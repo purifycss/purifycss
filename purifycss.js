@@ -173,20 +173,18 @@ var purify = function(files, css, options){
   }
   options = DEFAULT_OPTIONS;
 
-  // If they pass in an array of filepaths, then concat the content.
-  // If not, then we assume it is the source content/css itself.
   var cssString = Array.isArray(css) ? concatFiles(css) : css;
   var content = Array.isArray(files) ? concatFiles(files) : files;
 
-  // this is the abstract syntax tree
+  // Turn css into abstract syntax tree
   var original = gonzales.srcToCSSP(cssString);
 
-  // Everything that starts with @ in css (@media, @keyframe, etc.)
+  // Tree with everything that begins with @ in css (@media, @keyframe, etc.)
   var atSign = _.filter(original, function(branch){
     return branch[0] === 'atruler' || branch[0] === 's';
   });
 
-  // Everything that doesn't start with an @ (classes, elements, ids, etc.)
+  // Tree with everything that doesn't start with an @ (classes, elements, ids, etc.)
   original = _.filter(original, function(branch){
     return branch[0] !== 'atruler';
   });
@@ -196,24 +194,24 @@ var purify = function(files, css, options){
 
   var flattenedCSS = _.flatten(original.slice());
 
-  // get list of things that are actually used
+  // Get list of things that are actually used
   var classes = extractClassesFromFlatCSS(flattenedCSS);
   var ids = extractIDsFromFlatCSS(flattenedCSS);
   var htmlEls = extractHTMLElementsFromContent(content);
   
-  // narrow everything down to stuff that is used
+  // Narrow tree down to stuff that is used
   classes = findClassesInFiles(classes, content);
   var stylesheet = filterByUsedClassesAndHtmlEls(original, classes, htmlEls);
   ids = filterByUsedIds(original, ids);
   removeUnusedMedias(atSign, classes);
   atSign = filterMediasByZeroClasses(atSign);
 
-  // turn everything back into css
+  // Turn tree back into css
   var idStyles = gonzales.csspToSrc(ids);
   var classStyles = gonzales.csspToSrc(stylesheet);
   var atStyles = gonzales.csspToSrc(atSign);
 
-  // combine and format
+  // Combine and format
   var styles = classStyles + '\n' + atStyles + '\n' + idStyles;
   styles = JSON.parse(formatCSS(JSON.stringify(styles)));
 
