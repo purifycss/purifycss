@@ -165,7 +165,7 @@ var filterMediasByZeroClasses = function(atSign){
 var DEFAULT_OPTIONS = {
   write: false,
   minify: false,
-  info: false;
+  info: false
 };
 
 var purify = function(files, css, options){
@@ -245,8 +245,8 @@ var purify = function(files, css, options){
 //   ['reddit.css', 'subreddit.css', 'thebutton.css'], // LIST OF CSS FILES TO EXTRACT CLASSES
 //   'purifiedreddit.css', // OUTPUT FILE
 //   {
-//     minify: true
-//     write: false
+//     minify: true,
+//     output: false
 //   }
 // );
 
