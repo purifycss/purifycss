@@ -10,7 +10,7 @@ var concatFiles = function(files){
   }, '');
 };
 
-var uncss = function(files, css, writeTo, options){
+var purify = function(files, css, writeTo, options){
   var cssString = concatFiles(css);
   var content = concatFiles(files);
 
@@ -216,7 +216,7 @@ var filterMediasByZeroClasses = function(atSign){
 };
 
 // EXAMPLE API FOR THE FUNCTION
-// uncss(
+// purify(
 //   ['reddit.html', 'reddit.js', 'reddit2.js'], // LIST OF FILES TO CHECK FOR CLASSES
 //   ['reddit.css', 'subreddit.css', 'thebutton.css'], // LIST OF CSS FILES TO EXTRACT CLASSES
 //   'purifiedreddit.css', // OUTPUT FILE
@@ -225,4 +225,4 @@ var filterMediasByZeroClasses = function(atSign){
 //   }
 // );
 
-module.exports = uncss;
+module.exports = purify;
