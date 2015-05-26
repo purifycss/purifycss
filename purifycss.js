@@ -176,6 +176,8 @@ var purify = function(files, css, options){
   var cssString = Array.isArray(css) ? concatFiles(css) : css;
   var content = Array.isArray(files) ? concatFiles(files) : files;
 
+  var beginningLength = cssString.length;
+
   // Turn css into abstract syntax tree
   var original = gonzales.srcToCSSP(cssString);
 
@@ -225,10 +227,11 @@ var purify = function(files, css, options){
     fs.writeFile(options.output, styles, function(err){
       if(err) return err;
 
-      console.log('');
-      console.log('FINISHED MAKING STYLES ANOREXIC!!');
-      console.log('SOMEBODY GIVE THESE STYLESHEETS A BURGER, THEY\'RE SO SKINNY');
-      console.log('');
+      console.log('##################################');
+      console.log('Before purify, CSS was ' + beginningLength + ' chars long.');
+      console.log('After purify, CSS is ' + styles.length + ' chars long. (' +
+       Math.floor((beginningLength / styles.length * 10)) / 10  + ' times smaller)');
+      console.log('##################################');
     });
   }
 };
