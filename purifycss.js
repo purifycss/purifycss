@@ -4,68 +4,15 @@ var util = require('util');
 var _ = require('underscore');
 var cleanCss = require('clean-css');
 
+//////////////////////////////////////////////
+// The main function is the "purify" function.
+// Everything else is a helper
+//////////////////////////////////////////////
+
 var concatFiles = function(files){
   return files.reduce(function(total, file){
     return total + fs.readFileSync(file, 'utf8');
   }, '');
-};
-
-var purify = function(files, css, writeTo, options){
-  var cssString = concatFiles(css);
-  var content = concatFiles(files);
-
-  var original = gonzales.srcToCSSP(cssString);
-  var atSign = _.filter(original, function(branch){
-    return branch[0] === 'atruler' || branch[0] === 's';
-  });
-
-  console.log(util.inspect(original, false, null));
-
-  original = _.filter(original, function(branch){
-    return branch[0] !== 'atruler';
-  });
-
-  var json = original.slice();
-  json = _.flatten(json);
-
-
-  var classes = extractClassesFromFlatCSS(json);
-  var ids = extractIDsFromFlatCSS(json);
-  
-  var htmlEls = extractHTMLElementsFromContent(content);
-  classes = findClassesInFiles(classes, content);
-
-  var stylesheet = filterByUsedClassesAndHtmlEls(original, classes, htmlEls);
-  ids = filterByUsedIds(original, ids);
-
-  removeUnusedMedias(atSign, classes);
-  atSign = filterMediasByZeroClasses(atSign);
-
-  var idStyles = gonzales.csspToSrc(ids);
-  var classStyles = gonzales.csspToSrc(stylesheet);
-  var atStyles = gonzales.csspToSrc(atSign);
-  var styles = classStyles + '\n' + atStyles + '\n' + idStyles;
-
-  fs.writeFile(writeTo, styles, function(err){
-    if(err) return err;
-
-    var styleFile = fs.readFileSync(writeTo, 'utf8');
-    var json = JSON.stringify(styleFile);
-    var styless = formatCSS(json);
-    
-    if(options && options.minify){
-      var finalStyle = new cleanCss().minify(JSON.parse(styless)).styles;
-    } else {
-      var finalStyle = JSON.parse(styless);
-    }
-
-    fs.writeFile(writeTo, finalStyle, function(){
-      console.log('');
-      console.log('FINISHED MAKING STYLES ANOREXIC!!');
-      console.log('SOMEBODY GIVE THESE STYLESHEETS A BURGER, THEY\'RE SO SKINNY');
-      console.log('');
-    });
-  });
 };
 
 var formatCSS = function(styless){
@@ -212,6 +159,73 @@ var filterMediasByZeroClasses = function(atSign){
     }
 
     return count > 0;
+  });
+};
+
+var purify = function(files, css, writeTo, options){
+  // If they pass in an array of filepaths, then concat the content.
+  // If not, then we assume it is the source content/css itself.
+  var cssString = Array.isArray(css) ? concatFiles(css) : css;
+  var content = Array.isArray(files) ? concatFiles(files) : files;
+
+  // this is the abstract syntax tree
+  var original = gonzales.srcToCSSP(cssString);
+
+  // Everything that starts with @ in css (@media, @keyframe, etc.)
+  var atSign = _.filter(original, function(branch){
+    return branch[0] === 'atruler' || branch[0] === 's';
+  });
+
+  // Everything that doesn't start with an @ (classes, elements, ids, etc.)
+  original = _.filter(original, function(branch){
+    return branch[0] !== 'atruler';
+  });
+
+  console.log(util.inspect(original, false, null));
+
+
+  var flattenedCSS = _.flatten(original.slice());
+
+  // get list of things that are actually used
+  var classes = extractClassesFromFlatCSS(flattenedCSS);
+  var ids = extractIDsFromFlatCSS(flattenedCSS);
+  var htmlEls = extractHTMLElementsFromContent(content);
+  
+  // narrow everything down to stuff that is used
+  classes = findClassesInFiles(classes, content);
+  var stylesheet = filterByUsedClassesAndHtmlEls(original, classes, htmlEls);
+  ids = filterByUsedIds(original, ids);
+  removeUnusedMedias(atSign, classes);
+  atSign = filterMediasByZeroClasses(atSign);
+
+  // turn everything back into css
+  var idStyles = gonzales.csspToSrc(ids);
+  var classStyles = gonzales.csspToSrc(stylesheet);
+  var atStyles = gonzales.csspToSrc(atSign);
+
+  // combine the newly made css together
+  var styles = classStyles + '\n' + atStyles + '\n' + idStyles;
+
+  // weird file write hack
+  fs.writeFile(writeTo, styles, function(err){
+    if(err) return err;
+
+    var styleFile = fs.readFileSync(writeTo, 'utf8');
+    var json = JSON.stringify(styleFile);
+    var styless = formatCSS(json);
+    
+    if(options && options.minify){
+      var finalStyle = new cleanCss().minify(JSON.parse(styless)).styles;
+    } else {
+      var finalStyle = JSON.parse(styless);
+    }
+
+    fs.writeFile(writeTo, finalStyle, function(){
+      console.log('');
+      console.log('FINISHED MAKING STYLES ANOREXIC!!');
+      console.log('SOMEBODY GIVE THESE STYLESHEETS A BURGER, THEY\'RE SO SKINNY');
+      console.log('');
+    });
   });
 };
 
