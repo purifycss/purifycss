@@ -1,0 +1,32 @@
+{
+  "name": "purify-css",
+  "version": "1.0.0",
+  "description": "Removed unused css. Compatible with single-page apps.",
+  "main": "app.js",
+  "dependencies": {
+    "clean-css": "^3.2.10",
+    "cssparser": "^0.2.2",
+    "gonzales": "^1.0.7",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fog-glory/purify-css.git"
+  },
+  "keywords": [
+    "optimize",
+    "css",
+    "remove",
+    "unused"
+  ],
+  "author": "Kenny Tran, Matthew Rourke, Phoebe Li",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fog-glory/purify-css/issues"
+  },
+  "homepage": "https://github.com/fog-glory/purify-css"
+}
