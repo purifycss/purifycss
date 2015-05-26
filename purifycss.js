@@ -28,7 +28,7 @@ var uncss = function(files, css, writeTo, options){
   var json = original.slice();
   json = _.flatten(json);
 
-  
+
   var classes = extractClassesFromFlatCSS(json);
   var ids = extractIDsFromFlatCSS(json);
   
@@ -225,11 +225,4 @@ var filterMediasByZeroClasses = function(atSign){
 //   }
 // );
 
-uncss(
-  ['index.html', 'app.js'],
-  ['boot.css'],
-  'anorexic.css',
-  {
-    minify: false
-  }
-);
+module.exports = uncss;
