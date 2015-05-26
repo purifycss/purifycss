@@ -219,8 +219,6 @@ var purify = function(files, css, options){
 
   if(options.minify){
     styles = new cleanCss().minify(styles).styles;
-  } else {
-    styles = styles;
   }
 
   if(!options.output){
