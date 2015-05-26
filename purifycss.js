@@ -189,7 +189,7 @@ var purify = function(files, css, options){
     return branch[0] !== 'atruler';
   });
 
-  console.log(util.inspect(original, false, null));
+  // console.log(util.inspect(original, false, null));
 
 
   var flattenedCSS = _.flatten(original.slice());
