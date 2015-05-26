@@ -221,17 +221,17 @@ var purify = function(files, css, options){
     styles = new cleanCss().minify(styles).styles;
   }
 
+  console.log('##################################');
+  console.log('Before purify, CSS was ' + beginningLength + ' chars long.');
+  console.log('After purify, CSS is ' + styles.length + ' chars long. (' +
+    Math.floor((beginningLength / styles.length * 10)) / 10  + ' times smaller)');
+  console.log('##################################');
+
   if(!options.output){
     return styles
   } else {
     fs.writeFile(options.output, styles, function(err){
       if(err) return err;
-
-      console.log('##################################');
-      console.log('Before purify, CSS was ' + beginningLength + ' chars long.');
-      console.log('After purify, CSS is ' + styles.length + ' chars long. (' +
-       Math.floor((beginningLength / styles.length * 10)) / 10  + ' times smaller)');
-      console.log('##################################');
     });
   }
 };
