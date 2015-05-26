@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/fog-glory/purify-css.git"
+    "url": "https://github.com/purifycss/purify-css.git"
   },
   "keywords": [
     "optimize",
@@ -26,7 +26,7 @@
   "author": "Kenny Tran, Matthew Rourke, Phoebe Li",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/fog-glory/purify-css/issues"
+    "url": "https://github.com/purifycss/purify-css/issues"
   },
-  "homepage": "https://github.com/fog-glory/purify-css"
+  "homepage": "https://github.com/purifycss/purify-css"
 }
