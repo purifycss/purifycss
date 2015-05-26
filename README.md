@@ -1,16 +1,12 @@
-# Purify your CSS
-### How?
-1. Check the classes that you use in your HTML *and* Javascript.
-2. Filter out your CSS file with only the classes that you **do** use.
-3. Return a string of your purified CSS.
+PurifyCSS removes CSS that you aren't using in your app, which results in smaller file sizes, which ultimately reduces load time.
 
-# How to use
+### How?
+1. Check which classes you use in your HTML *or* Javascript.
+2. Filter out your CSS file with only the classes that you **do** use.
+3. ??
+4. Profit
+
+# Install
 ```
 npm install purify-css
 ```
-
-# API
-purify(content, css, options);
-
-**content** (Array / String) filepaths that you use CSS in (html, javascripts)
-**css** (Array / String) css that you want us to filter
