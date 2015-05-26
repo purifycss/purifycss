@@ -162,7 +162,17 @@ var filterMediasByZeroClasses = function(atSign){
   });
 };
 
-var purify = function(files, css, writeTo, options){
+var DEFAULT_OPTIONS = {
+  write: false,
+  minify: false
+};
+
+var purify = function(files, css, options){
+  if(options){
+    _.extend(DEFAULT_OPTIONS, options);
+  }
+  options = DEFAULT_OPTIONS;
+
   // If they pass in an array of filepaths, then concat the content.
   // If not, then we assume it is the source content/css itself.
   var cssString = Array.isArray(css) ? concatFiles(css) : css;
@@ -203,30 +213,28 @@ var purify = function(files, css, writeTo, options){
   var classStyles = gonzales.csspToSrc(stylesheet);
   var atStyles = gonzales.csspToSrc(atSign);
 
-  // combine the newly made css together
+  // combine and format
   var styles = classStyles + '\n' + atStyles + '\n' + idStyles;
+  styles = JSON.parse(formatCSS(JSON.stringify(styles)));
 
-  // weird file write hack
-  fs.writeFile(writeTo, styles, function(err){
-    if(err) return err;
+  if(options.minify){
+    styles = new cleanCss().minify(styles).styles;
+  } else {
+    styles = styles;
+  }
 
-    var styleFile = fs.readFileSync(writeTo, 'utf8');
-    var json = JSON.stringify(styleFile);
-    var styless = formatCSS(json);
-    
-    if(options && options.minify){
-      var finalStyle = new cleanCss().minify(JSON.parse(styless)).styles;
-    } else {
-      var finalStyle = JSON.parse(styless);
-    }
+  if(!options.output){
+    return styles
+  } else {
+    fs.writeFile(options.output, styles, function(err){
+      if(err) return err;
 
-    fs.writeFile(writeTo, finalStyle, function(){
       console.log('');
       console.log('FINISHED MAKING STYLES ANOREXIC!!');
       console.log('SOMEBODY GIVE THESE STYLESHEETS A BURGER, THEY\'RE SO SKINNY');
       console.log('');
     });
-  });
+  }
 };
 
 // EXAMPLE API FOR THE FUNCTION
@@ -236,6 +244,7 @@ var purify = function(files, css, writeTo, options){
 //   'purifiedreddit.css', // OUTPUT FILE
 //   {
 //     minify: true
+//     write: false
 //   }
 // );
 
