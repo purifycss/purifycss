@@ -28,100 +28,18 @@ var uncss = function(files, css, writeTo, options){
   var json = original.slice();
   json = _.flatten(json);
 
-
+  
   var classes = extractClassesFromFlatCSS(json);
-  var htmlEls = extractHTMLElementsFromContent(content);
   var ids = extractIDsFromFlatCSS(json);
+  
+  var htmlEls = extractHTMLElementsFromContent(content);
   classes = findClassesInFiles(classes, content);
 
-  var stylesheet = _.filter(original, function(branch){
-    var flatBranch = _.flatten(branch.slice());
-    if(flatBranch[0] === 's'){
-      return true;
-    }
+  var stylesheet = filterByUsedClassesAndHtmlEls(original, classes, htmlEls);
+  ids = filterByUsedIds(original, ids);
 
-    for(var i = 0; i < flatBranch.length; i++){
-      if(flatBranch[i] === 'clazz'){
-        return classes.indexOf(flatBranch[i + 2]) > -1;
-      }
-    }
-
-    for(var i = 0; i < flatBranch.length; i++){
-      if(flatBranch[i] === 'ident' && htmlEls.indexOf(flatBranch[i + 1]) > -1){
-        return true;
-      }
-    }
-
-    return false;
-  });
-
-  ids = _.filter(original, function(branch){
-    var flatBranch = _.flatten(branch.slice());
-
-    if(flatBranch[0] === 's'){
-      return true;
-    }
-
-    for(var i = 0; i < flatBranch.length; i++){
-      if(flatBranch[i] === 'shash'){
-        return ids.indexOf(flatBranch[i + 1]) > -1;
-      }
-    }
-
-    return false;
-  });
-
-  atSign.forEach(function(branch){
-    if(branch[0] !== 'atruler'){
-      return;
-    }
-
-    for(var i = 1; i < branch.length; i++){
-      if(branch[i][0] !== 'atrulers'){
-        continue;
-      }
-
-      // console.log(util.inspect(twig, false, null));
-      branch[i] = _.filter(branch[i], function(twig){
-        if(twig[0] !== 'ruleset'){
-          return true;
-        }
-        var flattened = _.flatten(twig);
-
-        var flag = false;
-
-        for(var j = 0; j < flattened.length; j++){
-          if(flattened[j] === 'clazz'){
-            if(classes.indexOf(flattened[j + 2]) > -1){
-              flag = true;
-            } else {
-              return false;
-            }
-          }
-        }
-
-        return flag;
-      });
-    }
-  });
-
-  atSign = _.filter(atSign, function(branch){
-    if(branch[0] !== 'atruler'){
-      return true;
-    }
-
-    var flatBranch = _.flatten(branch);
-
-    var count = 0;
-
-    for(var i = 0; i < flatBranch.length; i++){
-      if(flatBranch[i] === 'property'){
-        count++;
-      }
-    }
-
-    return count > 0;
-  });
+  removeUnusedMedias(atSign, classes);
+  atSign = filterMediasByZeroClasses(atSign);
 
   var idStyles = gonzales.csspToSrc(ids);
   var classStyles = gonzales.csspToSrc(stylesheet);
@@ -200,6 +118,103 @@ var findClassesInFiles = function(classes, content){
   });
 };
 
+var filterByUsedClassesAndHtmlEls = function(ast, classes, htmlEls){
+  return _.filter(ast, function(branch){
+    var flatBranch = _.flatten(branch.slice());
+    if(flatBranch[0] === 's'){
+      return true;
+    }
+
+    for(var i = 0; i < flatBranch.length; i++){
+      if(flatBranch[i] === 'clazz'){
+        return classes.indexOf(flatBranch[i + 2]) > -1;
+      }
+    }
+
+    for(var i = 0; i < flatBranch.length; i++){
+      if(flatBranch[i] === 'ident' && htmlEls.indexOf(flatBranch[i + 1]) > -1){
+        return true;
+      }
+    }
+
+    return false;
+  });
+};
+
+var filterByUsedIds = function(ast, ids){
+  return _.filter(ast, function(branch){
+    var flatBranch = _.flatten(branch.slice());
+
+    if(flatBranch[0] === 's'){
+      return true;
+    }
+
+    for(var i = 0; i < flatBranch.length; i++){
+      if(flatBranch[i] === 'shash'){
+        return ids.indexOf(flatBranch[i + 1]) > -1;
+      }
+    }
+
+    return false;
+  });
+};
+
+var removeUnusedMedias = function(atSign, classes){
+  atSign.forEach(function(branch){
+    if(branch[0] !== 'atruler'){
+      return;
+    }
+
+    for(var i = 1; i < branch.length; i++){
+      if(branch[i][0] !== 'atrulers'){
+        continue;
+      }
+
+      // console.log(util.inspect(twig, false, null));
+      branch[i] = _.filter(branch[i], function(twig){
+        if(twig[0] !== 'ruleset'){
+          return true;
+        }
+        var flattened = _.flatten(twig);
+
+        var flag = false;
+
+        for(var j = 0; j < flattened.length; j++){
+          if(flattened[j] === 'clazz'){
+            if(classes.indexOf(flattened[j + 2]) > -1){
+              flag = true;
+            } else {
+              return false;
+            }
+          }
+        }
+
+        return flag;
+      });
+    }
+  });
+};
+
+var filterMediasByZeroClasses = function(atSign){
+  return _.filter(atSign, function(branch){
+    if(branch[0] !== 'atruler'){
+      return true;
+    }
+
+    var flatBranch = _.flatten(branch);
+
+    var count = 0;
+
+    for(var i = 0; i < flatBranch.length; i++){
+      if(flatBranch[i] === 'property'){
+        count++;
+      }
+    }
+
+    return count > 0;
+  });
+};
+
 // EXAMPLE API FOR THE FUNCTION
 // uncss(
 //   ['reddit.html', 'reddit.js', 'reddit2.js'], // LIST OF FILES TO CHECK FOR CLASSES
@@ -209,3 +224,12 @@ var findClassesInFiles = function(classes, content){
 //     minify: true
 //   }
 // );
+
+uncss(
+  ['index.html', 'app.js'],
+  ['boot.css'],
+  'anorexic.css',
+  {
+    minify: false
+  }
+);
