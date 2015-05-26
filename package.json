@@ -5,7 +5,6 @@
   "main": "app.js",
   "dependencies": {
     "clean-css": "^3.2.10",
-    "cssparser": "^0.2.2",
     "gonzales": "^1.0.7",
     "underscore": "^1.8.3"
   },
