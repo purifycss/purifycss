@@ -61,7 +61,39 @@ var extractIDsFromFlatCSS = function(json){
 
 var findClassesInFiles = function(classes, content){
   return _.filter(classes, function(className){
-    return content.indexOf(className) > -1;
+
+    // TODO: search for parts only if they keep showing up in css
+
+    // we search for the prefix, middles, and suffixes
+    // because if the prefix/middle/suffix can't be found, then
+    // certainly the whole className can't be found.
+    return contentHasPrefixSuffix(className, content);
+  });
+};
+
+var contentHasPrefixSuffix = function(className, content){
+  var split = className.split('-');
+
+  if(split.length === 1){
+    return content.indexOf(split[0]) > -1;
+  }
+
+  var i = 0;
+  return _.some(split, function(part){
+    if(i === 0){
+      i++;
+      return content.indexOf(part + '-') > -1;
+    }
+
+    if(i < split.length - 1){
+      i++;
+      return content.indexOf('-' + part + '-') > -1;
+    }
+
+    if(i === split.length - 1){
+      i++;
+      return content.indexOf('-' + part) > -1;
+    }
   });
 };
 
@@ -164,7 +196,8 @@ var filterMediasByZeroClasses = function(atSign){
 
 var DEFAULT_OPTIONS = {
   write: false,
-  minify: false
+  minify: false,
+  info: false
 };
 
 var purify = function(files, css, options){
@@ -221,17 +254,19 @@ var purify = function(files, css, options){
     styles = new cleanCss().minify(styles).styles;
   }
 
+  if(options.info){
+    console.log('##################################');
+    console.log('Before purify, CSS was ' + beginningLength + ' chars long.');
+    console.log('After purify, CSS is ' + styles.length + ' chars long. (' +
+      Math.floor((beginningLength / styles.length * 10)) / 10  + ' times smaller)');
+    console.log('##################################');
+  }
+
   if(!options.output){
     return styles
   } else {
     fs.writeFile(options.output, styles, function(err){
       if(err) return err;
-
-      console.log('##################################');
-      console.log('Before purify, CSS was ' + beginningLength + ' chars long.');
-      console.log('After purify, CSS is ' + styles.length + ' chars long. (' +
-       Math.floor((beginningLength / styles.length * 10)) / 10  + ' times smaller)');
-      console.log('##################################');
     });
   }
 };
@@ -242,9 +277,11 @@ var purify = function(files, css, options){
 //   ['reddit.css', 'subreddit.css', 'thebutton.css'], // LIST OF CSS FILES TO EXTRACT CLASSES
 //   'purifiedreddit.css', // OUTPUT FILE
 //   {
-//     minify: true
-//     write: false
+//     minify: true,
+//     output: false
 //   }
 // );
 
 module.exports = purify;
+
+// -unique
