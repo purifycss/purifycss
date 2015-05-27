@@ -61,7 +61,39 @@ var extractIDsFromFlatCSS = function(json){
 
 var findClassesInFiles = function(classes, content){
   return _.filter(classes, function(className){
-    return content.indexOf(className) > -1;
+
+    // TODO: search for parts only if they keep showing up in css
+
+    // we search for the prefix, middles, and suffixes
+    // because if the prefix/middle/suffix can't be found, then
+    // certainly the whole className can't be found.
+    return contentHasPrefixSuffix(className, content);
+  });
+};
+
+var contentHasPrefixSuffix = function(className, content){
+  var split = className.split('-');
+
+  if(split.length === 1){
+    return content.indexOf(split[0]) > -1;
+  }
+
+  var i = 0;
+  return _.some(split, function(part){
+    if(i === 0){
+      i++;
+      return content.indexOf(part + '-') > -1;
+    }
+
+    if(i < split.length - 1){
+      i++;
+      return content.indexOf('-' + part + '-') > -1;
+    }
+
+    if(i === split.length - 1){
+      i++;
+      return content.indexOf('-' + part) > -1;
+    }
   });
 };
 
@@ -251,3 +283,5 @@ var purify = function(files, css, options){
 // );
 
 module.exports = purify;
+
+// -unique
