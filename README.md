@@ -14,7 +14,9 @@ npm install purify-css
 
 # API
 ```javascript
-purify(content, css, options)
+var purify = require('purify-css');
+
+purify(content, css, options);
 ```
 
 ## ```content```
