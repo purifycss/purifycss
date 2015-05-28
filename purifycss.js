@@ -15,16 +15,16 @@ var concatFiles = function(files){
   }, '');
 };
 
-var formatCSS = function(styless){
-  styless = styless.split('\\n\\n').join('');
-  styless = styless.split(' \\n').join('');
-  styless = styless.split('   ').join('');
-  styless = styless.split('}').join('}\\n');
-  styless = styless.split('}\\n\\n').join('}\\n');
-  styless = styless.split(' }').join('}');
-  styless = styless.split(' }').join('}');
+var formatCSS = function(styles){
+  styles = styles.split('\\n\\n').join('');
+  styles = styles.split(' \\n').join('');
+  styles = styles.split('   ').join('');
+  styles = styles.split('}').join('}\\n');
+  styles = styles.split('}\\n\\n').join('}\\n');
+  styles = styles.split(' }').join('}');
+  styles = styles.split(' }').join('}');
 
-  return styless;
+  return styles;
 };
 
 var extractHTMLElementsFromContent = function(content){
@@ -194,21 +194,33 @@ var filterMediasByZeroClasses = function(atSign){
   });
 };
 
+
 var DEFAULT_OPTIONS = {
   write: false,
   minify: false,
   info: false
 };
-
+////////////////////
+// ARGUMENTS
+// files    = an array of filepaths to html/js files OR a raw string of content to search through
+// css      = an array of filepaths to css files OR a raw string of css to filter
+// options  = {
+//   write  : string (filepath to write purified css to. if false, function returns raw string)
+//   minify : boolean (if true, will minify the purified css)
+//   info   : boolean (if true, will log out stats of how much css was reduced)
+// }
+////////////////////
 var purify = function(files, css, options){
   if(options){
-    _.extend(DEFAULT_OPTIONS, options);
+    options = _.extend({}, DEFAULT_OPTIONS, options);
+  } else {
+    options = DEFAULT_OPTIONS;
   }
-  options = DEFAULT_OPTIONS;
 
   var cssString = Array.isArray(css) ? concatFiles(css) : css;
   var content = Array.isArray(files) ? concatFiles(files) : files;
 
+  // Store starting length. Will be helpful later to show how much was reduced
   var beginningLength = cssString.length;
 
   // Turn css into abstract syntax tree
@@ -225,7 +237,6 @@ var purify = function(files, css, options){
   });
 
   // console.log(util.inspect(original, false, null));
-
 
   var flattenedCSS = _.flatten(original.slice());
 
@@ -271,17 +282,4 @@ var purify = function(files, css, options){
   }
 };
 
-// EXAMPLE API FOR THE FUNCTION
-// purify(
-//   ['reddit.html', 'reddit.js', 'reddit2.js'], // LIST OF FILES TO CHECK FOR CLASSES
-//   ['reddit.css', 'subreddit.css', 'thebutton.css'], // LIST OF CSS FILES TO EXTRACT CLASSES
-//   'purifiedreddit.css', // OUTPUT FILE
-//   {
-//     minify: true,
-//     output: false
-//   }
-// );
-
 module.exports = purify;
-
-// -unique
