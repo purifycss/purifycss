@@ -224,7 +224,7 @@ var purify = function(files, css, options, callback){
 
   var cssString = Array.isArray(css) ? concatFiles(css) : css;
   var content = Array.isArray(files) ? concatFiles(files) : files;
-
+  content = content.toLowerCase();
   // Store starting length. Will be helpful later to show how much was reduced
   var beginningLength = cssString.length;
 
