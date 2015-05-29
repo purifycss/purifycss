@@ -210,7 +210,12 @@ var DEFAULT_OPTIONS = {
 //   info   : boolean (if true, will log out stats of how much css was reduced)
 // }
 ////////////////////
-var purify = function(files, css, options){
+var purify = function(files, css, options, callback){
+  if(typeof options === 'function'){
+    callback = options;
+    options = {};
+  }
+
   if(options){
     options = _.extend({}, DEFAULT_OPTIONS, options);
   } else {
@@ -274,7 +279,11 @@ var purify = function(files, css, options){
   }
 
   if(!options.output){
-    return styles
+    if(callback){
+      callback(styles);
+    } else {
+      return styles
+    }
   } else {
     fs.writeFile(options.output, styles, function(err){
       if(err) return err;
