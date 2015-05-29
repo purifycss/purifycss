@@ -10,3 +10,8 @@ app.js
 .DS_Store
 
 npm-debug.log
+
+index.html
+javascript.js
+purified.css
+purify_module
