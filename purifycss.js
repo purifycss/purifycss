@@ -144,18 +144,19 @@ var removeUnusedMedias = function(atSign, classes){
       return;
     }
 
+    if(_.flatten(branch).indexOf('media') === -1){
+      return;
+    }
     for(var i = 1; i < branch.length; i++){
       if(branch[i][0] !== 'atrulers'){
         continue;
       }
 
-      // console.log(util.inspect(twig, false, null));
       branch[i] = _.filter(branch[i], function(twig){
         if(twig[0] !== 'ruleset'){
           return true;
         }
         var flattened = _.flatten(twig);
-
         var flag = false;
 
         for(var j = 0; j < flattened.length; j++){
@@ -181,7 +182,6 @@ var filterMediasByZeroClasses = function(atSign){
     }
 
     var flatBranch = _.flatten(branch);
-
     var count = 0;
 
     for(var i = 0; i < flatBranch.length; i++){
@@ -241,7 +241,7 @@ var purify = function(files, css, options, callback){
     return branch[0] !== 'atruler';
   });
 
-  // console.log(util.inspect(original, false, null));
+  // console.log(util.inspect(atSign, false, null));
 
   var flattenedCSS = _.flatten(original.slice());
 
