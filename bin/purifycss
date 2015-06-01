@@ -1,0 +1,20 @@
+var argv = require('yargs').argv;
+var purify = require('../purifycss.js');
+
+var files = argv._;
+
+var content = files.filter(function(file){
+  return file.substr(file.length - 4) !== '.css';
+});
+
+var css = files.filter(function(file){
+  return file.substr(file.length - 4) === '.css';
+});
+
+var options = {
+  minify: !!argv['min'],
+  info: !!argv['info'],
+  output: argv['out']
+};
+
+purify(content, css, options);
