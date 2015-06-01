@@ -6,7 +6,8 @@
   "dependencies": {
     "clean-css": "^3.2.10",
     "gonzales": "^1.0.7",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "yargs": "^3.10.0"
   },
   "devDependencies": {},
   "scripts": {
@@ -27,5 +28,6 @@
   "bugs": {
     "url": "https://github.com/purifycss/purify-css/issues"
   },
+  "bin": "./bin/purifycss",
   "homepage": "https://github.com/purifycss/purify-css"
 }
