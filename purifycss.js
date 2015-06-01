@@ -2,7 +2,7 @@ var fs = require('fs');
 var gonzales = require('gonzales');
 var util = require('util');
 var _ = require('underscore');
-var cleanCss = require('clean-css');
+var CleanCss = require('clean-css');
 
 //////////////////////////////////////////////
 // The main function is the "purify" function.
@@ -67,7 +67,7 @@ var findClassesInFiles = function(classes, content){
     // we search for the prefix, middles, and suffixes
     // because if the prefix/middle/suffix can't be found, then
     // certainly the whole className can't be found.
-    return contentHasPrefixSuffix(className, content);
+    return contentHasPrefixSuffix(className.toLowerCase(), content);
   });
 };
 
@@ -78,23 +78,29 @@ var contentHasPrefixSuffix = function(className, content){
     return content.indexOf(split[0]) > -1;
   }
 
+  var foundParts = _.every(split, function(part){
+    return content.indexOf(part) > -1;
+  });
+
   var i = 0;
-  return _.some(split, function(part){
+  var foundOneWithHyphen = _.some(split, function(part){
     if(i === 0){
-      i++;
-      return content.indexOf(part + '-') > -1;
+      part = part + '-';
     }
 
     if(i < split.length - 1){
-      i++;
-      return content.indexOf('-' + part + '-') > -1;
+      part = '-' + part + '-';
     }
 
     if(i === split.length - 1){
-      i++;
-      return content.indexOf('-' + part) > -1;
+      part = '-' + part;
     }
+    
+    i++;
+    return content.indexOf(part) > -1;
   });
+
+  return foundParts && foundOneWithHyphen;
 };
 
 var filterByUsedClassesAndHtmlEls = function(ast, classes, htmlEls){
@@ -267,7 +273,7 @@ var purify = function(files, css, options, callback){
   styles = JSON.parse(formatCSS(JSON.stringify(styles)));
 
   if(options.minify){
-    styles = new cleanCss().minify(styles).styles;
+    styles = new CleanCss().minify(styles).styles;
   }
 
   if(options.info){
