@@ -1,11 +1,8 @@
 # PurifyCSS
 
-A tool that removes CSS that you aren't using in your app, which results in smaller file sizes, which ultimately reduces load time.
+Remove CSS not being used in your app **>** smaller file sizes **>** reduce initial load time
 
-1. Check which classes you use in your HTML **and** Javascript.
-2. Filter out your CSS file with only the classes that you **do** use.
-3. ??
-4. Profit
+Able to detect **dynamically-loaded CSS classes** (classes that get initialized according to user interaction). PurifyCSS has been designed from the beginning with **single-page apps** in mind (works great for static sites too).
 
 # Install
 ```
