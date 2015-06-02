@@ -1,6 +1,10 @@
 # PurifyCSS
 
-Remove CSS not being used in your app **>** smaller file sizes **>** reduce initial load time
+* Remove dead weight CSS not being used in your app
+
+* *Results in:* much smaller file sizes
+
+* *Results in:* Initial load time reduced
 
 Able to detect **dynamically-loaded CSS classes** (classes that get initialized according to user interaction). PurifyCSS has been designed from the beginning with **single-page apps** in mind (works great for static sites too).
 
