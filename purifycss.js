@@ -103,7 +103,6 @@ var contentHasPrefixSuffix = function(className, content){
   var split = className.split('-');
 
   if(split.length === 1){
-    return content.indexOf(split[0]) > -1;
     var indices = getAllIndexes(content, split[0]);
     var neighborsAreNotLetters = !neighborsAreLetters(content, indices, split[0]);
     var found = !!indices;
