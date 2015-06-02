@@ -4,6 +4,8 @@ var util = require('util');
 var _ = require('underscore');
 var CleanCss = require('clean-css');
 
+var htmlEls = ['a','abbr','acronym','address','applet','area','article','aside','audio','b','base','basefont','bdi','bdo','bgsound','big','blink','blockquote','body','br','button','canvas','caption','center','cite','code','col','colgroup','command','content','data','datalist','dd','del','details','dfn','dialog','dir','div','dl','dt','element','em','embed','fieldset','figcaption','figure','font','footer','form','frame','frameset','head','header','hgroup','hr','html','i','iframe','image','img','input','ins','isindex','kbd','keygen','label','legend','li','link','listing','main','map','mark','marquee','menu','menuitem','meta','meter','multicol','nav','nobr','noembed','noframes','noscript','object','ol','optgroup','option','output','p','param','picture','plaintext','pre','progress','q','rp','rt','rtc','ruby','s','samp','script','section','select','shadow','small','source','spacer','span','strike','strong','style','sub','summary','sup','table','tbody','td','template','textarea','tfoot','th','thead','time','title','tr','track','tt','u','ul','var','video','wbr','xmp'];
+
 //////////////////////////////////////////////
 // The main function is the "purify" function.
 // Everything else is a helper
@@ -13,6 +15,33 @@ var concatFiles = function(files){
   return files.reduce(function(total, file){
     return total + fs.readFileSync(file, 'utf8');
   }, '');
+};
+
+var getAllIndexes = function(content, str){
+  var indices = [];
+
+  for(var i = 0; i < content.length - str.length + 1; i++){
+    if(content.substr(i, str.length) === str){
+      indices.push(i);
+    }
+  }
+
+  if(indices.length === 0){
+    indices = false;
+  }
+
+  return indices;
+};
+
+var neighborsAreLetters = function(content, indices, str){
+  if (!indices){
+    return false;
+  }
+
+  return _.every(indices, function(i){
+    return !!content[i - 1].match(/[a-z]/i) ||
+           !!content[i + str.length].match(/[a-z]/i);
+  });
 };
 
 var formatCSS = function(styles){
@@ -28,10 +57,11 @@ var formatCSS = function(styles){
 };
 
 var extractHTMLElementsFromContent = function(content){
-  var htmlElements = require('./htmlEls.js');
+  return _.filter(htmlEls, function(ele){
+    var indices = getAllIndexes(content, ele);
+    var neighborsAreNotLetters = !neighborsAreLetters(content, indices, ele);
 
-  return _.filter(htmlElements, function(ele){
-    return content.indexOf(ele) > -1;
+    return indices && neighborsAreNotLetters;
   });
 };
 
@@ -62,8 +92,6 @@ var extractIDsFromFlatCSS = function(json){
 var findClassesInFiles = function(classes, content){
   return _.filter(classes, function(className){
 
-    // TODO: search for parts only if they keep showing up in css
-
     // we search for the prefix, middles, and suffixes
     // because if the prefix/middle/suffix can't be found, then
     // certainly the whole className can't be found.
@@ -76,11 +104,24 @@ var contentHasPrefixSuffix = function(className, content){
 
   if(split.length === 1){
     return content.indexOf(split[0]) > -1;
+    var indices = getAllIndexes(content, split[0]);
+    var neighborsAreNotLetters = !neighborsAreLetters(content, indices, split[0]);
+    var found = !!indices;
+
+    return found && neighborsAreLetters;
   }
 
   var foundParts = _.every(split, function(part){
-    return content.indexOf(part) > -1;
+    var indices = getAllIndexes(content, part);
+    var neighborsAreNotLetters = !neighborsAreLetters(content, indices, part);
+    var found = !!indices;
+
+    return found && neighborsAreNotLetters;
   });
+
+  if(!foundParts){
+    return false;
+  }
 
   var i = 0;
   var foundOneWithHyphen = _.some(split, function(part){
@@ -95,7 +136,7 @@ var contentHasPrefixSuffix = function(className, content){
     if(i === split.length - 1){
       part = '-' + part;
     }
-    
+
     i++;
     return content.indexOf(part) > -1;
   });
