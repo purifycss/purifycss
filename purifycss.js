@@ -261,12 +261,8 @@ var purify = function(files, css, options, callback){
     callback = options;
     options = {};
   }
-
-  if(options){
-    options = _.extend({}, DEFAULT_OPTIONS, options);
-  } else {
-    options = DEFAULT_OPTIONS;
-  }
+  options = options || {};
+  options = _.extend({}, DEFAULT_OPTIONS, options);
 
   var cssString = Array.isArray(css) ? concatFiles(css) : css;
   var content = Array.isArray(files) ? concatFiles(files) : files;
