@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var argv = require('yargs').argv;
 var purify = require('../purifycss.js');
 
