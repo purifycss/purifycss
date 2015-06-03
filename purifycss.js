@@ -51,28 +51,27 @@ var formatCSS = function(styles){
   return styles;
 };
 
-var extractClassesFromFlatCSS = function(json){
+var extractIDsAndClassesFromCSS = function(css){
+  var ids = [];
   var classes = [];
 
-  for(var i = 0; i < json.length; i++){
-    if(json[i] === 'clazz'){
-      classes.push(json[i + 2]);
+  for(var i = 0; i < css.length; i++){
+    if(css[i] === 'clazz'){
+      classes.push(css[i + 2]);
+    }
+
+    if(css[i] === 'shash'){
+      ids.push(css[i + 1]);
     }
   }
 
-  return _.uniq(classes);
-};
+  ids = _.uniq(ids);
+  classes = _.uniq(classes);
 
-var extractIDsFromFlatCSS = function(json){
-  var ids = [];
-
-  for(var i = 0; i < json.length; i++){
-    if(json[i] === 'shash'){
-      ids.push(json[i + 1]);
-    }
-  }
-
-  return _.uniq(ids);
+  return {
+    ids: ids,
+    classes: classes
+  };
 };
 
 var findWordsInFiles = function(words, content){
@@ -255,14 +254,17 @@ var purify = function(files, css, options, callback){
 
   var flattenedCSS = _.flatten(original.slice());
 
-  // Get list of things that are actually used
-  var classes = extractClassesFromFlatCSS(flattenedCSS);
-  var ids = extractIDsFromFlatCSS(flattenedCSS);
+  // Get list of things that are used
+  var extraction = extractIDsAndClassesFromCSS(flattenedCSS);
+  var classes = extraction.classes;
+  var ids = extraction.ids;
   
-  // Narrow tree down to stuff that is used
+  // Narrow list down to things that are found in content
   var filteredHtmlEls = findWordsInFiles(htmlEls, content);
   classes = findWordsInFiles(classes, content);
   ids = findWordsInFiles(ids, content);
+
+  // Narrow CSS tree down to things that remain on the list
   var stylesheet = filterByUsedClassesAndHtmlEls(original, classes, filteredHtmlEls);
   ids = filterByUsedIds(original, ids);
   removeUnusedMedias(atSign, classes);
