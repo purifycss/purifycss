@@ -123,9 +123,7 @@ var contentHasPrefixSuffix = function(className, content){
   var wholeClassValidated = validateStr(content, className, neighborsAreLettersOrHyphen);
   if(wholeClassValidated){
     return true;
-  }
-
-  if(split.length === 1){
+  } else if (split.length === 1){
     return false;
   }
 
@@ -134,31 +132,7 @@ var contentHasPrefixSuffix = function(className, content){
     return partValidated;
   });
 
-  if(!foundParts){
-    return false;
-  }
-
-  var i = 0;
-  var foundOneWithHyphen = _.some(split, function(part){
-    if(i === 0){
-      part = part + '-';
-    }
-
-    if(i < split.length - 1){
-      part = '-' + part + '-';
-    }
-
-    if(i === split.length - 1){
-      part = '-' + part;
-    }
-
-    i++;
-
-    var partValidated = validateStr(content, part, neighborsAreLetters);
-    return partValidated;
-  });
-
-  return foundParts && foundOneWithHyphen;
+  return foundParts;
 };
 
 var filterByUsedClassesAndHtmlEls = function(ast, classes, htmlEls){
