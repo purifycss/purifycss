@@ -107,20 +107,20 @@ var extractIDsFromFlatCSS = function(json){
   return _.uniq(ids);
 };
 
-var findClassesInFiles = function(classes, content){
-  return _.filter(classes, function(className){
+var findWordsInFiles = function(words, content){
+  return _.filter(words, function(word){
 
     // we search for the prefix, middles, and suffixes
     // because if the prefix/middle/suffix can't be found, then
-    // certainly the whole className can't be found.
-    return contentHasPrefixSuffix(className.toLowerCase(), content);
+    // certainly the whole word can't be found.
+    return contentHasPrefixSuffix(word.toLowerCase(), content);
   });
 };
 
-var contentHasPrefixSuffix = function(className, content){
-  var split = className.split('-');
+var contentHasPrefixSuffix = function(word, content){
+  var split = word.split('-');
 
-  var wholeClassValidated = validateStr(content, className, neighborsAreLettersOrHyphen);
+  var wholeClassValidated = validateStr(content, word, neighborsAreLettersOrHyphen);
   if(wholeClassValidated){
     return true;
   } else if (split.length === 1){
@@ -285,7 +285,8 @@ var purify = function(files, css, options, callback){
   var htmlEls = extractHTMLElementsFromContent(content);
   
   // Narrow tree down to stuff that is used
-  classes = findClassesInFiles(classes, content);
+  classes = findWordsInFiles(classes, content);
+  ids = findWordsInFiles(ids, content);
   var stylesheet = filterByUsedClassesAndHtmlEls(original, classes, htmlEls);
   ids = filterByUsedIds(original, ids);
   removeUnusedMedias(atSign, classes);
