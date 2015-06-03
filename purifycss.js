@@ -17,6 +17,15 @@ var concatFiles = function(files){
   }, '');
 };
 
+var validateStr = function(content, str, neighborCheck){
+  var indices = getAllIndexes(content, str);
+
+  var neighborValidated = !neighborCheck(content, indices, str);
+  var found = !!indices;
+
+  return found && neighborValidated;
+};
+
 var getAllIndexes = function(content, str){
   var indices = [];
 
@@ -69,10 +78,8 @@ var formatCSS = function(styles){
 
 var extractHTMLElementsFromContent = function(content){
   return _.filter(htmlEls, function(ele){
-    var indices = getAllIndexes(content, ele);
-    var neighborsAreNotLetters = !neighborsAreLettersOrHyphen(content, indices, ele);
-
-    return indices && neighborsAreNotLetters;
+    var validatedHTML = validateStr(content, ele, neighborsAreLetters);
+    return validatedHTML;
   });
 };
 
@@ -113,28 +120,18 @@ var findClassesInFiles = function(classes, content){
 var contentHasPrefixSuffix = function(className, content){
   var split = className.split('-');
 
-  var indices = getAllIndexes(content, className);
-  var neighborsAreNotLetters = !neighborsAreLettersOrHyphen(content, indices, className);
-  var found = !!indices;
-
-  if(found && neighborsAreNotLetters){
+  var wholeClassValidated = validateStr(content, className, neighborsAreLettersOrHyphen);
+  if(wholeClassValidated){
     return true;
   }
 
   if(split.length === 1){
-    var indices = getAllIndexes(content, split[0]);
-    var neighborsAreNotLetters = !neighborsAreLettersOrHyphen(content, indices, split[0]);
-    var found = !!indices;
-
-    return found && neighborsAreNotLetters;
+    return false;
   }
 
   var foundParts = _.every(split, function(part){
-    var indices = getAllIndexes(content, part);
-    var neighborsAreNotLetters = !neighborsAreLetters(content, indices, part);
-    var found = !!indices;
-
-    return found && neighborsAreNotLetters;
+    var partValidated = validateStr(content, part, neighborsAreLetters);
+    return partValidated;
   });
 
   if(!foundParts){
@@ -156,12 +153,9 @@ var contentHasPrefixSuffix = function(className, content){
     }
 
     i++;
-    // return content.indexOf(part) > -1;
-    var indices = getAllIndexes(content, part);
-    var neighborsAreNotLetters = !neighborsAreLetters(content, indices, part);
-    var found = !!indices;
 
-    return found && neighborsAreNotLetters;
+    var partValidated = validateStr(content, part, neighborsAreLetters);
+    return partValidated;
   });
 
   return foundParts && foundOneWithHyphen;
