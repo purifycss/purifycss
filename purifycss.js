@@ -17,6 +17,15 @@ var concatFiles = function(files){
   }, '');
 };
 
+var validateStr = function(content, str, neighborCheck){
+  var indices = getAllIndexes(content, str);
+
+  var neighborValidated = !neighborCheck(content, indices, str);
+  var found = !!indices;
+
+  return found && neighborValidated;
+};
+
 var getAllIndexes = function(content, str){
   var indices = [];
 
@@ -44,6 +53,17 @@ var neighborsAreLetters = function(content, indices, str){
   });
 };
 
+var neighborsAreLettersOrHyphen = function(content, indices, str){
+  if(!indices){
+    return false;
+  }
+
+  return _.every(indices, function(i){
+    return !!content[i - 1].match(/[a-z\-]/i) ||
+           !!content[i + str.length].match(/[a-z\-]/i);
+  });
+};
+
 var formatCSS = function(styles){
   styles = styles.split('\\n\\n').join('');
   styles = styles.split(' \\n').join('');
@@ -58,10 +78,8 @@ var formatCSS = function(styles){
 
 var extractHTMLElementsFromContent = function(content){
   return _.filter(htmlEls, function(ele){
-    var indices = getAllIndexes(content, ele);
-    var neighborsAreNotLetters = !neighborsAreLetters(content, indices, ele);
-
-    return indices && neighborsAreNotLetters;
+    var validatedHTML = validateStr(content, ele, neighborsAreLetters);
+    return validatedHTML;
   });
 };
 
@@ -102,20 +120,18 @@ var findClassesInFiles = function(classes, content){
 var contentHasPrefixSuffix = function(className, content){
   var split = className.split('-');
 
-  if(split.length === 1){
-    var indices = getAllIndexes(content, split[0]);
-    var neighborsAreNotLetters = !neighborsAreLetters(content, indices, split[0]);
-    var found = !!indices;
+  var wholeClassValidated = validateStr(content, className, neighborsAreLettersOrHyphen);
+  if(wholeClassValidated){
+    return true;
+  }
 
-    return found && neighborsAreLetters;
+  if(split.length === 1){
+    return false;
   }
 
   var foundParts = _.every(split, function(part){
-    var indices = getAllIndexes(content, part);
-    var neighborsAreNotLetters = !neighborsAreLetters(content, indices, part);
-    var found = !!indices;
-
-    return found && neighborsAreNotLetters;
+    var partValidated = validateStr(content, part, neighborsAreLetters);
+    return partValidated;
   });
 
   if(!foundParts){
@@ -137,7 +153,9 @@ var contentHasPrefixSuffix = function(className, content){
     }
 
     i++;
-    return content.indexOf(part) > -1;
+
+    var partValidated = validateStr(content, part, neighborsAreLetters);
+    return partValidated;
   });
 
   return foundParts && foundOneWithHyphen;
