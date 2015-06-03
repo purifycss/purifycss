@@ -18,50 +18,25 @@ var concatFiles = function(files){
 };
 
 var validateStr = function(content, str, neighborCheck){
-  var indices = getAllIndexes(content, str);
+  var length = str.length;
 
-  var neighborValidated = !neighborCheck(content, indices, str);
-  var found = !!indices;
+  for(var i = 0; i < content.length - length + 1; i++){
+    if(content[i] === str[0] && 
+       content[i + length - 1] === str[length - 1] &&
+       content.substr(i, length) === str){
 
-  return found && neighborValidated;
-};
-
-var getAllIndexes = function(content, str){
-  var indices = [];
-
-  for(var i = 0; i < content.length - str.length + 1; i++){
-    if(content.substr(i, str.length) === str){
-      indices.push(i);
+      if(!neighborCheck(content, i, str)){
+        return true;
+      }
     }
   }
 
-  if(indices.length === 0){
-    indices = false;
-  }
-
-  return indices;
+  return false;
 };
 
-var neighborsAreLetters = function(content, indices, str){
-  if (!indices){
-    return false;
-  }
-
-  return _.every(indices, function(i){
-    return !!content[i - 1].match(/[a-z]/i) ||
-           !!content[i + str.length].match(/[a-z]/i);
-  });
-};
-
-var neighborsAreLettersOrHyphen = function(content, indices, str){
-  if(!indices){
-    return false;
-  }
-
-  return _.every(indices, function(i){
-    return !!content[i - 1].match(/[a-z\-]/i) ||
-           !!content[i + str.length].match(/[a-z\-]/i);
-  });
+var neighborsAreLetters = function(content, i, str){
+  return !!content[i - 1].match(/[a-z]/i) ||
+         !!content[i + str.length].match(/[a-z]/i);
 };
 
 var formatCSS = function(styles){
@@ -74,13 +49,6 @@ var formatCSS = function(styles){
   styles = styles.split(' }').join('}');
 
   return styles;
-};
-
-var extractHTMLElementsFromContent = function(content){
-  return _.filter(htmlEls, function(ele){
-    var validatedHTML = validateStr(content, ele, neighborsAreLetters);
-    return validatedHTML;
-  });
 };
 
 var extractClassesFromFlatCSS = function(json){
@@ -107,58 +75,38 @@ var extractIDsFromFlatCSS = function(json){
   return _.uniq(ids);
 };
 
-var findClassesInFiles = function(classes, content){
-  return _.filter(classes, function(className){
+var findWordsInFiles = function(words, content){
+  return _.filter(words, function(word){
 
     // we search for the prefix, middles, and suffixes
     // because if the prefix/middle/suffix can't be found, then
-    // certainly the whole className can't be found.
-    return contentHasPrefixSuffix(className.toLowerCase(), content);
+    // certainly the whole word can't be found.
+
+    return contentHasPrefixSuffix(word.toLowerCase(), content);
   });
 };
 
-var contentHasPrefixSuffix = function(className, content){
-  var split = className.split('-');
+var cache = {};
 
-  var wholeClassValidated = validateStr(content, className, neighborsAreLettersOrHyphen);
-  if(wholeClassValidated){
-    return true;
+var contentHasPrefixSuffix = function(word, content){
+  if(cache.hasOwnProperty(word)){
+    return cache[word];
   }
 
-  if(split.length === 1){
-    return false;
-  }
+  var split = word.split('-');
 
   var foundParts = _.every(split, function(part){
+    if(cache.hasOwnProperty(part)){
+      return cache[part];
+    }
+
     var partValidated = validateStr(content, part, neighborsAreLetters);
+    cache[part] = partValidated;
+
     return partValidated;
   });
 
-  if(!foundParts){
-    return false;
-  }
-
-  var i = 0;
-  var foundOneWithHyphen = _.some(split, function(part){
-    if(i === 0){
-      part = part + '-';
-    }
-
-    if(i < split.length - 1){
-      part = '-' + part + '-';
-    }
-
-    if(i === split.length - 1){
-      part = '-' + part;
-    }
-
-    i++;
-
-    var partValidated = validateStr(content, part, neighborsAreLetters);
-    return partValidated;
-  });
-
-  return foundParts && foundOneWithHyphen;
+  return foundParts;
 };
 
 var filterByUsedClassesAndHtmlEls = function(ast, classes, htmlEls){
@@ -282,9 +230,11 @@ var purify = function(files, css, options, callback){
   options = options || {};
   options = _.extend({}, DEFAULT_OPTIONS, options);
 
+  var startTime = new Date();
+
   var cssString = Array.isArray(css) ? concatFiles(css) : css;
   var content = Array.isArray(files) ? concatFiles(files) : files;
-  content = content.toLowerCase();
+  content = content.toLowerCase().split('\n').join('');
   // Store starting length. Will be helpful later to show how much was reduced
   var beginningLength = cssString.length;
 
@@ -308,11 +258,12 @@ var purify = function(files, css, options, callback){
   // Get list of things that are actually used
   var classes = extractClassesFromFlatCSS(flattenedCSS);
   var ids = extractIDsFromFlatCSS(flattenedCSS);
-  var htmlEls = extractHTMLElementsFromContent(content);
   
   // Narrow tree down to stuff that is used
-  classes = findClassesInFiles(classes, content);
-  var stylesheet = filterByUsedClassesAndHtmlEls(original, classes, htmlEls);
+  var filteredHtmlEls = findWordsInFiles(htmlEls, content);
+  classes = findWordsInFiles(classes, content);
+  ids = findWordsInFiles(ids, content);
+  var stylesheet = filterByUsedClassesAndHtmlEls(original, classes, filteredHtmlEls);
   ids = filterByUsedIds(original, ids);
   removeUnusedMedias(atSign, classes);
   atSign = filterMediasByZeroClasses(atSign);
@@ -336,6 +287,7 @@ var purify = function(files, css, options, callback){
     console.log('After purify, CSS is ' + styles.length + ' chars long. (' +
       Math.floor((beginningLength / styles.length * 10)) / 10  + ' times smaller)');
     console.log('##################################');
+    console.log('This function took: ', new Date() - startTime, 'ms');
   }
 
   if(!options.output){
