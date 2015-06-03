@@ -44,6 +44,17 @@ var neighborsAreLetters = function(content, indices, str){
   });
 };
 
+var neighborsAreLettersOrHyphen = function(content, indices, str){
+  if(!indices){
+    return false;
+  }
+
+  return _.every(indices, function(i){
+    return !!content[i - 1].match(/[a-z\-]/i) ||
+           !!content[i + str.length].match(/[a-z\-]/i);
+  });
+};
+
 var formatCSS = function(styles){
   styles = styles.split('\\n\\n').join('');
   styles = styles.split(' \\n').join('');
@@ -59,7 +70,7 @@ var formatCSS = function(styles){
 var extractHTMLElementsFromContent = function(content){
   return _.filter(htmlEls, function(ele){
     var indices = getAllIndexes(content, ele);
-    var neighborsAreNotLetters = !neighborsAreLetters(content, indices, ele);
+    var neighborsAreNotLetters = !neighborsAreLettersOrHyphen(content, indices, ele);
 
     return indices && neighborsAreNotLetters;
   });
@@ -102,12 +113,20 @@ var findClassesInFiles = function(classes, content){
 var contentHasPrefixSuffix = function(className, content){
   var split = className.split('-');
 
+  var indices = getAllIndexes(content, className);
+  var neighborsAreNotLetters = !neighborsAreLettersOrHyphen(content, indices, className);
+  var found = !!indices;
+
+  if(found && neighborsAreNotLetters){
+    return true;
+  }
+
   if(split.length === 1){
     var indices = getAllIndexes(content, split[0]);
-    var neighborsAreNotLetters = !neighborsAreLetters(content, indices, split[0]);
+    var neighborsAreNotLetters = !neighborsAreLettersOrHyphen(content, indices, split[0]);
     var found = !!indices;
 
-    return found && neighborsAreLetters;
+    return found && neighborsAreNotLetters;
   }
 
   var foundParts = _.every(split, function(part){
@@ -137,7 +156,12 @@ var contentHasPrefixSuffix = function(className, content){
     }
 
     i++;
-    return content.indexOf(part) > -1;
+    // return content.indexOf(part) > -1;
+    var indices = getAllIndexes(content, part);
+    var neighborsAreNotLetters = !neighborsAreLetters(content, indices, part);
+    var found = !!indices;
+
+    return found && neighborsAreNotLetters;
   });
 
   return foundParts && foundOneWithHyphen;
