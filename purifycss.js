@@ -109,25 +109,67 @@ var contentHasPrefixSuffix = function(word, content){
 };
 
 var filterByUsedClassesAndHtmlEls = function(ast, classes, htmlEls){
+  ast.forEach(function(branch){
+    if(branch[0] !== 'ruleset'){
+      return;
+    }
+
+    for(var i = 1; i < branch.length; i++){
+      if(branch[i][0] !== 'selector'){
+        continue;
+      }
+
+      var throwDelim = false;
+      branch[i] = _.filter(branch[i], function(twig){
+        var flatTwig = _.flatten(twig);
+
+        if(flatTwig[0] === 'delim' && throwDelim){
+          throwDelim = false;
+          return false;
+        }
+
+        if(flatTwig[0] !== 'simpleselector'){
+          return true;
+        }
+
+        var hasClass = flatTwig.indexOf('clazz') > -1;
+
+        if(hasClass){
+          for(var j = 1; j < flatTwig.length; j++){
+            if(flatTwig[j] === 'clazz'){
+              if(classes.indexOf(flatTwig[j + 2]) === -1){
+                throwDelim = true;
+                return false;
+              }
+            }
+          }
+        } else {
+          for(var j = 1; j < flatTwig.length; j++){
+            if(flatTwig[i] === 'ident' && htmlEls.indexOf(flatTwig[i + 1]) > -1){
+              return true;
+            }
+          }
+
+          throwDelim = true;
+          return false;
+        }
+
+        return true;
+      });
+
+      if(branch[i][branch[i].length - 1][0] === 'delim'){
+        branch[i] = branch[i].slice(0, branch[i].length - 1);
+      }
+    }
+  });
+
   return _.filter(ast, function(branch){
-    var flatBranch = _.flatten(branch.slice());
-    if(flatBranch[0] === 's'){
+    if(branch[0] !== 'ruleset'){
       return true;
     }
 
-    for(var i = 0; i < flatBranch.length; i++){
-      if(flatBranch[i] === 'clazz'){
-        return classes.indexOf(flatBranch[i + 2]) > -1;
-      }
-    }
-
-    for(var i = 0; i < flatBranch.length; i++){
-      if(flatBranch[i] === 'ident' && htmlEls.indexOf(flatBranch[i + 1]) > -1){
-        return true;
-      }
-    }
-
-    return false;
+    var flatBranch = _.flatten(branch);
+    return flatBranch.indexOf('simpleselector') > -1;
   });
 };
 
@@ -141,7 +183,7 @@ var filterByUsedIds = function(ast, ids){
 
     for(var i = 0; i < flatBranch.length; i++){
       if(flatBranch[i] === 'shash'){
-        return ids.indexOf(flatBranch[i + 1]) > -1;
+        return ids.indexOf(flatBranch[i + 1].toLowerCase()) > -1;
       }
     }
 
