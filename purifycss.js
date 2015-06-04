@@ -247,6 +247,12 @@ var filterMediasByZeroClasses = function(atSign){
   });
 };
 
+var reduceContent = function(content){
+  return content
+    .split('\n').join('')
+    .replace(/\s\s+/g, ' ');
+};
+
 
 var DEFAULT_OPTIONS = {
   write: false,
@@ -275,7 +281,8 @@ var purify = function(files, css, options, callback){
 
   var cssString = Array.isArray(css) ? concatFiles(css) : css;
   var content = Array.isArray(files) ? concatFiles(files) : files;
-  content = content.toLowerCase().split('\n').join('');
+  content = reduceContent(content.toLowerCase());
+
   // Store starting length. Will be helpful later to show how much was reduced
   var beginningLength = cssString.length;
 
