@@ -85,11 +85,17 @@ var extractIDsAndClassesFromCSS = function(css){
 
 var findWordsInWordHash = function(words, wordsHash){
   return _.filter(words, function(word){
-    return wordsHash[word] ||
-           _.every(word.split('-'), function(part){
-             return wordsHash[part] || wordsHash[part + '-'] ||
-                    wordsHash['-' + part + '-'] || wordsHash['-' + part];
-           });
+    var splitWord = word.split('-');
+
+    if(splitWord.length === 1){
+      return wordsHash[word];
+    } else {
+      return wordsHash[word] ||
+             _.every(splitWord, function(part){
+               return wordsHash[part] || wordsHash[part + '-'] ||
+                      wordsHash['-' + part + '-'] || wordsHash['-' + part];
+             });
+    }
   });
 };
 
