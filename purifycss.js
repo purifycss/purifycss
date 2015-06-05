@@ -17,26 +17,35 @@ var concatFiles = function(files){
   }, '');
 };
 
-var validateStr = function(content, str, neighborCheck){
-  var length = str.length;
+var getAllUsedCharactersInClasses = function(classes){
+  var usedChars = {};
 
-  for(var i = 0; i < content.length - length + 1; i++){
-    if(content[i] === str[0] && 
-       content[i + length - 1] === str[length - 1] &&
-       content.substr(i, length) === str){
+  classes.forEach(function(selector){
+    for(var i = 0; i < selector.length; i++){
+      var chr = selector[i];
+      usedChars[chr] = true;
+    }
+  });
 
-      if(!neighborCheck(content, i, str)){
-        return true;
-      }
+  return usedChars;
+};
+
+var getAllUsedWords = function(content, usedChars){
+  var used = {};
+  var word = "";
+
+  for(var i = 0; i < content.length; i++){
+    var chr = content[i];
+
+    if(chr in usedChars){
+      word += chr;
+    } else {
+      used[word] = true;
+      word = "";
     }
   }
 
-  return false;
-};
-
-var neighborsAreLetters = function(content, i, str){
-  return !!content[i - 1].match(/[a-z]/i) ||
-         !!content[i + str.length].match(/[a-z]/i);
+  return used;
 };
 
 var formatCSS = function(styles){
@@ -74,38 +83,14 @@ var extractIDsAndClassesFromCSS = function(css){
   };
 };
 
-var findWordsInFiles = function(words, content){
+var findWordsInWordHash = function(words, wordsHash){
   return _.filter(words, function(word){
-
-    // we search for the prefix, middles, and suffixes
-    // because if the prefix/middle/suffix can't be found, then
-    // certainly the whole word can't be found.
-
-    return contentHasPrefixSuffix(word.toLowerCase(), content);
+    return wordsHash[word] ||
+           _.every(word.split('-'), function(part){
+             return wordsHash[part] || wordsHash[part + '-'] ||
+                    wordsHash['-' + part + '-'] || wordsHash['-' + part];
+           });
   });
-};
-
-var cache = {};
-
-var contentHasPrefixSuffix = function(word, content){
-  if(cache.hasOwnProperty(word)){
-    return cache[word];
-  }
-
-  var split = word.split('-');
-
-  var foundParts = _.every(split, function(part){
-    if(cache.hasOwnProperty(part)){
-      return cache[part];
-    }
-
-    var partValidated = validateStr(content, part, neighborsAreLetters);
-    cache[part] = partValidated;
-
-    return partValidated;
-  });
-
-  return foundParts;
 };
 
 var filterByUsedClassesAndHtmlEls = function(ast, classes, htmlEls){
@@ -307,11 +292,15 @@ var purify = function(files, css, options, callback){
   var extraction = extractIDsAndClassesFromCSS(flattenedCSS);
   var classes = extraction.classes;
   var ids = extraction.ids;
-  
+
+  // Get hash of word-parts appearing in content
+  var chrHash = getAllUsedCharactersInClasses(classes);
+  var wordsInContent = getAllUsedWords(content, chrHash);
+
   // Narrow list down to things that are found in content
-  var filteredHtmlEls = findWordsInFiles(htmlEls, content);
-  classes = findWordsInFiles(classes, content);
-  ids = findWordsInFiles(ids, content);
+  classes = findWordsInWordHash(classes, wordsInContent);
+  var filteredHtmlEls = findWordsInWordHash(htmlEls, wordsInContent);
+  ids = findWordsInWordHash(ids, wordsInContent);
 
   // Narrow CSS tree down to things that remain on the list
   var stylesheet = filterByUsedClassesAndHtmlEls(original, classes, filteredHtmlEls);
