@@ -17,27 +17,14 @@ var concatFiles = function(files){
   }, '');
 };
 
-var getAllUsedCharactersInClasses = function(classes){
-  var usedChars = {};
-
-  classes.forEach(function(selector){
-    for(var i = 0; i < selector.length; i++){
-      var chr = selector[i];
-      usedChars[chr] = true;
-    }
-  });
-
-  return usedChars;
-};
-
-var getAllUsedWords = function(content, usedChars){
+var getAllUsedWords = function(content){
   var used = {};
   var word = "";
 
   for(var i = 0; i < content.length; i++){
     var chr = content[i];
 
-    if(chr in usedChars){
+    if(chr.match(/^[\w-]+$/)){
       word += chr;
     } else {
       used[word] = true;
@@ -75,11 +62,32 @@ var extractIDsAndClassesFromCSS = function(css){
   }
 
   ids = _.uniq(ids);
-  classes = _.uniq(classes);
+  var normalClasses = [];
+  var specialClasses = [];
+  var normalIds = [];
+  var specialIds = [];
+
+  classes.forEach(function(selector){
+    if(selector.match(/^[\w-]+$/)){
+      normalClasses.push(selector);
+    } else {
+      specialClasses.push(selector);
+    }
+  });
+
+  ids.forEach(function(selector){
+    if(selector.match(/^[\w-]+$/)){
+      normalIds.push(selector);
+    } else {
+      specialIds.push(selector);
+    }
+  });
 
   return {
-    ids: ids,
-    classes: classes
+    ids: _.uniq(normalIds),
+    specialIds: _.uniq(specialIds),
+    classes: _.uniq(normalClasses),
+    specialClasses: _.uniq(specialClasses)
   };
 };
 
@@ -96,6 +104,12 @@ var findWordsInWordHash = function(words, wordsHash){
                       wordsHash['-' + part + '-'] || wordsHash['-' + part];
              });
     }
+  });
+};
+
+var findSpecialInContent = function(selectors, content){
+  return _.filter(selectors, function(selector){
+    return content.indexOf(selector) > -1;
   });
 };
 
@@ -296,17 +310,21 @@ var purify = function(files, css, options, callback){
 
   // Get list of things that are used
   var extraction = extractIDsAndClassesFromCSS(flattenedCSS);
+
   var classes = extraction.classes;
+  var specialClasses = extraction.specialClasses;
   var ids = extraction.ids;
+  var specialIds = extraction.specialIds;
 
   // Get hash of word-parts appearing in content
-  var chrHash = getAllUsedCharactersInClasses(classes);
-  var wordsInContent = getAllUsedWords(content, chrHash);
+  var wordsInContent = getAllUsedWords(content);
 
   // Narrow list down to things that are found in content
   classes = findWordsInWordHash(classes, wordsInContent);
+  classes = classes.concat(findSpecialInContent(specialClasses, content));
   var filteredHtmlEls = findWordsInWordHash(htmlEls, wordsInContent);
   ids = findWordsInWordHash(ids, wordsInContent);
+  ids = ids.concat(findSpecialInContent(specialIds, content));
 
   // Narrow CSS tree down to things that remain on the list
   var stylesheet = filterByUsedClassesAndHtmlEls(original, classes, filteredHtmlEls);
