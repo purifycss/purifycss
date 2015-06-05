@@ -26,8 +26,8 @@
   "author": "Kenny Tran, Matthew Rourke, Phoebe Li",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/purifycss/purify-css/issues"
+    "url": "https://github.com/purifycss/purifycss/issues"
   },
   "bin": "./bin/purifycss",
-  "homepage": "https://github.com/purifycss/purify-css"
+  "homepage": "https://github.com/purifycss/purifycss"
 }
