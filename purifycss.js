@@ -93,7 +93,7 @@ var extractIDsAndClassesFromCSS = function(css){
 
 var findWordsInWordHash = function(words, wordsHash){
   return _.filter(words, function(word){
-    var splitWord = word.split('-');
+    var splitWord = word.toLowerCase().split('-');
 
     if(splitWord.length === 1){
       return wordsHash[word];
