@@ -23,7 +23,7 @@ var DEFAULT_OPTIONS = {
   info: false
 };
 
-var purify = function(files, css, options, callback){
+var purify = function(searchThrough, css, options, callback){
   if(typeof options === 'function'){
     callback = options;
     options = {};
@@ -32,7 +32,7 @@ var purify = function(files, css, options, callback){
   options = _.extend({}, DEFAULT_OPTIONS, options);
 
   var cssString = Array.isArray(css) ? concatFiles(css) : css;
-  var content = Array.isArray(files) ? concatFiles(files) : files;
+  var content = Array.isArray(searchThrough) ? concatFiles(searchThrough) : searchThrough;
   content = reduceContent(content.toLowerCase());
 
   // Save these to give helpful info at the end
@@ -43,11 +43,19 @@ var purify = function(files, css, options, callback){
   var tree = new CssSyntaxTree(cssString);
 
   // Narrow list down to things that are found in content
-  var extraction = new Extraction(content, tree);
+  var extraction = new Extraction(content);
+  var classes = extraction.filter(tree.classes);
+  var specialClasses = extraction.filterBySearch(tree.specialClasses);
+  var ids = extraction.filter(tree.ids);
+  var specialIds = extraction.filterBySearch(tree.specialIds);
+
+  classes = classes.concat(specialClasses);
+  ids = ids.concat(specialIds);
+  var usedHtmlEls = extraction.filter(htmlEls);
 
   // Narrow CSS tree down to things that remain on the list
-  tree.filterSelectors(extraction.classes, extraction.htmlEls, extraction.ids);
-  tree.filterAtRules(extraction.classes);
+  tree.filterSelectors(classes, usedHtmlEls, ids);
+  tree.filterAtRules(classes);
 
   // Turn tree back into css
   var styles = tree.toSrc();
@@ -91,3 +99,5 @@ var printInfo = function(startTime, beginningLength, endingLength){
   console.log('##################################');
   console.log('This function took: ', new Date() - startTime, 'ms');
 };
+
+var htmlEls = ['a','abbr','acronym','address','applet','area','article','aside','audio','b','base','basefont','bdi','bdo','bgsound','big','blink','blockquote','body','br','button','canvas','caption','center','cite','code','col','colgroup','command','content','data','datalist','dd','del','details','dfn','dialog','dir','div','dl','dt','element','em','embed','fieldset','figcaption','figure','font','footer','form','frame','frameset','head','header','hgroup','hr','html','i','iframe','image','img','input','ins','isindex','kbd','keygen','label','legend','li','link','listing','main','map','mark','marquee','menu','menuitem','meta','meter','multicol','nav','nobr','noembed','noframes','noscript','object','ol','optgroup','option','output','p','param','picture','plaintext','pre','progress','q','rp','rt','rtc','ruby','s','samp','script','section','select','shadow','small','source','spacer','span','strike','strong','style','sub','summary','sup','table','tbody','td','template','textarea','tfoot','th','thead','time','title','tr','track','tt','u','ul','var','video','wbr','xmp'];
