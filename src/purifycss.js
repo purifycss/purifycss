@@ -50,22 +50,18 @@ var purify = function(files, css, options, callback){
   tree.filterAtRules(extraction.classes);
 
   // Turn tree back into css
-  styles = tree.toSrc();
+  var styles = tree.toSrc();
 
   if(options.minify){
     styles = new CleanCss().minify(styles).styles;
   }
 
   if(options.info){
-    printInfo(startTime, beginningLength);
+    printInfo(startTime, beginningLength, styles.length);
   }
 
   if(!options.output){
-    if(callback){
-      return callback(styles);
-    } else {
-      return styles
-    }
+    return callback ? callback(styles) : styles;
   } else {
     fs.writeFile(options.output, styles, function(err){
       if(err) return err;
@@ -87,11 +83,11 @@ var reduceContent = function(content){
     .replace(/\s\s+/g, ' ');
 };
 
-var printInfo = function(startTime, beginningLength){
+var printInfo = function(startTime, beginningLength, endingLength){
   console.log('##################################');
   console.log('Before purify, CSS was ' + beginningLength + ' chars long.');
-  console.log('After purify, CSS is ' + styles.length + ' chars long. (' +
-    Math.floor((beginningLength / styles.length * 10)) / 10  + ' times smaller)');
+  console.log('After purify, CSS is ' + endingLength + ' chars long. (' +
+    Math.floor((beginningLength / endingLength * 10)) / 10  + ' times smaller)');
   console.log('##################################');
   console.log('This function took: ', new Date() - startTime, 'ms');
 };
