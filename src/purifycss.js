@@ -282,14 +282,13 @@ var purify = function(files, css, options, callback){
   options = options || {};
   options = _.extend({}, DEFAULT_OPTIONS, options);
 
-  var startTime = new Date();
-
   var cssString = Array.isArray(css) ? concatFiles(css) : css;
   var content = Array.isArray(files) ? concatFiles(files) : files;
   content = reduceContent(content.toLowerCase());
 
-  // Store starting length. Will be helpful later to show how much was reduced
+  // Save these to give helpful info at the end
   var beginningLength = cssString.length;
+  var startTime = new Date();
 
   // Turn css into abstract syntax tree
   var original = gonzales.srcToCSSP(cssString);
