@@ -16,6 +16,8 @@ var CssTree = function(cssString){
   this.initialize(ast);
 };
 
+module.exports = CssTree;
+
 CssTree.prototype.initialize = function(ast){
   // Everything that begins with @ in css (@media, @keyframe, etc.)
   this.atRulesTree = _.filter(ast, function(branch){
@@ -226,5 +228,3 @@ CssTree.prototype.toSrc = function(){
   var styles = classStyles + '\n' + atStyles + '\n';
   return JSON.parse(formatCSS(JSON.stringify(styles)));
 };
-
-module.exports = CssTree;
