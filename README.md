@@ -2,11 +2,7 @@
 
 * Remove dead weight CSS not being used in your app.
 
-*Result:* smaller file sizes.
-
-*Result:* reduced load time.
-
-Able to detect **dynamically-loaded CSS classes** (classes that get initialized according to user interaction). PurifyCSS has been designed from the beginning with **single-page apps** in mind (works great for static sites too).
+Able to also detect **dynamically-loaded CSS classes**. PurifyCSS has been designed from the beginning with **single-page apps** in mind.
 
 # Install
 ```
@@ -17,7 +13,7 @@ npm install purify-css
 ```javascript
 var purify = require('purify-css');
 
-purify(content, css, options);
+purify(content, css, options, callback);
 ```
 
 ## ```content```
@@ -36,7 +32,7 @@ purify(content, css, options);
 **```String```** of css you want us to filter.
 
 
-##```options```
+##```options (optional)```
 ##### Type: ```Object```
 
 ##### Properties of options object:
@@ -46,3 +42,20 @@ purify(content, css, options);
 * **```output:```** Filepath to write purified css to. Returns raw string if ```false```. Default: ```false```
 
 * **```info:```** Logs info on how much css was removed if ```true```. Default: ```false```
+
+##```callback (optional)```
+##### Type: ```Function```
+
+##### Example
+``` javascript
+purify(content, css, options, function(output){
+  console.log(output, ' is the result of purify');
+});
+```
+
+##### Example without options
+``` javascript
+purify(content, css, function(output){
+  console.log('callback without options');
+});
+```
