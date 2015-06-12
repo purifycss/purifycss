@@ -45,10 +45,10 @@ npm install purify-css
 
 * **All** javascript frameworks
 
-##### Example for the class ```framework-button```
+##### Example for the class ```angular-button```
 ``` javascript
   <!-- angular template -->
-  <div ng-class="'framework' + '-button'"></div>
+  <div ng-class="'angular' + '-button'"></div>
 ```
 
 ##### Example for the class ```commentBox```
