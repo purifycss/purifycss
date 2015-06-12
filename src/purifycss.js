@@ -58,20 +58,20 @@ var purify = function(searchThrough, css, options, callback){
   tree.filterAtRules(classes);
 
   // Turn tree back into css
-  var styles = tree.toSrc();
+  var source = tree.toSrc();
 
   if(options.minify){
-    styles = new CleanCss().minify(styles).styles;
+    source = new CleanCss().minify(source).styles;
   }
 
   if(options.info){
-    printInfo(startTime, beginningLength, styles.length);
+    printInfo(startTime, beginningLength, source.length);
   }
 
   if(!options.output){
-    return callback ? callback(styles) : styles;
+    return callback ? callback(source) : source;
   } else {
-    fs.writeFile(options.output, styles, function(err){
+    fs.writeFile(options.output, source, function(err){
       if(err) return err;
     });
   }

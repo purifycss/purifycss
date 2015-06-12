@@ -1,6 +1,6 @@
 {
   "name": "purify-css",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Removed unused css. Compatible with single-page apps.",
   "main": "./src/purifycss.js",
   "dependencies": {
@@ -9,9 +9,12 @@
     "underscore": "^1.8.3",
     "yargs": "^3.10.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "chai": "^3.0.0",
+    "mocha": "^2.2.5"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node ./node_modules/mocha/bin/mocha"
   },
   "repository": {
     "type": "git",
@@ -22,6 +25,13 @@
     "css",
     "remove",
     "unused"
+  ],
+  "files": [
+    "bin",
+    "src",
+    "LICENSE",
+    "package.json",
+    "README.md"
   ],
   "author": "Kenny Tran, Matthew Rourke, Phoebe Li",
   "license": "MIT",
