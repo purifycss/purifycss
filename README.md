@@ -6,6 +6,8 @@ Able to also detect **dynamically-loaded CSS classes** in your javascript.
 
 PurifyCSS has been designed from the beginning with **single-page apps** in mind.
 
+*This is in addition to working with static page apps.*
+
 # Potential reduction
 * Bootstrap file: ~140k characters.
 * Average Bootstrap usage: ~40% (at most)
