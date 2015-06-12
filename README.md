@@ -69,6 +69,8 @@ npm install purify-css
   );
 ```
 
+### PurifyCSS works with all javascript frameworks.
+
 # API
 ```javascript
 var purify = require('purify-css');
@@ -79,7 +81,7 @@ purify(content, css, options, callback);
 ## ```content```
 ##### Type: ```Array``` or ```String```
 
-**```Array```** of filepaths to the files you want purify to search through for used classes (HTML, Javascripts, Templates, anything)
+**```Array```** of filepaths to the files you want purify to search through for used classes (HTML, Javascripts, Templates, anything that relates to CSS classes)
 
 **```String```** of content you want us to look for used classes.
 
