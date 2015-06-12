@@ -2,11 +2,70 @@
 
 * Remove dead weight CSS not being used in your app.
 
-Able to also detect **dynamically-loaded CSS classes**. PurifyCSS has been designed from the beginning with **single-page apps** in mind.
+Able to also detect **dynamically-loaded CSS classes**.
+
+PurifyCSS has been designed from the beginning with **single-page apps** in mind.
 
 # Install
 ```
 npm install purify-css
+```
+
+#Able to detect
+* Anytime your class name is intact in your code.
+
+##### Example for the class ```button-active```
+``` html
+  <!-- html -->
+  <!-- class directly on element -->
+  <div class="button-active">click</div>
+```
+
+``` javascript
+  // javascript
+  // this example is jquery, but anytime your class name is together in your javascript, it will work
+  $(button).addClass('button-active');
+```
+
+* Dynamically created classes
+
+##### Example for the class ```button-active```
+``` javascript
+  // can detect even if class is split
+  var half = 'button-';
+  $(button).addClass(half + 'active');
+```
+
+``` javascript
+  // can detect even if class is joined
+  var dynamicClass = ['button', 'active'].join('-');
+  $(button).addClass(dynamicClass);
+```
+
+* **All** javascript frameworks
+
+##### Example for the class ```framework-button```
+``` javascript
+  <!-- angular template -->
+  <div ng-class="'framework' + '-button'"></div>
+```
+
+##### Example for the class ```commentBox```
+```javascript
+  // react component
+  var CommentBox = React.createClass({
+    render: function() {
+      return (
+        <div className="commentBox">
+          Hello, world! I am a CommentBox.
+        </div>
+      );
+    }
+  });
+  React.render(
+    <CommentBox />,
+    document.getElementById('content')
+  );
 ```
 
 # API
