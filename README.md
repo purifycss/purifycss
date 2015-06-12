@@ -9,7 +9,7 @@ PurifyCSS has been designed from the beginning with **single-page apps** in mind
 # Potential reduction
 * Bootstrap file: ~140k characters.
 * Average Bootstrap usage: ~40% (at most)
-* Purified + Minified Bootstrap: ~27k characters
+* Purified + Minified Bootstrap: **~27k characters**
 
 # Install
 ```
