@@ -1,8 +1,8 @@
 # PurifyCSS
 
-* Remove dead weight CSS not being used in your app.
+* Detects which CSS classes your app is using and creates a file without the unused CSS.
 
-Able to also detect **dynamically-loaded CSS classes**.
+Able to also detect **dynamically-loaded CSS classes** in your javascript.
 
 PurifyCSS has been designed from the beginning with **single-page apps** in mind.
 
@@ -35,9 +35,7 @@ npm install purify-css
   // can detect even if class is split
   var half = 'button-';
   $(button).addClass(half + 'active');
-```
-
-``` javascript
+  
   // can detect even if class is joined
   var dynamicClass = ['button', 'active'].join('-');
   $(button).addClass(dynamicClass);
@@ -81,7 +79,7 @@ purify(content, css, options, callback);
 ## ```content```
 ##### Type: ```Array``` or ```String```
 
-**```Array```** of filepaths to the files you want purify to search through for used classes (HTML, Javascripts, Templates, anything that relates to CSS classes)
+**```Array```** of filepaths to the files you want to search through for used classes (HTML, Javascripts, Templates, anything that relates to CSS classes)
 
 **```String```** of content you want us to look for used classes.
 
