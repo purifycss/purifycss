@@ -23,7 +23,8 @@ npm install purify-css
 
 ``` javascript
   // javascript
-  // this example is jquery, but anytime your class name is together in your javascript, it will work
+  // this example is jquery, but anytime your class name 
+  // is together in your javascript, it will work
   $(button).addClass('button-active');
 ```
 
