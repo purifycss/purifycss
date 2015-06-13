@@ -128,6 +128,24 @@ purify(content, css, function(output){
 });
 ```
 
+## Command Line Tool
+
+```
+$ npm install -g purify-css
+```
+
+```
+$ purifycss
+usage: purifycss <css> <content> [option ...]
+
+options:
+ --min                Minify CSS
+ --out [filepath]     Filepath to write purified css to
+ --info               Logs info on how much css was removed
+
+ -h, --help           Prints help (this message) and exits
+```
+
 # At build time
 [Grunt](https://github.com/purifycss/grunt-purify-css)
 
