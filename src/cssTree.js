@@ -35,11 +35,11 @@ CssTree.prototype.initialize = function(ast){
 
   for(var i = 0; i < css.length; i++){
     if(css[i] === 'clazz'){
-      classes.push(css[i + 2]);
+      classes.push(css[i + 2].toLowerCase());
     }
 
     if(css[i] === 'shash'){
-      ids.push(css[i + 1]);
+      ids.push(css[i + 1].toLowerCase());
     }
   }
 
@@ -114,7 +114,7 @@ CssTree.prototype.filterSelectors = function(classes, htmlEls, ids){
         if(hasClass){
           for(var j = 1; j < flatTwig.length; j++){
             if(flatTwig[j] === 'clazz'){
-              if(classes.indexOf(flatTwig[j + 2]) === -1){
+              if(classes.indexOf(flatTwig[j + 2].toLowerCase()) === -1){
                 throwDelim = true;
                 return false;
               }

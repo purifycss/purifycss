@@ -60,5 +60,6 @@ describe('purify', function(){
     var result = purify(content, css);
 
     expect(result.indexOf('testFoo') > -1).to.equal(true);
+    expect(result.indexOf('camelCase') > -1).to.equal(true);
   });
 });
