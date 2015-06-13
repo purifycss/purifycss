@@ -75,7 +75,7 @@ npm install purify-css
   );
 ```
 
-### PurifyCSS works with all javascript frameworks.
+### PurifyCSS works with all Javascript frameworks.
 
 # API
 ```javascript
