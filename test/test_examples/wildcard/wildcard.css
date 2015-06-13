@@ -1,0 +1,17 @@
+*,
+::before,
+::after {
+	background: black;
+}
+
+::selection {
+	background: black;
+}
+
+::-webkit-scrollbar {
+	background: black;
+}
+
+::-webkit-scrollbar:vertical {
+	background: black;
+}
