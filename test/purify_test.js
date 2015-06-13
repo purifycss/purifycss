@@ -62,4 +62,17 @@ describe('purify', function(){
     expect(result.indexOf('testFoo') > -1).to.equal(true);
     expect(result.indexOf('camelCase') > -1).to.equal(true);
   });
+
+  it('works with wildcard, pseudo-elements', function(){
+    var content = fs.readFileSync(absPath + 'wildcard/wildcard.html', 'utf8');
+    var css = fs.readFileSync(absPath + 'wildcard/wildcard.css', 'utf8');
+    var result = purify(content, css);
+
+    expect(result.indexOf('*') > -1).to.equal(true);
+    expect(result.indexOf('before') > -1).to.equal(true);
+    expect(result.indexOf('scrollbar') > -1).to.equal(true);
+    expect(result.indexOf('selection') > -1).to.equal(true);
+    expect(result.indexOf('vertical') > -1).to.equal(true);
+  });
+
 });
