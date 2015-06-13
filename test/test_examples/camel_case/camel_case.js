@@ -1,1 +1,3 @@
 'testFoo'
+
+'camelCase'
