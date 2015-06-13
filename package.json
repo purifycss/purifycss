@@ -38,6 +38,8 @@
   "bugs": {
     "url": "https://github.com/purifycss/purifycss/issues"
   },
-  "bin": "./bin/purifycss",
+  "bin": {
+    "purifycss": "./bin/purifycss"
+  },
   "homepage": "https://github.com/purifycss/purifycss"
 }
