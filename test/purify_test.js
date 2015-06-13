@@ -14,6 +14,17 @@ describe('purify', function(){
     expect(result.indexOf('.triple-simple-class') > -1).to.equal(true);
   });
 
+  it('can use a callback', function(){
+    var content = fs.readFileSync(absPath + 'simple/simple.js', 'utf8');
+    var css = fs.readFileSync(absPath + 'simple/simple.css', 'utf8');
+
+    purify(content, css, function(result){
+      expect(result.indexOf('.single') > -1).to.equal(true);
+      expect(result.indexOf('.double-class') > -1).to.equal(true);
+      expect(result.indexOf('.triple-simple-class') > -1).to.equal(true);
+    });
+  });
+
   it('can find classes that are added together', function(){
     var content = fs.readFileSync(absPath + 'combined/combined.js', 'utf8');
     var css = fs.readFileSync(absPath + 'combined/combined.css', 'utf8');
@@ -41,5 +52,13 @@ describe('purify', function(){
     expect(result.indexOf('.taylor-swift') > -1).to.equal(true);
     expect(result.indexOf('.blank-space') > -1).to.equal(true);
     expect(result.indexOf('.shake-it-off') === -1).to.equal(true);
+  });
+
+  it('works with camelCase', function(){
+    var content = fs.readFileSync(absPath + 'camel_case/camel_case.js', 'utf8');
+    var css = fs.readFileSync(absPath + 'camel_case/camel_case.css', 'utf8');
+    var result = purify(content, css);
+
+    expect(result.indexOf('testFoo') > -1).to.equal(true);
   });
 });
