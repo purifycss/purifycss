@@ -144,8 +144,6 @@ options:
  --info               Logs info on how much css was removed
 
  -h, --help           Prints help (this message) and exits
-
-Report bugs to: https://github.com/purifycss/purifycss/issues
 ```
 
 # At build time
