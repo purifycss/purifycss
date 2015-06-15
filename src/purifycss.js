@@ -55,7 +55,7 @@ var purify = function(searchThrough, css, options, callback){
 
   // Narrow CSS tree down to things that remain on the list
   tree.filterSelectors(classes, usedHtmlEls, ids);
-  tree.filterAtRules(classes);
+  tree.filterAtRules(classes, usedHtmlEls, ids);
 
   // Turn tree back into css
   var source = tree.toSrc();
