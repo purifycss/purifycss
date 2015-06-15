@@ -75,4 +75,15 @@ describe('purify', function(){
     expect(result.indexOf('vertical') > -1).to.equal(true);
   });
 
+  it('works with media queries', function(){
+    var content = fs.readFileSync(absPath + 'media_queries/media_queries.js', 'utf8');
+    var css = fs.readFileSync(absPath + 'media_queries/media_queries.css', 'utf8');
+    var result = purify(content, css);
+
+    expect(result.indexOf('.media-class') > -1).to.equal(true);
+    expect(result.indexOf('.alone') > -1).to.equal(true);
+    expect(result.indexOf('#id-in-media') > -1).to.equal(true);
+    expect(result.indexOf('body') > -1).to.equal(true);
+    expect(result.indexOf('.unused-class') > -1).to.equal(false);
+  });
 });

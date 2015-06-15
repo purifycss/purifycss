@@ -102,37 +102,20 @@ CssTree.prototype.filterSelectors = function(classes, htmlEls, ids){
 
         var isId = flatTwig.indexOf('shash') > -1;
         if(isId){
-          for(var k = 0; k < flatTwig.length; k++){
-            if(flatTwig[k] === 'shash'){
-              if(ids.indexOf(flatTwig[k + 1].toLowerCase()) === -1){
-                throwDelim = true;
-                return false;
-              }
-            }
-          }
-          return true;
+          var validated = validateId(flatTwig, ids);
+          throwDelim = !validated;
+          return validated;
         }
 
         var hasClass = flatTwig.indexOf('clazz') > -1;
-
         if(hasClass){
-          for(var j = 1; j < flatTwig.length; j++){
-            if(flatTwig[j] === 'clazz'){
-              if(classes.indexOf(flatTwig[j + 2].toLowerCase()) === -1){
-                throwDelim = true;
-                return false;
-              }
-            }
-          }
+          var validated = validateClass(flatTwig, classes);
+          throwDelim = !validated;
+          return validated
         } else {
-          for(var j = 1; j < flatTwig.length; j++){
-            if(flatTwig[i] === 'ident' && htmlEls.indexOf(flatTwig[i + 1]) > -1){
-              return true;
-            }
-          }
-
-          throwDelim = true;
-          return false;
+          var validated = validateHtmlTag(flatTwig, htmlEls);
+          throwDelim = !validated;
+          return validated;
         }
 
         return true;
@@ -154,7 +137,7 @@ CssTree.prototype.filterSelectors = function(classes, htmlEls, ids){
   });
 };
 
-CssTree.prototype.filterAtRules = function(classes){
+CssTree.prototype.filterAtRules = function(classes, htmlEls, ids){
   this.atRulesTree.forEach(function(branch){
     if(branch[0] !== 'atruler'){
       return;
@@ -168,24 +151,39 @@ CssTree.prototype.filterAtRules = function(classes){
         continue;
       }
 
+      var throwDelim = false;
       branch[i] = _.filter(branch[i], function(twig){
         if(twig[0] !== 'ruleset'){
+          if(twig[0] === 'delim' && throwDelim){
+            throwDelim = false;
+            return false;
+          }
           return true;
         }
-        var flattened = _.flatten(twig);
-        var flag = false;
 
-        for(var j = 0; j < flattened.length; j++){
-          if(flattened[j] === 'clazz'){
-            if(classes.indexOf(flattened[j + 2]) > -1){
-              flag = true;
-            } else {
-              return false;
-            }
-          }
+        var flatTwig = _.flatten(twig);
+
+        if (flatTwig.indexOf('pseudoe') > -1 || flatTwig.indexOf('*') > -1) {
+          return true;
         }
 
-        return flag;
+        var isId = flatTwig.indexOf('shash') > -1;
+        if(isId){
+          var validated = validateId(flatTwig, ids);
+          throwDelim = !validated;
+          return validated;
+        }
+
+        var hasClass = flatTwig.indexOf('clazz') > -1;
+        if(hasClass){
+          var validated = validateClass(flatTwig, classes);
+          throwDelim = !validated;
+          return validated
+        } else {
+          var validated = validateHtmlTag(flatTwig, htmlEls);
+          throwDelim = !validated;
+          return validated;
+        }
       });
     }
   });
@@ -231,4 +229,36 @@ CssTree.prototype.toSrc = function(){
   // Combine and format
   var styles = classStyles + '\n' + atStyles + '\n';
   return JSON.parse(formatCSS(JSON.stringify(styles)));
+};
+
+var validateId = function(flatTwig, ids){
+  for(var i = 0; i < flatTwig.length; i++){
+    if(flatTwig[i] === 'shash'){
+      if(ids.indexOf(flatTwig[i + 1].toLowerCase()) === -1){
+        throwDelim = true;
+        return false;
+      }
+    }
+  }
+  return true;
+};
+
+var validateClass = function(flatTwig, classes){
+  for(var i = 1; i < flatTwig.length; i++){
+    if(flatTwig[i] === 'clazz'){
+      if(classes.indexOf(flatTwig[i + 2].toLowerCase()) === -1){
+        return false;
+      }
+    }
+  }
+  return true;
+};
+
+var validateHtmlTag = function(flatTwig, htmlEls){
+  for(var i = 1; i < flatTwig.length; i++){
+    if(flatTwig[i] === 'ident' && htmlEls.indexOf(flatTwig[i + 1]) > -1){
+      return true;
+    }
+  }
+  return false;
 };
