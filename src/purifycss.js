@@ -48,13 +48,14 @@ var purify = function(searchThrough, css, options, callback){
   var specialClasses = extraction.filterBySearch(tree.specialClasses);
   var ids = extraction.filter(tree.ids);
   var specialIds = extraction.filterBySearch(tree.specialIds);
+  var attrSelectors = extraction.filterBySearch(tree.attrSelectors);
 
   classes = classes.concat(specialClasses);
   ids = ids.concat(specialIds);
   var usedHtmlEls = extraction.filter(htmlEls);
 
   // Narrow CSS tree down to things that remain on the list
-  tree.filterSelectors(classes, usedHtmlEls, ids);
+  tree.filterSelectors(classes, usedHtmlEls, ids, attrSelectors);
   tree.filterAtRules(classes, usedHtmlEls, ids);
 
   // Turn tree back into css

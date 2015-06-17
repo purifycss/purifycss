@@ -86,4 +86,14 @@ describe('purify', function(){
     expect(result.indexOf('body') > -1).to.equal(true);
     expect(result.indexOf('.unused-class') > -1).to.equal(false);
   });
+
+  it('works with attribute selectors', function(){
+    var content = fs.readFileSync(absPath + 'attribute_selector/attribute_selector.js', 'utf8');
+    var css = fs.readFileSync(absPath + 'attribute_selector/attribute_selector.css', 'utf8');
+    var result = purify(content, css);
+
+    expect(result.indexOf('font-icon-') > -1).to.equal(true);
+    expect(result.indexOf('center aligned') > -1).to.equal(true);
+    expect(result.indexOf('github') > -1).to.equal(false);
+  });
 });
