@@ -1,0 +1,12 @@
+
+[class*="font-icon-"] {
+  color: black;
+}
+
+a.link[href*="github.com"] {
+  color: black;
+}
+
+.ui[class*="center aligned"].grid {
+  color: black;
+}
