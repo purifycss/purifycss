@@ -12,6 +12,7 @@ var CssTree = function(cssString){
   this.specialClasses = null;
   this.ids = null;
   this.specialIds = null;
+  this.attrSelectors = null;
 
   this.initialize(ast);
 };
@@ -32,10 +33,15 @@ CssTree.prototype.initialize = function(ast){
   var ids = [];
   var classes = [];
   var css = _.flatten(ast.slice());
+  var attrSelectors = [];
 
   for(var i = 0; i < css.length; i++){
     if(css[i] === 'clazz'){
       classes.push(css[i + 2].toLowerCase());
+    }
+
+    if(css[i] === 'attrselector'){
+      attrSelectors.push(css[i + 3].toLowerCase());
     }
 
     if(css[i] === 'shash'){
@@ -43,11 +49,17 @@ CssTree.prototype.initialize = function(ast){
     }
   }
 
+  attrSelectors = _.uniq(attrSelectors);
   ids = _.uniq(ids);
   var normalClasses = [];
   var specialClasses = [];
   var normalIds = [];
   var specialIds = [];
+
+  // Remove first and last quotes
+  attrSelectors = attrSelectors.map(function(attrselector) {
+    return attrselector.replace(/^"(.+(?="$))"$/, '$1');
+  });
 
   classes.forEach(function(selector){
     if(selector.match(/^[\w-]+$/)){
@@ -70,9 +82,10 @@ CssTree.prototype.initialize = function(ast){
   this.specialIds = _.uniq(specialIds);
   this.classes = _.uniq(normalClasses);
   this.specialClasses = _.uniq(specialClasses);
+  this.attrSelectors = attrSelectors;
 };
 
-CssTree.prototype.filterSelectors = function(classes, htmlEls, ids){
+CssTree.prototype.filterSelectors = function(classes, htmlEls, ids, attrSelectors){
   this.selectors.forEach(function(branch){
     if(branch[0] !== 'ruleset'){
       return;
@@ -97,6 +110,20 @@ CssTree.prototype.filterSelectors = function(classes, htmlEls, ids){
         }
 
         if (flatTwig.indexOf('pseudoe') > -1 || flatTwig.indexOf('*') > -1) {
+          return true;
+        }
+
+        var isAttrSelector = flatTwig.indexOf('attrselector') > -1;
+        if (isAttrSelector) {
+          for(var k = 0; k < flatTwig.length; k++){
+            if(flatTwig[k] === 'attrselector'){
+              var attrvalue = flatTwig[k + 3].toLowerCase().replace(/^"(.+(?="$))"$/, '$1');
+              if(attrSelectors.indexOf(attrvalue) === -1){
+                throwDelim = true;
+                return false;
+              }
+            }
+          }
           return true;
         }
 
