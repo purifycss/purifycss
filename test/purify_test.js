@@ -96,4 +96,14 @@ describe('purify', function(){
     expect(result.indexOf('center aligned') > -1).to.equal(true);
     expect(result.indexOf('github') > -1).to.equal(false);
   });
+
+  it('works with special characters', function(){
+    var content = fs.readFileSync(absPath + 'special_characters/special_characters.js', 'utf8');
+    var css = fs.readFileSync(absPath + 'special_characters/special_characters.css', 'utf8');
+    var result = purify(content, css);
+
+    expect(result.indexOf('@home') > -1).to.equal(true);
+    expect(result.indexOf('+rounded') > -1).to.equal(true);
+    expect(result.indexOf('button') > -1).to.equal(true);
+  });
 });
