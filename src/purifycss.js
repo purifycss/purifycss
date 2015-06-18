@@ -1,4 +1,4 @@
-var fs = require('fs');
+var fs = require('rw');
 var util = require('util');
 var _ = require('underscore');
 var CleanCss = require('clean-css');
