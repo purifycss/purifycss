@@ -31,7 +31,7 @@ Extraction.prototype.filterBySearch = function(words){
   var that = this;
 
   return _.filter(words, function(word){
-    return that.content.indexOf(word) > -1;
+    return that.content.indexOf(word.replace(/\\/g, '')) > -1;
   });
 };
 
