@@ -75,7 +75,7 @@ npm install purify-css
   );
 ```
 
-### PurifyCSS detects all JS frameworks. PurifyCSS is voodoo magic.
+### PurifyCSS detects all JS frameworks. It is voodoo magic.
 
 # API
 ```javascript
