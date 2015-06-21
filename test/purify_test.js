@@ -85,6 +85,7 @@ describe('purify', function(){
     expect(result.indexOf('#id-in-media') > -1).to.equal(true);
     expect(result.indexOf('body') > -1).to.equal(true);
     expect(result.indexOf('.unused-class') > -1).to.equal(false);
+    expect(result.indexOf('66666px') > -1).to.equal(false);
   });
 
   it('works with attribute selectors', function(){

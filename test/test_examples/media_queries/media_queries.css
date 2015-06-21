@@ -3,7 +3,7 @@
     color: black;
   }
 
-  .alone {
+  .alone, .unused-class {
     color: black;
   }
 
@@ -17,7 +17,13 @@
 }
 
 @media (max-width: 960px){
-  .unused-class {
+  .alone, .unused-class {
+    color: black;
+  }
+}
+
+@media (max-width: 66666px){
+  .unused-class, .unused-class2 {
     color: black;
   }
 }
