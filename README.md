@@ -1,8 +1,8 @@
 # PurifyCSS
 
-* Detects which CSS classes your app is using and creates a file without the unused CSS.
+* Detects which CSS selectors your app is using and creates a file without the unused CSS.
 
-Able to also detect **dynamically-loaded CSS classes** in your javascript.
+Able to also detect **dynamically-loaded CSS selectors** in your javascript.
 
 PurifyCSS has been designed from the beginning with **single-page apps** in mind.
 
