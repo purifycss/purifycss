@@ -6,10 +6,10 @@ Able to also detect **dynamically-loaded CSS selectors** in your javascript.
 
 PurifyCSS has been designed from the beginning with **single-page apps** in mind.
 
-*This is in addition to working with static page apps.*
+*This is in addition to working with multi-page apps. PurifyCSS is voodoo magic.*
 
 # Potential reduction
-* Bootstrap file: ~140k characters.
+* [Bootstrap](https://github.com/twbs/bootstrap) file: ~140k characters.
 * Average Bootstrap usage: ~40% (at most)
 * Minified Bootstrap: ~117k characters.
 * Purified + Minified Bootstrap: **~27k characters**
