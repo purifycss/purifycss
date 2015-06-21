@@ -96,61 +96,7 @@ CssTree.prototype.filterSelectors = function(classes, htmlEls, ids, attrSelector
         continue;
       }
 
-      var throwDelim = false;
-      branch[i] = _.filter(branch[i], function(twig){
-        var flatTwig = _.flatten(twig);
-
-        if(flatTwig[0] === 'delim' && throwDelim){
-          throwDelim = false;
-          return false;
-        }
-
-        if(flatTwig[0] !== 'simpleselector'){
-          return true;
-        }
-
-        if (flatTwig.indexOf('pseudoe') > -1 || flatTwig.indexOf('*') > -1) {
-          return true;
-        }
-
-        var isAttrSelector = flatTwig.indexOf('attrselector') > -1;
-        if (isAttrSelector) {
-          for(var k = 0; k < flatTwig.length; k++){
-            if(flatTwig[k] === 'attrselector'){
-              var attrvalue = flatTwig[k + 3].toLowerCase().replace(/^"(.+(?="$))"$/, '$1');
-              if(attrSelectors.indexOf(attrvalue) === -1){
-                throwDelim = true;
-                return false;
-              }
-            }
-          }
-          return true;
-        }
-
-        var isId = flatTwig.indexOf('shash') > -1;
-        if(isId){
-          var validated = validateId(flatTwig, ids);
-          throwDelim = !validated;
-          return validated;
-        }
-
-        var hasClass = flatTwig.indexOf('clazz') > -1;
-        if(hasClass){
-          var validated = validateClass(flatTwig, classes);
-          throwDelim = !validated;
-          return validated
-        } else {
-          var validated = validateHtmlTag(flatTwig, htmlEls);
-          throwDelim = !validated;
-          return validated;
-        }
-
-        return true;
-      });
-
-      if(branch[i][branch[i].length - 1][0] === 'delim'){
-        branch[i] = branch[i].slice(0, branch[i].length - 1);
-      }
+      branch[i] = filterSelector(branch[i], classes, htmlEls, ids, attrSelectors);
     }
   });
 
@@ -164,7 +110,7 @@ CssTree.prototype.filterSelectors = function(classes, htmlEls, ids, attrSelector
   });
 };
 
-CssTree.prototype.filterAtRules = function(classes, htmlEls, ids){
+CssTree.prototype.filterAtRules = function(classes, htmlEls, ids, attrSelectors){
   this.atRulesTree.forEach(function(branch){
     if(branch[0] !== 'atruler'){
       return;
@@ -173,44 +119,37 @@ CssTree.prototype.filterAtRules = function(classes, htmlEls, ids){
     if(_.flatten(branch).indexOf('media') === -1){
       return;
     }
+
     for(var i = 1; i < branch.length; i++){
       if(branch[i][0] !== 'atrulers'){
         continue;
       }
 
-      var throwDelim = false;
+      for(var j = 1; j < branch[i].length; j++){
+        var twig = branch[i][j];
+
+        if(twig[0] !== 'ruleset'){
+          continue;
+        }
+
+        for(var k = 0; k < twig.length; k++){
+          var miniTwig = twig[k];
+
+          if(miniTwig[0] !== 'selector'){
+            continue;
+          }
+
+          branch[i][j][k] = filterSelector(miniTwig, classes, htmlEls, ids, attrSelectors);
+        }
+      }
+
       branch[i] = _.filter(branch[i], function(twig){
         if(twig[0] !== 'ruleset'){
-          if(twig[0] === 'delim' && throwDelim){
-            throwDelim = false;
-            return false;
-          }
           return true;
         }
 
         var flatTwig = _.flatten(twig);
-
-        if (flatTwig.indexOf('pseudoe') > -1 || flatTwig.indexOf('*') > -1) {
-          return true;
-        }
-
-        var isId = flatTwig.indexOf('shash') > -1;
-        if(isId){
-          var validated = validateId(flatTwig, ids);
-          throwDelim = !validated;
-          return validated;
-        }
-
-        var hasClass = flatTwig.indexOf('clazz') > -1;
-        if(hasClass){
-          var validated = validateClass(flatTwig, classes);
-          throwDelim = !validated;
-          return validated
-        } else {
-          var validated = validateHtmlTag(flatTwig, htmlEls);
-          throwDelim = !validated;
-          return validated;
-        }
+        return flatTwig.indexOf('simpleselector') > -1;
       });
     }
   });
@@ -288,4 +227,65 @@ var validateHtmlTag = function(flatTwig, htmlEls){
     }
   }
   return false;
+};
+
+var filterSelector = function(branch, classes, htmlEls, ids, attrSelectors){
+  var throwDelim = false;
+
+  var output = _.filter(branch, function(twig){
+    var flatTwig = _.flatten(twig);
+
+    if(flatTwig[0] === 'delim' && throwDelim){
+      throwDelim = false;
+      return false;
+    }
+
+    if(flatTwig[0] !== 'simpleselector'){
+      return true;
+    }
+
+    if (flatTwig.indexOf('pseudoe') > -1 || flatTwig.indexOf('*') > -1) {
+      return true;
+    }
+
+    var isAttrSelector = flatTwig.indexOf('attrselector') > -1;
+    if (isAttrSelector) {
+      for(var k = 0; k < flatTwig.length; k++){
+        if(flatTwig[k] === 'attrselector'){
+          var attrvalue = flatTwig[k + 3].toLowerCase().replace(/^"(.+(?="$))"$/, '$1');
+          if(attrSelectors.indexOf(attrvalue) === -1){
+            throwDelim = true;
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+
+    var isId = flatTwig.indexOf('shash') > -1;
+    if(isId){
+      var validated = validateId(flatTwig, ids);
+      throwDelim = !validated;
+      return validated;
+    }
+
+    var hasClass = flatTwig.indexOf('clazz') > -1;
+    if(hasClass){
+      var validated = validateClass(flatTwig, classes);
+      throwDelim = !validated;
+      return validated
+    } else {
+      var validated = validateHtmlTag(flatTwig, htmlEls);
+      throwDelim = !validated;
+      return validated;
+    }
+
+    return true;
+  });
+
+  if(output[output.length - 1][0] === 'delim'){
+    output = output.slice(0, output.length - 1);
+  }
+
+  return output;
 };
