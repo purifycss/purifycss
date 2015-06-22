@@ -1,5 +1,4 @@
 var fs = require('fs');
-var util = require('util');
 var _ = require('underscore');
 var CleanCss = require('clean-css');
 var CssSyntaxTree = require('./cssTree.js');
