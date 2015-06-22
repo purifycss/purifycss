@@ -20,6 +20,11 @@
   .alone, .unused-class {
     color: black;
   }
+  *,
+  :before,
+  :after {
+    background: black;
+  }
 }
 
 @media (max-width: 66666px){
