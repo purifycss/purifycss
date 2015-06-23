@@ -97,7 +97,7 @@ var reduceContent = function(content){
 
 var getRuleString = function(twig){
   var ruleString = '';
-  for(var i = 1; i < twig.length; i++) {
+  for(var i = 1; i < twig.length; i++){
     var rulePart = twig[i];
     switch (rulePart[0]) {
     case 's':
@@ -131,7 +131,7 @@ var printInfo = function(startTime, beginningLength, endingLength){
   console.log('This function took: ', new Date() - startTime, 'ms');
 };
 
-var printRejected = function (rejectedTwigs){
+var printRejected = function(rejectedTwigs){
   console.log('##################################');
   console.log('Rejected selectors:');
   console.log(_.map(rejectedTwigs, getRuleString).join('\n'));
