@@ -277,6 +277,9 @@ var filterSelector = function(branch, classes, htmlEls, ids, attrSelectors){
     if(isId){
       var validated = validateId(flatTwig, ids);
       throwDelim = !validated;
+      if (!validated){
+        rejectedTwigs.push(twig);
+      }
       return validated;
     }
 
