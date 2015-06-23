@@ -107,12 +107,17 @@ var getRuleString = function(twig){
     case 'clazz':
       ruleString += '.' + rulePart[1][1];
       break;
+    case 'shash':
+      ruleString += '#' + rulePart[1];
+      break;
     case 'ident':
       ruleString += rulePart[1];
       break;
     case 'attrib':
       ruleString += '[' + rulePart[1][1] + ']';
       break;
+    default:
+      ruleString += 'Unsupported: ' + JSON.stringify(twig);
     }
   }
   return ruleString;
