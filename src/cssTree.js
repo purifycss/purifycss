@@ -28,7 +28,7 @@ CssTree.prototype.initialize = function(ast){
   this.selectors = _.filter(ast, function(branch){
     return branch[0] !== 'atruler';
   });
-  
+
   var ids = [];
   var classes = [];
   var css = _.flatten(ast.slice());
@@ -85,6 +85,8 @@ CssTree.prototype.initialize = function(ast){
 };
 
 CssTree.prototype.filterSelectors = function(classes, htmlEls, ids, attrSelectors){
+  var rejectedTwigs = [];
+
   this.selectors.forEach(function(branch){
     if(branch[0] !== 'ruleset'){
       return;
@@ -95,7 +97,9 @@ CssTree.prototype.filterSelectors = function(classes, htmlEls, ids, attrSelector
         continue;
       }
 
-      branch[i] = filterSelector(branch[i], classes, htmlEls, ids, attrSelectors);
+      var filterResult = filterSelector(branch[i], classes, htmlEls, ids, attrSelectors);
+      branch[i] = filterResult[0];
+      rejectedTwigs = rejectedTwigs.concat(filterResult[1]);
     }
   });
 
@@ -107,9 +111,13 @@ CssTree.prototype.filterSelectors = function(classes, htmlEls, ids, attrSelector
     var flatBranch = _.flatten(branch);
     return flatBranch.indexOf('simpleselector') > -1;
   });
+
+  return rejectedTwigs;
 };
 
 CssTree.prototype.filterAtRules = function(classes, htmlEls, ids, attrSelectors){
+  var rejectedTwigs = [];
+
   this.atRulesTree.forEach(function(branch){
     if(branch[0] !== 'atruler'){
       return;
@@ -138,7 +146,9 @@ CssTree.prototype.filterAtRules = function(classes, htmlEls, ids, attrSelectors)
             continue;
           }
 
-          branch[i][j][k] = filterSelector(miniTwig, classes, htmlEls, ids, attrSelectors);
+          var filterResult = filterSelector(miniTwig, classes, htmlEls, ids, attrSelectors);
+          branch[i][j][k] = filterResult[0];
+          rejectedTwigs = rejectedTwigs.concat(filterResult[1]);
         }
       }
 
@@ -154,6 +164,7 @@ CssTree.prototype.filterAtRules = function(classes, htmlEls, ids, attrSelectors)
   });
 
   this.removeEmptyAtRules();
+  return rejectedTwigs;
 };
 
 CssTree.prototype.removeEmptyAtRules = function(){
@@ -230,6 +241,7 @@ var validateHtmlTag = function(flatTwig, htmlEls){
 
 var filterSelector = function(branch, classes, htmlEls, ids, attrSelectors){
   var throwDelim = false;
+  var rejectedTwigs = [];
 
   var output = _.filter(branch, function(twig){
     var flatTwig = _.flatten(twig);
@@ -265,6 +277,7 @@ var filterSelector = function(branch, classes, htmlEls, ids, attrSelectors){
     if(isId){
       var validated = validateId(flatTwig, ids);
       throwDelim = !validated;
+      if (!validated) {console.error('222');}
       return validated;
     }
 
@@ -272,10 +285,16 @@ var filterSelector = function(branch, classes, htmlEls, ids, attrSelectors){
     if(hasClass){
       var validated = validateClass(flatTwig, classes);
       throwDelim = !validated;
+      if (!validated){
+        rejectedTwigs.push(twig);
+      }
       return validated
     } else {
       var validated = validateHtmlTag(flatTwig, htmlEls);
       throwDelim = !validated;
+      if (!validated){
+        rejectedTwigs.push(twig);
+      }
       return validated;
     }
 
@@ -286,5 +305,5 @@ var filterSelector = function(branch, classes, htmlEls, ids, attrSelectors){
     output = output.slice(0, output.length - 1);
   }
 
-  return output;
+  return [output, rejectedTwigs];
 };

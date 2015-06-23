@@ -54,8 +54,8 @@ var purify = function(searchThrough, css, options, callback){
   var usedHtmlEls = extraction.filter(htmlEls);
 
   // Narrow CSS tree down to things that remain on the list
-  tree.filterSelectors(classes, usedHtmlEls, ids, attrSelectors);
-  tree.filterAtRules(classes, usedHtmlEls, ids, attrSelectors);
+  var rejectedSelectorTwigs = tree.filterSelectors(classes, usedHtmlEls, ids, attrSelectors);
+  var rejectedAtRuleTwigs = tree.filterAtRules(classes, usedHtmlEls, ids, attrSelectors);
 
   // Turn tree back into css
   var source = tree.toSrc();
@@ -66,6 +66,10 @@ var purify = function(searchThrough, css, options, callback){
 
   if(options.info){
     printInfo(startTime, beginningLength, source.length);
+  }
+
+  if (options.rejected){
+    printRejected(rejectedSelectorTwigs.concat(rejectedAtRuleTwigs));
   }
 
   if(!options.output){
@@ -91,6 +95,29 @@ var reduceContent = function(content){
     .replace(/\s\s+/g, ' ');
 };
 
+var getRuleString = function(twig){
+  var ruleString = '';
+  //console.error(twig);
+  for(var i = 1; i < twig.length; i++) {
+    var rulePart = twig[i];
+    switch (rulePart[0]) {
+    case 's':
+      ruleString += rulePart[1] !== '\n' ? rulePart[1] : '';
+      break;
+    case 'clazz':
+      ruleString += '.' + rulePart[1][1];
+      break;
+    case 'ident':
+      ruleString += rulePart[1];
+      break;
+    case 'attrib':
+      ruleString += '[' + rulePart[1][1] + ']';
+      break;
+    }
+  }
+  return ruleString;
+};
+
 var printInfo = function(startTime, beginningLength, endingLength){
   console.log('##################################');
   console.log('Before purify, CSS was ' + beginningLength + ' chars long.');
@@ -99,5 +126,12 @@ var printInfo = function(startTime, beginningLength, endingLength){
   console.log('##################################');
   console.log('This function took: ', new Date() - startTime, 'ms');
 };
+
+var printRejected = function (rejectedTwigs) {
+  console.log('##################################');
+  console.log('Rejected selectors:');
+  console.log(_.map(rejectedTwigs, getRuleString).join('\n'));
+  console.log('##################################');
+}
 
 var htmlEls = ['h1','h2','h3','h4','h5','h6','a','abbr','acronym','address','applet','area','article','aside','audio','b','base','basefont','bdi','bdo','bgsound','big','blink','blockquote','body','br','button','canvas','caption','center','cite','code','col','colgroup','command','content','data','datalist','dd','del','details','dfn','dialog','dir','div','dl','dt','element','em','embed','fieldset','figcaption','figure','font','footer','form','frame','frameset','head','header','hgroup','hr','html','i','iframe','image','img','input','ins','isindex','kbd','keygen','label','legend','li','link','listing','main','map','mark','marquee','menu','menuitem','meta','meter','multicol','nav','nobr','noembed','noframes','noscript','object','ol','optgroup','option','output','p','param','picture','plaintext','pre','progress','q','rp','rt','rtc','ruby','s','samp','script','section','select','shadow','small','source','spacer','span','strike','strong','style','sub','summary','sup','table','tbody','td','template','textarea','tfoot','th','thead','time','title','tr','track','tt','u','ul','var','video','wbr','xmp'];
