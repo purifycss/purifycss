@@ -65,11 +65,11 @@ var purify = function(searchThrough, css, options, callback){
   }
 
   if(options.info){
-    printInfo(startTime, beginningLength, source.length);
+    printInfo(options.metaToErr, startTime, beginningLength, source.length);
   }
 
   if (options.rejected){
-    printRejected(rejectedSelectorTwigs.concat(rejectedAtRuleTwigs));
+    printRejected(options.metaToErr, rejectedSelectorTwigs.concat(rejectedAtRuleTwigs));
   }
 
   if(!options.output){
@@ -122,20 +122,22 @@ var getRuleString = function(twig){
   return ruleString;
 };
 
-var printInfo = function(startTime, beginningLength, endingLength){
-  console.log('##################################');
-  console.log('Before purify, CSS was ' + beginningLength + ' chars long.');
-  console.log('After purify, CSS is ' + endingLength + ' chars long. (' +
+var printInfo = function(toErr, startTime, beginningLength, endingLength){
+  var logFn = toErr? console.error: console.log;
+  logFn.call(null, '##################################');
+  logFn.call(null, 'Before purify, CSS was ' + beginningLength + ' chars long.');
+  logFn.call(null, 'After purify, CSS is ' + endingLength + ' chars long. (' +
     Math.floor((beginningLength / endingLength * 10)) / 10  + ' times smaller)');
-  console.log('##################################');
-  console.log('This function took: ', new Date() - startTime, 'ms');
+  logFn.call(null, '##################################');
+  logFn.call(null, 'This function took: ', new Date() - startTime, 'ms');
 };
 
-var printRejected = function(rejectedTwigs){
-  console.log('##################################');
-  console.log('Rejected selectors:');
-  console.log(_.map(rejectedTwigs, getRuleString).join('\n'));
-  console.log('##################################');
+var printRejected = function(toErr, rejectedTwigs){
+  var logFn = toErr? console.error: console.log;
+  logFn.call(null, '##################################');
+  logFn.call(null, 'Rejected selectors:');
+  logFn.call(null, _.map(rejectedTwigs, getRuleString).join('\n'));
+  logFn.call(null, '##################################');
 }
 
 var htmlEls = ['h1','h2','h3','h4','h5','h6','a','abbr','acronym','address','applet','area','article','aside','audio','b','base','basefont','bdi','bdo','bgsound','big','blink','blockquote','body','br','button','canvas','caption','center','cite','code','col','colgroup','command','content','data','datalist','dd','del','details','dfn','dialog','dir','div','dl','dt','element','em','embed','fieldset','figcaption','figure','font','footer','form','frame','frameset','head','header','hgroup','hr','html','i','iframe','image','img','input','ins','isindex','kbd','keygen','label','legend','li','link','listing','main','map','mark','marquee','menu','menuitem','meta','meter','multicol','nav','nobr','noembed','noframes','noscript','object','ol','optgroup','option','output','p','param','picture','plaintext','pre','progress','q','rp','rt','rtc','ruby','s','samp','script','section','select','shadow','small','source','spacer','span','strike','strong','style','sub','summary','sup','table','tbody','td','template','textarea','tfoot','th','thead','time','title','tr','track','tt','u','ul','var','video','wbr','xmp'];
