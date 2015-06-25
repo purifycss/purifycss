@@ -23,6 +23,7 @@ if (content.length === 0) return printUsage("content");
 var options = {
   minify: !!argv.min,
   info: !!argv.info,
+  rejected: !!argv.rejected,
   output: argv.out
 };
 
