@@ -31,7 +31,7 @@ npm install purify-css
 
 ``` javascript
   // javascript
-  // this example is jquery, but anytime your class name 
+  // this example is jquery, but anytime your class name
   // is together in your javascript, it will work
   $(button).addClass('button-active');
 ```
@@ -43,7 +43,7 @@ npm install purify-css
   // can detect even if class is split
   var half = 'button-';
   $(button).addClass(half + 'active');
-  
+
   // can detect even if class is joined
   var dynamicClass = ['button', 'active'].join('-');
   $(button).addClass(dynamicClass);
@@ -113,6 +113,8 @@ purify(content, css, options, callback);
 
 * **```rejected:```** Logs the CSS rules that were removed if ```true```. Default: ```false```.
 
+* **```errmeta:```** Logs non-CSS information to stderr instead of stdout, for filtering, if ```true```. Default: ```false```.
+
 ##```callback (optional)```
 ##### Type: ```Function```
 
@@ -145,6 +147,7 @@ options:
  --out [filepath]     Filepath to write purified CSS to
  --info               Logs info on how much CSS was removed
  --rejected           Logs the CSS rules that were removed
+ --errmeta            Logs non-CSS information to stderr instead of stdout, for filtering
 
  -h, --help           Prints help (this message) and exits
 ```
