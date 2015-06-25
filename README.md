@@ -95,9 +95,9 @@ purify(content, css, options, callback);
 ## ```css```
 ##### Type: ```Array``` or ```String```
 
-**```Array```** of filepaths to the css files you want us to filter.
+**```Array```** of filepaths to the CSS files you want us to filter.
 
-**```String```** of css you want us to filter.
+**```String```** of CSS you want us to filter.
 
 
 ##```options (optional)```
@@ -105,11 +105,13 @@ purify(content, css, options, callback);
 
 ##### Properties of options object:
 
-* **```minify:```** Set to ```true``` to minify. Default: ```false```
+* **```minify:```** Set to ```true``` to minify. Default: ```false```.
 
-* **```output:```** Filepath to write purified css to. Returns raw string if ```false```. Default: ```false```
+* **```output:```** Filepath to write purified CSS to. Returns raw string if ```false```. Default: ```false```.
 
-* **```info:```** Logs info on how much css was removed if ```true```. Default: ```false```
+* **```info:```** Logs info on how much CSS was removed if ```true```. Default: ```false```.
+
+* **```rejected:```** Logs the CSS rules that were removed if ```true```. Default: ```false```.
 
 ##```callback (optional)```
 ##### Type: ```Function```
@@ -140,8 +142,9 @@ usage: purifycss <css> <content> [option ...]
 
 options:
  --min                Minify CSS
- --out [filepath]     Filepath to write purified css to
- --info               Logs info on how much css was removed
+ --out [filepath]     Filepath to write purified CSS to
+ --info               Logs info on how much CSS was removed
+ --rejected           Logs the CSS rules that were removed
 
  -h, --help           Prints help (this message) and exits
 ```
@@ -149,3 +152,4 @@ options:
 # At build time
 [Grunt](https://github.com/purifycss/grunt-purify-css)
 
+[Gulp](https://github.com/purifycss/gulp-purifycss)
