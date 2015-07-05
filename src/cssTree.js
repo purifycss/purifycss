@@ -194,6 +194,9 @@ var formatCSS = function(styles){
   styles = styles.split('}\\n\\n').join('}\\n');
   styles = styles.split(' }').join('}');
   styles = styles.split(' }').join('}');
+  // Prevent breaking Handlebars or Moustache double brace style tags
+  styles = styles.split('}\\n}').join(' }}');
+  styles = styles.split('}}\\n').join('}}');
 
   return styles;
 };
