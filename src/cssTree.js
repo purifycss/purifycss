@@ -258,7 +258,7 @@ var filterSelector = function(branch, classes, htmlEls, ids, attrSelectors){
       return true;
     }
 
-    if (flatTwig.indexOf('pseudoe') > -1 || flatTwig.indexOf('*') > -1 || flatTwig.indexOf('pseudoc') > -1) {
+    if (flatTwig.indexOf('pseudoe') > -1 || flatTwig.indexOf('*') > -1 || flatTwig.indexOf('pseudoc') > -1 || flatTwig.indexOf('attrselector') > -1) {
       return true;
     }
 
