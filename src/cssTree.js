@@ -194,6 +194,9 @@ var formatCSS = function(styles){
   styles = styles.split('}\\n\\n').join('}\\n');
   styles = styles.split(' }').join('}');
   styles = styles.split(' }').join('}');
+  // Prevent breaking Handlebars or Moustache double brace style tags
+  styles = styles.split('}\\n}').join(' }}');
+  styles = styles.split('}}\\n').join('}}');
 
   return styles;
 };
@@ -255,7 +258,7 @@ var filterSelector = function(branch, classes, htmlEls, ids, attrSelectors){
       return true;
     }
 
-    if (flatTwig.indexOf('pseudoe') > -1 || flatTwig.indexOf('*') > -1 || flatTwig.indexOf('pseudoc') > -1) {
+    if (flatTwig.indexOf('pseudoe') > -1 || flatTwig.indexOf('*') > -1 || flatTwig.indexOf('pseudoc') > -1 || flatTwig.indexOf('attrselector') > -1) {
       return true;
     }
 
