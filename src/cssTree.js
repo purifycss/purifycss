@@ -255,12 +255,12 @@ var filterSelector = function(branch, classes, htmlEls, ids, attrSelectors){
       return true;
     }
 
-    if (flatTwig.indexOf('pseudoe') > -1 || flatTwig.indexOf('*') > -1 || flatTwig.indexOf('pseudoc') > -1) {
+    if(flatTwig.indexOf('pseudoe') > -1 || flatTwig.indexOf('*') > -1 || flatTwig.indexOf('pseudoc') > -1){
       return true;
     }
 
     var isAttrSelector = flatTwig.indexOf('attrselector') > -1;
-    if (isAttrSelector) {
+    if(isAttrSelector){
       for(var k = 0; k < flatTwig.length; k++){
         if(flatTwig[k] === 'attrselector'){
           var attrvalue = flatTwig[k + 3].toLowerCase().replace(/^"(.+(?="$))"$/, '$1');
@@ -277,7 +277,7 @@ var filterSelector = function(branch, classes, htmlEls, ids, attrSelectors){
     if(isId){
       var validated = validateId(flatTwig, ids);
       throwDelim = !validated;
-      if (!validated){
+      if(!validated){
         rejectedTwigs.push(twig);
       }
       return validated;
@@ -287,14 +287,14 @@ var filterSelector = function(branch, classes, htmlEls, ids, attrSelectors){
     if(hasClass){
       var validated = validateClass(flatTwig, classes);
       throwDelim = !validated;
-      if (!validated){
+      if(!validated){
         rejectedTwigs.push(twig);
       }
       return validated
     } else {
       var validated = validateHtmlTag(flatTwig, htmlEls);
       throwDelim = !validated;
-      if (!validated){
+      if(!validated){
         rejectedTwigs.push(twig);
       }
       return validated;

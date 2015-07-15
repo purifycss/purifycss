@@ -68,7 +68,7 @@ var purify = function(searchThrough, css, options, callback){
     printInfo(startTime, beginningLength, source.length);
   }
 
-  if (options.rejected){
+  if(options.rejected){
     printRejected(rejectedSelectorTwigs.concat(rejectedAtRuleTwigs));
   }
 
