@@ -2,7 +2,7 @@
 
 * Detects which CSS selectors your app is using and creates a file without the unused CSS.
 
-Able to also detect **dynamically-loaded CSS selectors** in your javascript.
+Able to also detect **dynamically-loaded CSS selectors** in your JavaScript.
 
 PurifyCSS has been designed from the beginning with **single-page apps** in mind.
 
@@ -49,7 +49,7 @@ npm install purify-css
   $(button).addClass(dynamicClass);
 ```
 
-* **All** javascript frameworks
+* **All** JavaScript frameworks
 
 ##### Example for the class ```angular-button```
 ``` javascript
@@ -87,7 +87,7 @@ purify(content, css, options, callback);
 ## ```content```
 ##### Type: ```Array``` or ```String```
 
-**```Array```** of filepaths to the files you want to search through for used classes (HTML, Javascripts, Templates, anything that relates to CSS classes)
+**```Array```** of filepaths to the files you want to search through for used classes (HTML, JavaScript, Templates, anything that relates to CSS classes)
 
 **```String```** of content you want us to look for used classes.
 
