@@ -290,7 +290,7 @@ var filterSelector = function(branch, classes, htmlEls, ids, attrSelectors){
       if(!validated){
         rejectedTwigs.push(twig);
       }
-      return validated
+      return validated;
     } else {
       var validated = validateHtmlTag(flatTwig, htmlEls);
       throwDelim = !validated;
