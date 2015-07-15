@@ -57,7 +57,7 @@ CssTree.prototype.initialize = function(ast){
 
   // Remove first and last quotes
   attrSelectors = attrSelectors.map(function(attrselector) {
-    return attrselector.replace(/^"(.+(?="$))"$/, '$1');
+    return attrselector.replace(/^["|'](.+(?=["|']$))["|']$/, '$1');
   });
 
   classes.forEach(function(selector){
@@ -263,7 +263,7 @@ var filterSelector = function(branch, classes, htmlEls, ids, attrSelectors){
     if(isAttrSelector){
       for(var k = 0; k < flatTwig.length; k++){
         if(flatTwig[k] === 'attrselector'){
-          var attrvalue = flatTwig[k + 3].toLowerCase().replace(/^"(.+(?="$))"$/, '$1');
+          var attrvalue = flatTwig[k + 3].toLowerCase().replace(/^["|'](.+(?=["|']$))["|']$/, '$1');
           if(attrSelectors.indexOf(attrvalue) === -1){
             throwDelim = true;
             return false;
