@@ -283,29 +283,14 @@ var filterSelector = function(branch, classes, htmlEls, ids, attrSelectors){
 
     var isId = flatTwig.indexOf('shash') > -1;
     if(isId){
-      var validated = validateId(flatTwig, ids);
-      throwDelim = !validated;
-      if(!validated){
-        rejectedTwigs.push(twig);
-      }
-      return validated;
+      return handleValidation(validateId(flatTwig, ids), throwDelim, rejectedTwigs, twig);
     }
 
     var hasClass = flatTwig.indexOf('clazz') > -1;
     if(hasClass){
-      var validated = validateClass(flatTwig, classes);
-      throwDelim = !validated;
-      if(!validated){
-        rejectedTwigs.push(twig);
-      }
-      return validated;
+      return handleValidation(validateClass(flatTwig, classes), throwDelim, rejectedTwigs, twig);
     } else {
-      var validated = validateHtmlTag(flatTwig, htmlEls);
-      throwDelim = !validated;
-      if(!validated){
-        rejectedTwigs.push(twig);
-      }
-      return validated;
+      return handleValidation(validateHtmlTag(flatTwig, htmlEls), throwDelim, rejectedTwigs, twig);
     }
 
     return true;
