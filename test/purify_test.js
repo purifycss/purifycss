@@ -75,6 +75,14 @@ describe('purify', function(){
     expect(result.indexOf('vertical') > -1).to.equal(true);
   });
 
+  it('works with unused classed with pseudo-elements', function(){
+    var content = "";
+    var css = ".email-address:before { }";
+    var result = purify(content, css);
+
+    expect(result).to.equal("");
+  });
+
   it('works with media queries', function(){
     var content = fs.readFileSync(absPath + 'media_queries/media_queries.js', 'utf8');
     var css = fs.readFileSync(absPath + 'media_queries/media_queries.css', 'utf8');
