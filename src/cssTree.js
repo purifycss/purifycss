@@ -1,5 +1,5 @@
 var gonzales = require('gonzales');
-var _ = require('underscore');
+var _ = require('./helpers');
 
 var CssTree = function(cssString){
   var ast = gonzales.srcToCSSP(cssString);
