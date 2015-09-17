@@ -1,8 +1,8 @@
 var fs = require('fs');
-var _ = require('underscore');
+var _ = require('./helpers');
 var CleanCss = require('clean-css');
-var CssSyntaxTree = require('./cssTree.js');
-var Extraction = require('./extraction.js');
+var CssSyntaxTree = require('./cssTree');
+var Extraction = require('./extraction');
 
 ////////////////////
 // ARGUMENTS

@@ -1,4 +1,4 @@
-var _ = require('underscore');
+var _ = require('./helpers');
 
 var Extraction = function(content){
   this.content = content;
