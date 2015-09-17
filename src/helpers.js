@@ -71,12 +71,14 @@ function reduce(collection, iterator, accumulator) {
   return accumulator;
 }
 
-function identity(value) {
-  return value;
+function identity() {
+  return function(value) {
+    return value;
+  }
 }
 
 function every(collection, predicate) {
-  predicate = predicate || identity(predicate);
+  predicate = predicate || identity();
   return !!reduce(collection, function(trueSoFar, value) {
     return trueSoFar && predicate(value);
   }, true);
