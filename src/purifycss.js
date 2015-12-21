@@ -9,9 +9,10 @@ var Extraction = require('./extraction.js');
 // files    = an array of filepaths to html/js files OR a raw string of content to search through
 // css      = an array of filepaths to css files OR a raw string of css to filter
 // options  = (optional) {
-//   write  : string (filepath to write purified css to. if false, function returns raw string)
-//   minify : boolean (if true, will minify the purified css)
-//   info   : boolean (if true, will log out stats of how much css was reduced)
+//   write   : string (filepath to write purified css to. if false, function returns raw string)
+//   minify  : boolean (if true, will minify the purified css)
+//   info    : boolean (if true, will log out stats of how much css was reduced)
+//   rejected: boolean (if true, will log out rejected css)
 // }
 // callback = (optional) a function that the purified css will be passed into
 ////////////////////
