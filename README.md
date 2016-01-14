@@ -153,3 +153,5 @@ options:
 [Grunt](https://github.com/purifycss/grunt-purify-css)
 
 [Gulp](https://github.com/purifycss/gulp-purifycss)
+
+[webpack](https://github.com/purifycss/purifycss-webpack-plugin)
