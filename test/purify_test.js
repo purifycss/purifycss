@@ -107,4 +107,13 @@ describe('purify', function(){
     expect(result.indexOf('+rounded') > -1).to.equal(true);
     expect(result.indexOf('button') > -1).to.equal(true);
   });
+
+  it('works with custom elements', function(){
+    var content = fs.readFileSync(absPath + 'custom_elements/custom_elements.js', 'utf8');
+    var css = fs.readFileSync(absPath + 'custom_elements/custom_elements.css', 'utf8');
+    var result = purify(content, css);
+
+    expect(result.indexOf('foo-bar') > -1).to.equal(true);
+    expect(result.indexOf('bar-foo') > -1).to.equal(false);
+  });
 });

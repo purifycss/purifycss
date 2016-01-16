@@ -49,10 +49,12 @@ var purify = function(searchThrough, css, options, callback){
   var ids = extraction.filter(tree.ids);
   var specialIds = extraction.filterBySearch(tree.specialIds);
   var attrSelectors = extraction.filterBySearch(tree.attrSelectors);
+  var customElements = extraction.filter(tree.customElements);
 
   classes = classes.concat(specialClasses);
   ids = ids.concat(specialIds);
   var usedHtmlEls = extraction.filter(htmlEls);
+  usedHtmlEls = usedHtmlEls.concat(customElements);
 
   // Narrow CSS tree down to things that remain on the list
   var rejectedSelectorTwigs = tree.filterSelectors(classes, usedHtmlEls, ids, attrSelectors);

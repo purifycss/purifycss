@@ -12,6 +12,7 @@ var CssTree = function(cssString){
   this.ids = null;
   this.specialIds = null;
   this.attrSelectors = null;
+  this.customElements = null;
 
   this.initialize(ast);
 };
@@ -33,6 +34,7 @@ CssTree.prototype.initialize = function(ast){
   var classes = [];
   var css = _.flatten(ast.slice());
   var attrSelectors = [];
+  var customElements = [];
 
   for(var i = 0; i < css.length; i++){
     if(css[i] === 'clazz'){
@@ -45,6 +47,10 @@ CssTree.prototype.initialize = function(ast){
 
     if(css[i] === 'shash'){
       ids.push(css[i + 1].toLowerCase());
+    }
+
+    if(css[i] === 'simpleselector' && css[i+1] === 'ident' && css[i+2].indexOf('-') !== -1){
+      customElements.push(css[i+2]);
     }
   }
 
@@ -82,6 +88,7 @@ CssTree.prototype.initialize = function(ast){
   this.classes = _.uniq(normalClasses);
   this.specialClasses = _.uniq(specialClasses);
   this.attrSelectors = attrSelectors;
+  this.customElements = _.uniq(customElements);
 };
 
 CssTree.prototype.filterSelectors = function(classes, htmlEls, ids, attrSelectors){
