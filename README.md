@@ -138,7 +138,7 @@ $ npm install -g purify-css
 
 ```
 $ purifycss
-usage: purifycss <css> <content> [option ...]
+usage: purifycss <content> <css> [option ...]
 
 options:
  --min                Minify CSS
