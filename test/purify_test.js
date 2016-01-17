@@ -73,6 +73,7 @@ describe('purify', function(){
     expect(result.indexOf('scrollbar') > -1).to.equal(true);
     expect(result.indexOf('selection') > -1).to.equal(true);
     expect(result.indexOf('vertical') > -1).to.equal(true);
+    expect(result.indexOf(':root') > -1).to.equal(true);
   });
 
   it('works with media queries', function(){
