@@ -76,7 +76,7 @@ describe('purify', function(){
   });
 
   it('works with media queries', function(){
-    var content = fs.readFileSync(absPath + 'media_queries/media_queries.js', 'utf8');
+    var content = fs.readFileSync(absPath + 'media_queries/media_queries.html', 'utf8');
     var css = fs.readFileSync(absPath + 'media_queries/media_queries.css', 'utf8');
     var result = purify(content, css);
 
