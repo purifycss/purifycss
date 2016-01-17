@@ -241,7 +241,7 @@ var validateHtmlTag = function(flatTwig, htmlEls){
 
 var handleValidation = function(validated, throwDelim, rejectedTwigs, twig){
   throwDelim = !validated;
-  if(validated){
+  if(!validated){
     rejectedTwigs.push(twig);
   }
   return validated;
