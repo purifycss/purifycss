@@ -31,7 +31,7 @@ npm install purify-css
 
 ``` javascript
   // javascript
-  // this example is jquery, but anytime your class name 
+  // this example is jquery, but anytime your class name
   // is together in your javascript, it will work
   $(button).addClass('button-active');
 ```
@@ -43,7 +43,7 @@ npm install purify-css
   // can detect even if class is split
   var half = 'button-';
   $(button).addClass(half + 'active');
-  
+
   // can detect even if class is joined
   var dynamicClass = ['button', 'active'].join('-');
   $(button).addClass(dynamicClass);
