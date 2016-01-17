@@ -3,10 +3,14 @@ var fs = require('fs');
 var purify = require('../src/purifycss.js');
 var absPath = __dirname + '/test_examples/';
 
+var read = function (path) {
+  return fs.readFileSync(absPath + path, 'utf8');
+}
+
 describe('purify', function(){
   it('can find classes intact', function(){
-    var content = fs.readFileSync(absPath + 'simple/simple.js', 'utf8');
-    var css = fs.readFileSync(absPath + 'simple/simple.css', 'utf8');
+    var content = read('simple/simple.js');
+    var css = read('simple/simple.css');
     var result = purify(content, css);
 
     expect(result.indexOf('.single') > -1).to.equal(true);
@@ -15,8 +19,8 @@ describe('purify', function(){
   });
 
   it('can use a callback', function(){
-    var content = fs.readFileSync(absPath + 'simple/simple.js', 'utf8');
-    var css = fs.readFileSync(absPath + 'simple/simple.css', 'utf8');
+    var content = read('simple/simple.js');
+    var css = read('simple/simple.css');
 
     purify(content, css, function(result){
       expect(result.indexOf('.single') > -1).to.equal(true);
@@ -26,8 +30,8 @@ describe('purify', function(){
   });
 
   it('can find classes that are added together', function(){
-    var content = fs.readFileSync(absPath + 'combined/combined.js', 'utf8');
-    var css = fs.readFileSync(absPath + 'combined/combined.css', 'utf8');
+    var content = read('combined/combined.js');
+    var css = read('combined/combined.css');
     var result = purify(content, css);
 
     expect(result.indexOf('.added-together') > -1).to.equal(true);
@@ -35,8 +39,8 @@ describe('purify', function(){
   });
 
   it('filters out classes not used', function(){
-    var content = fs.readFileSync(absPath + 'remove_unused/remove_unused.js', 'utf8');
-    var css = fs.readFileSync(absPath + 'remove_unused/remove_unused.css', 'utf8');
+    var content = read('remove_unused/remove_unused.js');
+    var css = read('remove_unused/remove_unused.css');
     var result = purify(content, css);
 
     expect(result.indexOf('.used-class') > -1).to.equal(true);
@@ -55,8 +59,8 @@ describe('purify', function(){
   });
 
   it('works with camelCase', function(){
-    var content = fs.readFileSync(absPath + 'camel_case/camel_case.js', 'utf8');
-    var css = fs.readFileSync(absPath + 'camel_case/camel_case.css', 'utf8');
+    var content = read('camel_case/camel_case.js');
+    var css = read('camel_case/camel_case.css');
     var result = purify(content, css);
 
     expect(result.indexOf('testFoo') > -1).to.equal(true);
@@ -64,8 +68,8 @@ describe('purify', function(){
   });
 
   it('works with wildcard, pseudo-elements', function(){
-    var content = fs.readFileSync(absPath + 'wildcard/wildcard.html', 'utf8');
-    var css = fs.readFileSync(absPath + 'wildcard/wildcard.css', 'utf8');
+    var content = read('wildcard/wildcard.html');
+    var css = read('wildcard/wildcard.css');
     var result = purify(content, css);
 
     expect(result.indexOf('*') > -1).to.equal(true);
@@ -77,8 +81,8 @@ describe('purify', function(){
   });
 
   it('works with media queries', function(){
-    var content = fs.readFileSync(absPath + 'media_queries/media_queries.html', 'utf8');
-    var css = fs.readFileSync(absPath + 'media_queries/media_queries.css', 'utf8');
+    var content = read('media_queries/media_queries.html');
+    var css = read('media_queries/media_queries.css');
     var result = purify(content, css);
 
     expect(result.indexOf('.media-class') > -1).to.equal(true);
@@ -90,8 +94,8 @@ describe('purify', function(){
   });
 
   it('works with attribute selectors', function(){
-    var content = fs.readFileSync(absPath + 'attribute_selector/attribute_selector.js', 'utf8');
-    var css = fs.readFileSync(absPath + 'attribute_selector/attribute_selector.css', 'utf8');
+    var content = read('attribute_selector/attribute_selector.js');
+    var css = read('attribute_selector/attribute_selector.css');
     var result = purify(content, css);
 
     expect(result.indexOf('font-icon-') > -1).to.equal(true);
@@ -100,8 +104,8 @@ describe('purify', function(){
   });
 
   it('works with special characters', function(){
-    var content = fs.readFileSync(absPath + 'special_characters/special_characters.js', 'utf8');
-    var css = fs.readFileSync(absPath + 'special_characters/special_characters.css', 'utf8');
+    var content = read('special_characters/special_characters.js');
+    var css = read('special_characters/special_characters.css');
     var result = purify(content, css);
 
     expect(result.indexOf('@home') > -1).to.equal(true);
