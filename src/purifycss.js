@@ -1,8 +1,8 @@
 var fs = require('fs');
 var _ = require('underscore');
 var CleanCss = require('clean-css');
-var CssSyntaxTree = require('./cssTree.js');
-var Extraction = require('./extraction.js');
+var CssSyntaxTree = require('./CssSyntaxTree.js');
+var ContentSelectorExtraction = require('./ContentSelectorExtraction.js');
 
 ////////////////////
 // ARGUMENTS
@@ -43,7 +43,7 @@ var purify = function(searchThrough, css, options, callback){
   var tree = new CssSyntaxTree(cssString);
 
   // Narrow list down to things that are found in content
-  var extraction = new Extraction(content);
+  var extraction = new ContentSelectorExtraction(content);
   var classes = extraction.filter(tree.classes);
   var specialClasses = extraction.filterBySearch(tree.specialClasses);
   var ids = extraction.filter(tree.ids);

@@ -1,15 +1,15 @@
 var _ = require('underscore');
 
-var Extraction = function(content){
+var ContentSelectorExtraction = function(content){
   this.content = content;
 
   // Get hash of word-parts appearing in content
   this.contentWords = getAllUsedWords(content);
 };
 
-module.exports = Extraction;
+module.exports = ContentSelectorExtraction;
 
-Extraction.prototype.filter = function(words){
+ContentSelectorExtraction.prototype.filter = function(words){
   var that = this;
 
   return _.filter(words, function(word){
@@ -27,7 +27,7 @@ Extraction.prototype.filter = function(words){
   });
 };
 
-Extraction.prototype.filterBySearch = function(words){
+ContentSelectorExtraction.prototype.filterBySearch = function(words){
   var that = this;
 
   return _.filter(words, function(word){
