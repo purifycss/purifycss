@@ -239,8 +239,7 @@ var validateHtmlTag = function(flatTwig, htmlEls){
   return false;
 };
 
-var handleValidation = function(validated, throwDelim, rejectedTwigs, twig){
-  throwDelim = !validated;
+var handleValidation = function(validated, rejectedTwigs, twig){
   if(!validated){
     rejectedTwigs.push(twig);
   }
@@ -283,14 +282,20 @@ var filterSelector = function(branch, classes, htmlEls, ids, attrSelectors){
 
     var isId = flatTwig.indexOf('shash') > -1;
     if(isId){
-      return handleValidation(validateId(flatTwig, ids), throwDelim, rejectedTwigs, twig);
+      var validated = validateId(flatTwig, ids);
+      throwDelim = !validated;
+      return handleValidation(validated, rejectedTwigs, twig);
     }
 
     var hasClass = flatTwig.indexOf('clazz') > -1;
     if(hasClass){
-      return handleValidation(validateClass(flatTwig, classes), throwDelim, rejectedTwigs, twig);
+      var validated = validateClass(flatTwig, classes);
+      throwDelim = !validated;
+      return handleValidation(validated, rejectedTwigs, twig);
     } else {
-      return handleValidation(validateHtmlTag(flatTwig, htmlEls), throwDelim, rejectedTwigs, twig);
+      var validated = validateHtmlTag(flatTwig, htmlEls);
+      throwDelim = !validated;
+      return handleValidation(validated, rejectedTwigs, twig);
     }
 
     return true;
