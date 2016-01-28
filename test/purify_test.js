@@ -112,4 +112,23 @@ describe('purify', function(){
     expect(result.indexOf('+rounded') > -1).to.equal(true);
     expect(result.indexOf('button') > -1).to.equal(true);
   });
+
+  it('works with delimited selectors', function (){
+    var content = read('delimited/delimited.html');
+    var css = read('delimited/delimited.css');
+    var result = purify(content, css);
+
+    var commaCount = result.split('').reduce(function (total, chr){
+      if (chr === ','){
+        return total + 1;
+      }
+
+      return total;
+    }, 0);
+
+    expect(commaCount).to.equal(1);
+    expect(result.indexOf('h1') > -1).to.equal(true);
+    expect(result.indexOf('p') > -1).to.equal(true);
+    expect(result.indexOf('.unused-class-name') === -1).to.equal(true);
+  });
 });
