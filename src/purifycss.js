@@ -3,6 +3,7 @@ var _ = require('underscore');
 var CleanCss = require('clean-css');
 var CssSyntaxTree = require('./CssSyntaxTree.js');
 var ContentSelectorExtraction = require('./ContentSelectorExtraction.js');
+var UglifyJS = require('uglifyjs');
 
 ////////////////////
 // ARGUMENTS
@@ -32,8 +33,11 @@ var purify = function(searchThrough, css, options, callback){
   options = _.extend({}, DEFAULT_OPTIONS, options);
 
   var cssString = Array.isArray(css) ? concatFiles(css) : css;
-  var content = Array.isArray(searchThrough) ? concatFiles(searchThrough) : searchThrough;
-  content = reduceContent(content.toLowerCase());
+  var content = Array.isArray(searchThrough) ?
+    concatFiles(searchThrough, {compress: true}) :
+    compressCode(searchThrough);
+
+  content = content.toLowerCase();
 
   // Save these to give helpful info at the end
   var beginningLength = cssString.length;
@@ -84,16 +88,36 @@ var purify = function(searchThrough, css, options, callback){
 
 module.exports = purify;
 
-var concatFiles = function(files){
-  return files.reduce(function(total, file){
-    return total + fs.readFileSync(file, 'utf8') + ' ';
-  }, '');
+var compressCode = function(code) {
+  try {
+    // Try to minimize the code as much as possible, removing noise.
+    var ast = UglifyJS.parse(code);
+    ast.figure_out_scope();
+    compressor = UglifyJS.Compressor();
+    ast = ast.transform(compressor);
+    ast.figure_out_scope();
+    ast.compute_char_frequency();
+    ast.mangle_names({toplevel: true});
+    code = ast.print_to_string();
+  } catch (e) {
+    // If compression fails, assume it's not a JS file and return the full code.
+  }
+
+  return code;
 };
 
-var reduceContent = function(content){
-  return content
-    .split('\n').join('')
-    .replace(/\s\s+/g, ' ');
+var concatFiles = function(files, options){
+  options = options || {};
+
+  return files.reduce(function(total, file){
+    var code = fs.readFileSync(file, 'utf8');
+
+    if (options.compress) {
+      code = compressCode(code);
+    }
+
+    return total + code + ' ';
+  }, '');
 };
 
 var getRuleString = function(twig){
