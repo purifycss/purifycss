@@ -7,7 +7,7 @@ var FileUtil = {
       // Try to minimize the code as much as possible, removing noise.
       var ast = UglifyJS.parse(code);
       ast.figure_out_scope();
-      compressor = UglifyJS.Compressor();
+      compressor = UglifyJS.Compressor({warnings: false});
       ast = ast.transform(compressor);
       ast.figure_out_scope();
       ast.compute_char_frequency();
