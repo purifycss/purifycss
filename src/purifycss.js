@@ -24,7 +24,8 @@ var PrintUtil = require('./utils/PrintUtil');
 var DEFAULT_OPTIONS = {
   write: false,
   minify: false,
-  info: false
+  info: false,
+  compress: true
 };
 
 var purify = function(searchThrough, css, options, callback){
@@ -37,7 +38,7 @@ var purify = function(searchThrough, css, options, callback){
 
   var cssString = Array.isArray(css) ? FileUtil.concatFiles(css) : css;
   var content = Array.isArray(searchThrough) ?
-    FileUtil.concatFiles(searchThrough, {compress: true}) :
+    FileUtil.concatFiles(searchThrough, options) :
     FileUtil.compressCode(searchThrough);
 
   content = content.toLowerCase();
