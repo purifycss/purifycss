@@ -3,10 +3,10 @@ var fs = require('fs');
 
 var CleanCss = require('clean-css');
 var ContentSelectorExtraction = require('./ContentSelectorExtraction');
-var CssSyntaxTree = require('./CssTreeWalker');
-var SelectorFilter = require('./SelectorFilter');
+var CssTreeWalker = require('./CssTreeWalker');
 var FileUtil = require('./utils/FileUtil');
 var PrintUtil = require('./utils/PrintUtil');
+var SelectorFilter = require('./SelectorFilter');
 
 ////////////////////
 // ARGUMENTS
@@ -51,10 +51,10 @@ var purify = function (searchThrough, css, options, callback) {
   var selectorFilter = new SelectorFilter(extraction.contentWords);
 
   // Turn css into abstract syntax tree
-  var tree = new CssSyntaxTree(cssString, [selectorFilter]);
+  var tree = new CssTreeWalker(cssString, [selectorFilter]);
   tree.beginReading();
 
-  // // Turn tree back into css
+  // Turn tree back into css
   var source = tree.toString();
 
   if (options.minify) {

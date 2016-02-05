@@ -7,8 +7,8 @@ var SelectorFilter = function (contentWords) {
 };
 
 SelectorFilter.prototype.initialize = function (CssSyntaxTree) {
-  CssSyntaxTree.on(EventTypes.SELECTOR_EVENT, this.parseRule.bind(this));
-  CssSyntaxTree.on(EventTypes.FINISH_READING_EVENT, this.removeEmptyRules.bind(this));
+  CssSyntaxTree.on(EventTypes.READ_SELECTOR, this.parseRule.bind(this));
+  CssSyntaxTree.on(EventTypes.FINISH_READING, this.removeEmptyRules.bind(this));
 };
 
 SelectorFilter.prototype.parseRule = function (selectors, rule) {
