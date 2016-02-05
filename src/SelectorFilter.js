@@ -1,7 +1,5 @@
-var RULE_TYPE = 'rule';
-var MEDIA_TYPE = 'media';
-var SELECTOR_EVENT = 'readSelectors';
-var FINISH_READING_EVENT = 'finishedReading';
+var ReworkTypes = require('./constants/ReworkTypes');
+var EventTypes = require('./constants/EventTypes');
 
 var SelectorFilter = function (contentWords) {
   this.contentWords = contentWords;
@@ -9,8 +7,8 @@ var SelectorFilter = function (contentWords) {
 };
 
 SelectorFilter.prototype.initialize = function (CssSyntaxTree) {
-  CssSyntaxTree.on(SELECTOR_EVENT, this.parseRule.bind(this));
-  CssSyntaxTree.on(FINISH_READING_EVENT, this.removeEmptyRules.bind(this));
+  CssSyntaxTree.on(EventTypes.SELECTOR_EVENT, this.parseRule.bind(this));
+  CssSyntaxTree.on(EventTypes.FINISH_READING_EVENT, this.removeEmptyRules.bind(this));
 };
 
 SelectorFilter.prototype.parseRule = function (selectors, rule) {
@@ -44,11 +42,11 @@ SelectorFilter.prototype.removeEmptyRules = function (rules) {
   rules.forEach(function (rule) {
     var ruleType = rule.type;
 
-    if (ruleType === RULE_TYPE && rule.selectors.length === 0) {
+    if (ruleType === ReworkTypes.RULE_TYPE && rule.selectors.length === 0) {
       emptyRules.push(rule);
     }
 
-    if (ruleType === MEDIA_TYPE) {
+    if (ruleType === ReworkTypes.MEDIA_TYPE) {
       this.removeEmptyRules(rule.rules);
       if (rule.rules.length === 0) {
         emptyRules.push(rule);

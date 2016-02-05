@@ -1,8 +1,8 @@
 var EventEmitter = require('events').EventEmitter;
 var rework = require('rework');
 
-var ReworkTypes = require('./src/constants/ReworkTypes');
-var EventTypes = require('./src/constants/EventTypes');
+var ReworkTypes = require('./constants/ReworkTypes');
+var EventTypes = require('./constants/EventTypes');
 
 var CssTreeWalker = function (code, plugins) {
   EventEmitter.call(this);
