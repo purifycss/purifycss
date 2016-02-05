@@ -1,6 +1,6 @@
 {
   "name": "purify-css",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "description": "Removed unused css. Compatible with single-page apps.",
   "main": "./src/purifycss.js",
   "dependencies": {
