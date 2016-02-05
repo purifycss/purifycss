@@ -3,10 +3,9 @@ var fs = require('fs');
 
 var CleanCss = require('clean-css');
 var ContentSelectorExtraction = require('./ContentSelectorExtraction');
-var CssSyntaxTree = require('../CssTreeWalker');
-var SelectorFilter = require('../SelectorFilter');
+var CssSyntaxTree = require('./CssTreeWalker');
+var SelectorFilter = require('./SelectorFilter');
 var FileUtil = require('./utils/FileUtil');
-var HTMLElements = require('./constants/HTMLElements');
 var PrintUtil = require('./utils/PrintUtil');
 
 ////////////////////
