@@ -27,8 +27,8 @@ var DEFAULT_OPTIONS = {
   info: false
 };
 
-var purify = function(searchThrough, css, options, callback){
-  if(typeof options === 'function'){
+var purify = function (searchThrough, css, options, callback) {
+  if (typeof options === 'function') {
     callback = options;
     options = {};
   }
@@ -68,23 +68,25 @@ var purify = function(searchThrough, css, options, callback){
   // Turn tree back into css
   var source = tree.toSrc();
 
-  if(options.minify){
+  if (options.minify) {
     source = new CleanCss().minify(source).styles;
   }
 
-  if(options.info){
+  if (options.info) {
     PrintUtil.printInfo(startTime, beginningLength, source.length);
   }
 
-  if(options.rejected){
+  if (options.rejected) {
     PrintUtil.printRejected(rejectedSelectorTwigs.concat(rejectedAtRuleTwigs));
   }
 
-  if(!options.output){
+  if (!options.output) {
     return callback ? callback(source) : source;
   } else {
-    fs.writeFile(options.output, source, function(err){
-      if(err) return err;
+    fs.writeFile(options.output, source, function (err) {
+      if (err) {
+        return err;
+      }
     });
   }
 };

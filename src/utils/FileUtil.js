@@ -2,7 +2,7 @@ var fs = require('fs');
 var UglifyJS = require('uglifyjs');
 
 var FileUtil = {
-  compressCode: function(code) {
+  compressCode: function (code) {
     try {
       // Try to minimize the code as much as possible, removing noise.
       var ast = UglifyJS.parse(code);
@@ -20,10 +20,10 @@ var FileUtil = {
     return code;
   },
 
-  concatFiles: function(files, options){
+  concatFiles: function (files, options) {
     options = options || {};
 
-    return files.reduce(function(total, file){
+    return files.reduce(function (total, file) {
       var code = fs.readFileSync(file, 'utf8');
 
       if (options.compress) {

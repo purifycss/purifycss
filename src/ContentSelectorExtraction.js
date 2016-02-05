@@ -1,6 +1,6 @@
 var _ = require('underscore');
 
-var ContentSelectorExtraction = function(content){
+var ContentSelectorExtraction = function (content) {
   this.content = content;
 
   // Get hash of word-parts appearing in content
@@ -9,17 +9,17 @@ var ContentSelectorExtraction = function(content){
 
 module.exports = ContentSelectorExtraction;
 
-ContentSelectorExtraction.prototype.filter = function(words){
+ContentSelectorExtraction.prototype.filter = function (words) {
   var that = this;
 
-  return _.filter(words, function(word){
+  return _.filter(words, function (word) {
     var splitWord = word.toLowerCase().split('-');
 
-    if(splitWord.length === 1){
+    if (splitWord.length === 1) {
       return that.contentWords[word];
     } else {
       return that.contentWords[word] ||
-             _.every(splitWord, function(part){
+             _.every(splitWord, function (part) {
                return that.contentWords[part] || that.contentWords[part + '-'] ||
                       that.contentWords['-' + part + '-'] || that.contentWords['-' + part];
              });
@@ -27,26 +27,26 @@ ContentSelectorExtraction.prototype.filter = function(words){
   });
 };
 
-ContentSelectorExtraction.prototype.filterBySearch = function(words){
+ContentSelectorExtraction.prototype.filterBySearch = function (words) {
   var that = this;
 
-  return _.filter(words, function(word){
+  return _.filter(words, function (word) {
     return that.content.indexOf(word.replace(/\\/g, '')) > -1;
   });
 };
 
-var getAllUsedWords = function(content){
+var getAllUsedWords = function (content) {
   var used = {};
-  var word = "";
+  var word = '';
 
-  for(var i = 0; i < content.length; i++){
+  for (var i = 0; i < content.length; i++) {
     var chr = content[i];
 
-    if(chr.match(/^[\w-]+$/)){
+    if (chr.match(/^[\w-]+$/)) {
       word += chr;
     } else {
       used[word] = true;
-      word = "";
+      word = '';
     }
   }
 

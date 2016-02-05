@@ -1,6 +1,8 @@
-var getRuleString = function(twig){
+var _ = require('underscore');
+
+var getRuleString = function (twig) {
   var ruleString = '';
-  for(var i = 1; i < twig.length; i++){
+  for (var i = 1; i < twig.length; i++) {
     var rulePart = twig[i];
     switch (rulePart[0]) {
     case 's':
@@ -25,20 +27,19 @@ var getRuleString = function(twig){
   return ruleString;
 };
 
-
 var PrintUtil = {
 
-  printInfo: function(startTime, beginningLength, endingLength){
+  printInfo: function (startTime, beginningLength, endingLength) {
     var logFn = console.error;
     logFn.call(null, '##################################');
     logFn.call(null, 'Before purify, CSS was ' + beginningLength + ' chars long.');
     logFn.call(null, 'After purify, CSS is ' + endingLength + ' chars long. (' +
-      Math.floor((beginningLength / endingLength * 10)) / 10  + ' times smaller)');
+      Math.floor((beginningLength / endingLength * 10)) / 10 + ' times smaller)');
     logFn.call(null, '##################################');
     logFn.call(null, 'This function took: ', new Date() - startTime, 'ms');
   },
 
-  printRejected: function(rejectedTwigs){
+  printRejected: function (rejectedTwigs) {
     var logFn = console.error;
     logFn.call(null, '##################################');
     logFn.call(null, 'Rejected selectors:');

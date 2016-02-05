@@ -1,0 +1,24 @@
+{
+  "env": {
+    "node": true,
+  },
+
+  "rules": {
+    "eqeqeq": [2, "smart"],
+    "quotes": [2, "single"],
+    "indent": [2, 2],
+    "camelcase": [0, {"properties": "never"}],
+    "no-mixed-spaces-and-tabs": 2,
+    "no-trailing-spaces": [2, { "skipBlankLines": false }],
+    "no-underscore-dangle": 0,
+    "no-unused-vars": 2,
+    "no-use-before-define": 0,
+    "no-multiple-empty-lines": [2, {"max": 1}],
+    "space-after-keywords": [2, "always"],
+    "space-before-blocks": [2, "always"],
+    "space-before-function-paren": [2, {
+      "anonymous": "always", "named": "never"
+    }],
+    "strict": [0, "never"]
+  }
+}

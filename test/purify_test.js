@@ -7,7 +7,7 @@ var read = function (path) {
   return fs.readFileSync(absPath + path, 'utf8');
 }
 
-describe('purify', function(){
+describe('purify', function () {
   describe('find intact classes', function () {
     beforeEach(function () {
       var content = read('simple/simple.js');
@@ -23,7 +23,7 @@ describe('purify', function(){
       expect(this.result.indexOf('.double-class') > -1).to.equal(true);
     });
 
-    it('can find .triple-simple-class', function(){
+    it('can find .triple-simple-class', function () {
       expect(this.result.indexOf('.triple-simple-class') > -1).to.equal(true);
     });
   });
@@ -34,8 +34,8 @@ describe('purify', function(){
       this.css = read('simple/simple.css');
     });
 
-    it('can use a callback', function(){
-      purify(this.content, this.css, function(result){
+    it('can use a callback', function () {
+      purify(this.content, this.css, function (result) {
         expect(result.indexOf('.triple-simple-class') > -1).to.equal(true);
       });
     });
@@ -52,7 +52,7 @@ describe('purify', function(){
       expect(this.result.indexOf('.added-together') > -1).to.equal(true);
     });
 
-    it('can find .array-joined', function(){
+    it('can find .array-joined', function () {
       expect(this.result.indexOf('.array-joined') > -1).to.equal(true);
     });
   });
@@ -225,8 +225,8 @@ describe('purify', function(){
     });
 
     it('removes the extra comma', function () {
-      var commaCount = this.result.split('').reduce(function (total, chr){
-        if (chr === ','){
+      var commaCount = this.result.split('').reduce(function (total, chr) {
+        if (chr === ',') {
           return total + 1;
         }
 
