@@ -179,7 +179,7 @@ describe('purify', function () {
 
   describe('attribute selectors', function () {
     beforeEach(function () {
-      var content = read('attribute_selector/attribute_selector.js');
+      var content = read('attribute_selector/attribute_selector.html');
       var css = read('attribute_selector/attribute_selector.css');
       this.result = purify(content, css);
     });

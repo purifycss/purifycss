@@ -42,7 +42,7 @@ var getAllUsedWords = function (content) {
   for (var i = 0; i < content.length; i++) {
     var chr = content[i];
 
-    if (chr.match(/^[\w-]+$/)) {
+    if (chr.match(/[a-z]+/)) {
       word += chr;
     } else {
       used[word] = true;

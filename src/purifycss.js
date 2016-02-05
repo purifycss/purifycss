@@ -2,8 +2,9 @@ var _ = require('underscore');
 var fs = require('fs');
 
 var CleanCss = require('clean-css');
-var ContentSelectorExtraction = require('./ContentSelectorExtraction.js');
-var CssSyntaxTree = require('./CssSyntaxTree.js');
+var ContentSelectorExtraction = require('./ContentSelectorExtraction');
+var CssSyntaxTree = require('../CssTreeWalker');
+var SelectorFilter = require('../SelectorFilter');
 var FileUtil = require('./utils/FileUtil');
 var HTMLElements = require('./constants/HTMLElements');
 var PrintUtil = require('./utils/PrintUtil');
@@ -46,27 +47,16 @@ var purify = function (searchThrough, css, options, callback) {
   var beginningLength = cssString.length;
   var startTime = new Date();
 
-  // Turn css into abstract syntax tree
-  var tree = new CssSyntaxTree(cssString);
-
   // Narrow list down to things that are found in content
   var extraction = new ContentSelectorExtraction(content);
-  var classes = extraction.filter(tree.classes);
-  var specialClasses = extraction.filterBySearch(tree.specialClasses);
-  var ids = extraction.filter(tree.ids);
-  var specialIds = extraction.filterBySearch(tree.specialIds);
-  var attrSelectors = extraction.filterBySearch(tree.attrSelectors);
+  var selectorFilter = new SelectorFilter(extraction.contentWords);
 
-  classes = classes.concat(specialClasses);
-  ids = ids.concat(specialIds);
-  var usedHtmlEls = extraction.filter(HTMLElements);
+  // Turn css into abstract syntax tree
+  var tree = new CssSyntaxTree(cssString, [selectorFilter]);
+  tree.beginReading();
 
-  // Narrow CSS tree down to things that remain on the list
-  var rejectedSelectorTwigs = tree.filterSelectors(classes, usedHtmlEls, ids, attrSelectors);
-  var rejectedAtRuleTwigs = tree.filterAtRules(classes, usedHtmlEls, ids, attrSelectors);
-
-  // Turn tree back into css
-  var source = tree.toSrc();
+  // // Turn tree back into css
+  var source = tree.toString();
 
   if (options.minify) {
     source = new CleanCss().minify(source).styles;
@@ -77,7 +67,7 @@ var purify = function (searchThrough, css, options, callback) {
   }
 
   if (options.rejected) {
-    PrintUtil.printRejected(rejectedSelectorTwigs.concat(rejectedAtRuleTwigs));
+    PrintUtil.printRejected(selectorFilter.rejectedSelectors);
   }
 
   if (!options.output) {
