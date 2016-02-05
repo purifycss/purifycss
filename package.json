@@ -6,7 +6,6 @@
   "dependencies": {
     "clean-css": "^3.2.10",
     "eslint": "^0.24.1",
-    "gonzales": "^1.0.7",
     "rework": "^1.0.1",
     "uglifyjs": "^2.4.10",
     "underscore": "^1.8.3",
