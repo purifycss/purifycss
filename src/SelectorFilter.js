@@ -1,5 +1,4 @@
-var ReworkTypes = require('./constants/ReworkTypes');
-var EventTypes = require('./constants/EventTypes');
+var getAllWordsInSelector = require('./utils/ExtractWordsUtil').getAllWordsInSelector;
 
 var SelectorFilter = function (contentWords) {
   this.contentWords = contentWords;
@@ -7,8 +6,7 @@ var SelectorFilter = function (contentWords) {
 };
 
 SelectorFilter.prototype.initialize = function (CssSyntaxTree) {
-  CssSyntaxTree.on(EventTypes.READ_SELECTOR, this.parseRule.bind(this));
-  CssSyntaxTree.on(EventTypes.FINISH_READING, this.removeEmptyRules.bind(this));
+  CssSyntaxTree.on('readRule', this.parseRule.bind(this));
 };
 
 SelectorFilter.prototype.parseRule = function (selectors, rule) {
@@ -34,78 +32,6 @@ SelectorFilter.prototype.filterSelectors = function (selectors) {
   });
 
   return usedSelectors;
-};
-
-SelectorFilter.prototype.removeEmptyRules = function (rules) {
-  var emptyRules = [];
-
-  rules.forEach(function (rule) {
-    var ruleType = rule.type;
-
-    if (ruleType === ReworkTypes.RULE_TYPE && rule.selectors.length === 0) {
-      emptyRules.push(rule);
-    }
-
-    if (ruleType === ReworkTypes.MEDIA_TYPE) {
-      this.removeEmptyRules(rule.rules);
-      if (rule.rules.length === 0) {
-        emptyRules.push(rule);
-      }
-    }
-  }.bind(this));
-
-  emptyRules.forEach(function (emptyRule) {
-    var index = rules.indexOf(emptyRule);
-    rules.splice(index, 1);
-  });
-};
-
-var getAllWordsInSelector = function (selector) {
-  // Remove attr selectors. "a[href...]"" will become "a".
-  selector = selector.replace(/\[(.+?)\]/g, '').toLowerCase();
-
-  // If complex attr selector (has a bracket in it) just leave
-  // the selector in. ¯\_(ツ)_/¯
-  if (selector.indexOf('[') !== -1 || selector.indexOf(']') !== -1) {
-    return [];
-  }
-
-  var words = [];
-  var word = '';
-  var skipNextWord = false;
-
-  for (var i = 0; i < selector.length; i++) {
-    var letter = selector[i];
-
-    if (skipNextWord && (letter !== '.' || letter !== '#' || letter !== ' ')) {
-      continue;
-    }
-
-    // If pseudoclass or universal selector, skip the next word
-    if (letter === ':' || letter === '*') {
-      addWord(words, word);
-      word = '';
-      skipNextWord = true;
-      continue;
-    }
-
-    if (letter.match(/[a-z]+/)) {
-      word += letter;
-    } else {
-      addWord(words, word);
-      word = '';
-      skipNextWord = false;
-    }
-  }
-
-  words.push(word);
-  return words;
-};
-
-var addWord = function (words, word) {
-  if (word.length > 0) {
-    words.push(word);
-  }
 };
 
 module.exports = SelectorFilter;

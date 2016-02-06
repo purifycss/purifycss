@@ -1,8 +1,7 @@
-var _ = require('underscore');
 var fs = require('fs');
 
 var CleanCss = require('clean-css');
-var ContentSelectorExtraction = require('./ContentSelectorExtraction');
+var getAllWordsInContent = require('./utils/ExtractWordsUtil').getAllWordsInContent;
 var CssTreeWalker = require('./CssTreeWalker');
 var FileUtil = require('./utils/FileUtil');
 var PrintUtil = require('./utils/PrintUtil');
@@ -21,10 +20,19 @@ var SelectorFilter = require('./SelectorFilter');
 // callback = (optional) a function that the purified css will be passed into
 ////////////////////
 
-var DEFAULT_OPTIONS = {
-  write: false,
-  minify: false,
-  info: false
+var getOptions = function (options) {
+  options = options || {};
+  var defaultOptions = {
+    write: false,
+    minify: false,
+    info: false
+  };
+
+  Object.keys(options).forEach(function (option) {
+    defaultOptions[option] = options[option];
+  });
+
+  return defaultOptions;
 };
 
 var purify = function (searchThrough, css, options, callback) {
@@ -32,29 +40,21 @@ var purify = function (searchThrough, css, options, callback) {
     callback = options;
     options = {};
   }
-  options = options || {};
-  options = _.extend({}, DEFAULT_OPTIONS, options);
+  options = getOptions(options);
 
   var cssString = Array.isArray(css) ? FileUtil.concatFiles(css) : css;
   var content = Array.isArray(searchThrough) ?
     FileUtil.concatFiles(searchThrough, {compress: true}) :
     FileUtil.compressCode(searchThrough);
-
   content = content.toLowerCase();
 
-  // Save these to give helpful info at the end
-  var beginningLength = cssString.length;
-  var startTime = new Date();
+  PrintUtil.startLog(cssString.length);
 
-  // Narrow list down to things that are found in content
-  var extraction = new ContentSelectorExtraction(content);
-  var selectorFilter = new SelectorFilter(extraction.contentWords);
+  var wordsInContent = getAllWordsInContent(content);
+  var selectorFilter = new SelectorFilter(wordsInContent);
 
-  // Turn css into abstract syntax tree
   var tree = new CssTreeWalker(cssString, [selectorFilter]);
   tree.beginReading();
-
-  // Turn tree back into css
   var source = tree.toString();
 
   if (options.minify) {
@@ -62,7 +62,7 @@ var purify = function (searchThrough, css, options, callback) {
   }
 
   if (options.info) {
-    PrintUtil.printInfo(startTime, beginningLength, source.length);
+    PrintUtil.printInfo(source.length);
   }
 
   if (options.rejected) {
