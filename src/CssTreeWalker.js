@@ -43,7 +43,7 @@ CssTreeWalker.prototype.readRules = function (rules) {
 
 CssTreeWalker.prototype.toString = function () {
   if (this.ast) {
-    return this.ast.toString();
+    return this.ast.toString().replace(/,\n/g, ', ');
   }
 
   return '';
