@@ -5,13 +5,13 @@
   "main": "./src/purifycss.js",
   "dependencies": {
     "clean-css": "^3.2.10",
-    "eslint": "^0.24.1",
     "rework": "^1.0.1",
     "uglifyjs": "^2.4.10",
     "yargs": "^3.10.0"
   },
   "devDependencies": {
     "chai": "^3.0.0",
+    "eslint": "^0.24.1",
     "mocha": "^2.2.5"
   },
   "scripts": {

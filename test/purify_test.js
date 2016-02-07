@@ -248,4 +248,17 @@ describe('purify', function () {
       expect(this.result.indexOf('.unused-class-name') === -1).to.equal(true);
     });
   });
+
+  describe('removal of selectors', function () {
+    beforeEach(function () {
+      this.css = read('bootstrap/modified-bootstrap.css');
+    });
+
+    it('should only have .testFoo', function () {
+      var css = this.css + read('camel_case/camel_case.css');
+      var result = purify('testFoo', css);
+      expect(result.length < 30).to.equal(true);
+      expect(result.indexOf('.testFoo') > -1).to.equal(true);
+    });
+  });
 });
