@@ -1,0 +1,7 @@
+div:before {
+  color: black;
+}
+
+.row:after {
+  color: black;
+}

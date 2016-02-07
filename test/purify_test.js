@@ -261,4 +261,20 @@ describe('purify', function () {
       expect(result.indexOf('.testFoo') > -1).to.equal(true);
     });
   });
+
+  describe('pseudo classes', function () {
+    beforeEach(function () {
+      var content = read('pseudo_class/pseudo_class.js');
+      var css = read('pseudo_class/pseudo_class.css');
+      this.result = purify(content, css);
+    });
+
+    it('finds div:before', function () {
+      expect(this.result.indexOf('div:before') > -1).to.equal(true);
+    });
+
+    it('removes row:after', function () {
+      expect(this.result.indexOf('row:after') > -1).to.equal(false);
+    });
+  });
 });
