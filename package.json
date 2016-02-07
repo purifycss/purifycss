@@ -15,6 +15,7 @@
     "mocha": "^2.2.5"
   },
   "scripts": {
+    "pretest": "eslint src",
     "test": "node ./node_modules/mocha/bin/mocha"
   },
   "repository": {
