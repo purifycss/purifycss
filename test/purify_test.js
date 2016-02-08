@@ -179,7 +179,7 @@ describe('purify', function () {
 
   describe('attribute selectors', function () {
     beforeEach(function () {
-      var content = read('attribute_selector/attribute_selector.js');
+      var content = read('attribute_selector/attribute_selector.html');
       var css = read('attribute_selector/attribute_selector.css');
       this.result = purify(content, css);
     });
@@ -246,6 +246,35 @@ describe('purify', function () {
 
     it('removes .unused-class-name', function () {
       expect(this.result.indexOf('.unused-class-name') === -1).to.equal(true);
+    });
+  });
+
+  describe('removal of selectors', function () {
+    beforeEach(function () {
+      this.css = read('bootstrap/modified-bootstrap.css');
+    });
+
+    it('should only have .testFoo', function () {
+      var css = this.css + read('camel_case/camel_case.css');
+      var result = purify('testFoo', css);
+      expect(result.length < 30).to.equal(true);
+      expect(result.indexOf('.testFoo') > -1).to.equal(true);
+    });
+  });
+
+  describe('pseudo classes', function () {
+    beforeEach(function () {
+      var content = read('pseudo_class/pseudo_class.js');
+      var css = read('pseudo_class/pseudo_class.css');
+      this.result = purify(content, css);
+    });
+
+    it('finds div:before', function () {
+      expect(this.result.indexOf('div:before') > -1).to.equal(true);
+    });
+
+    it('removes row:after', function () {
+      expect(this.result.indexOf('row:after') > -1).to.equal(false);
     });
   });
 });
