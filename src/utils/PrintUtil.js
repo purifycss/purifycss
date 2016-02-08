@@ -6,9 +6,8 @@ var PrintUtil = {
   printInfo: function (endingLength) {
     var logFn = console.error;
     logFn.call(null, '##################################');
-    logFn.call(null, 'Before purify, CSS was ' + beginningLength + ' chars long.');
-    logFn.call(null, 'After purify, CSS is ' + endingLength + ' chars long. (' +
-      Math.floor((beginningLength / endingLength * 10)) / 10 + ' times smaller)');
+    logFn.call(null, 'PurifyCSS has reduced the file size by ~' +
+      (((beginningLength - endingLength) / beginningLength) * 100).toFixed(1) + '%');
     logFn.call(null, '##################################');
     logFn.call(null, 'This function took: ', new Date() - startTime, 'ms');
   },

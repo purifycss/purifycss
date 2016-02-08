@@ -35,6 +35,10 @@ var getOptions = function (options) {
   return defaultOptions;
 };
 
+var minify = function (cssSource) {
+  return new CleanCss().minify(cssSource).styles;
+};
+
 var purify = function (searchThrough, css, options, callback) {
   if (typeof options === 'function') {
     callback = options;
@@ -48,7 +52,7 @@ var purify = function (searchThrough, css, options, callback) {
     FileUtil.compressCode(searchThrough);
   content = content.toLowerCase();
 
-  PrintUtil.startLog(cssString.length);
+  PrintUtil.startLog(minify(cssString).length);
 
   var wordsInContent = getAllWordsInContent(content);
   var selectorFilter = new SelectorFilter(wordsInContent);
@@ -58,11 +62,13 @@ var purify = function (searchThrough, css, options, callback) {
   var source = tree.toString();
 
   if (options.minify) {
-    source = new CleanCss().minify(source).styles;
+    source = minify(source);
   }
 
-  if (options.info) {
+  if (options.info && options.minify) {
     PrintUtil.printInfo(source.length);
+  } else if (options.info && !options.minify) {
+    PrintUtil.printInfo(minify(source).length);
   }
 
   if (options.rejected) {
