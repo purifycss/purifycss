@@ -46,11 +46,8 @@ var purify = function (searchThrough, css, options, callback) {
   }
   options = getOptions(options);
 
-  var cssString = Array.isArray(css) ? FileUtil.concatFiles(css) : css;
-  var content = Array.isArray(searchThrough) ?
-    FileUtil.concatFiles(searchThrough, {compress: true}) :
-    FileUtil.compressCode(searchThrough);
-  content = content.toLowerCase();
+  var cssString = FileUtil.filesToSource(css, 'css');
+  var content = FileUtil.filesToSource(searchThrough, 'content');
 
   PrintUtil.startLog(minify(cssString).length);
 

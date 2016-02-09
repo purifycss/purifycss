@@ -1,4 +1,5 @@
 var fs = require('fs');
+var glob = require('glob');
 var UglifyJS = require('uglifyjs');
 
 var FileUtil = {
@@ -34,6 +35,36 @@ var FileUtil = {
 
       return total + code + ' ';
     }, '');
+  },
+
+  getFilesFromPatternArray: function (patterns) {
+    var sourceFiles = {};
+
+    patterns.forEach(function (pattern) {
+      var files = glob.sync(pattern);
+      files.forEach(function (file) {
+        sourceFiles[file] = true;
+      });
+    });
+
+    return Object.keys(sourceFiles);
+  },
+
+  filesToSource: function (files, type) {
+    var isContent = type === 'content';
+    var options = {compress: isContent};
+
+    if (Array.isArray(files)) {
+      var files = FileUtil.getFilesFromPatternArray(files);
+      return FileUtil.concatFiles(files, options);
+    }
+
+    // 'files' is already a source string.
+    if (isContent) {
+      return FileUtil.compressCode(files).toLowerCase();
+    } else {
+      return files
+    }
   }
 };
 

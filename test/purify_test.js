@@ -79,8 +79,8 @@ describe('purify', function () {
 
   describe('works with multiple files', function () {
     beforeEach(function () {
-      var content = [absPath + 'multiple_files/multiple_files.js', absPath + 'multiple_files/multiple_files.html'];
-      var css = [absPath + 'multiple_files/multiple_files.css', absPath + 'multiple_files/multiple_files2.css'];
+      var content = ['**/test_examples/multiple_files/*.+(js|html)'];
+      var css = ['**/test_examples/multiple_files/*.css'];
       this.result = purify(content, css);
     });
 
