@@ -1,24 +1,31 @@
 #!/usr/bin/env node
 
-var path = require('path');
 var argv = require('yargs').argv;
+var path = require('path');
 var purify = require('../src/purifycss.js');
 
-if (argv.help || argv.h) return printUsage();
+if (argv.help || argv.h) {
+  return printUsage();
+}
 
 var files = argv._;
-if (files.length === 0) return printUsage();
+if (files.length === 0) {
+  return printUsage();
+}
 
-var css = files.filter(function(file){
+var css = files.filter(function (file) {
   return path.extname(file) === '.css';
 });
-if (css.length === 0) return printUsage("css");
+if (css.length === 0) {
+  return printUsage('css');
+}
 
-var content = files.filter(function(file){
+var content = files.filter(function (file) {
   return path.extname(file) !== '.css';
 });
-if (content.length === 0) return printUsage("content");
-
+if (content.length === 0) {
+  return printUsage('content');
+}
 
 var options = {
   minify: !!argv.min,
@@ -33,18 +40,22 @@ if (options.output) {
   console.log(purify(content, css, options));
 }
 
-
 function printUsage(errorOn) {
-  if (errorOn === "css") console.log("usage: purifycss \033[4;31m<css>\033[0m <content> [option ...]");
-  else if (errorOn === "content") console.log("usage: purifycss <css> \033[4;31m<content>\033[0m [option ...]");
-  else console.log("usage: purifycss <css> <content> [option ...]");
+  if (errorOn === 'css') {
+    console.log('usage: purifycss \033[4;31m<css>\033[0m <content> [option ...]');
+  } else if (errorOn === 'content') {
+    console.log('usage: purifycss <css> \033[4;31m<content>\033[0m [option ...]');
+  } else {
+    console.log('usage: purifycss <css> <content> [option ...]');
+  }
   console.log();
-  console.log("options:");
-  console.log(" --min                Minify CSS");
-  console.log(" --out [filepath]     Filepath to write purified css to");
-  console.log(" --info               Logs info on how much css was removed");
+  console.log('options:');
+  console.log(' --min                Minify CSS');
+  console.log(' --out [filepath]     Filepath to write purified css to');
+  console.log(' --info               Logs info on how much css was removed');
+  console.log(' --rejected           Logs the CSS rules that were removed');
   console.log();
-  console.log(" -h, --help           Prints help (this message) and exits");
+  console.log(' -h, --help           Prints help (this message) and exits');
   console.log();
-  console.log("Report bugs to: https://github.com/purifycss/purifycss/issues");
+  console.log('Report bugs to: https://github.com/purifycss/purifycss/issues');
 }

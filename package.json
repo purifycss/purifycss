@@ -16,7 +16,7 @@
     "mocha": "^2.2.5"
   },
   "scripts": {
-    "pretest": "eslint src",
+    "pretest": "eslint src && eslint bin/purifycss",
     "test": "node ./node_modules/mocha/bin/mocha"
   },
   "repository": {
