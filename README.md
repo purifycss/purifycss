@@ -73,7 +73,7 @@ logs out:
 
 <br />
 
-##### Example with file patterns + writing to a file
+##### Example with [glob](https://github.com/isaacs/node-glob) file patterns + writing to a file
 
 ```js
 var content = ['**/src/js/*.js', '**/src/html/*.html'];
@@ -89,7 +89,7 @@ purify(content, css, options);
 
 <br />
 
-##### Example with mixed file patterns and source strings + minify
+##### Example with both [glob](https://github.com/isaacs/node-glob) file patterns and source strings + minify
 
 ```js
 var content = ['**/src/js/*.js', '**/src/html/*.html'];
@@ -120,7 +120,7 @@ purify(content, css, function (purifiedResult) {
 
 <br />
 
-##### Example with callback and options
+##### Example with callback + options
 
 ```js
 var content = ['**/src/js/*.js', '**/src/html/*.html'];
@@ -152,18 +152,18 @@ purify(content, css, options, callback);
 #####  The ```content``` argument
 ##### Type: ```Array``` or ```String```
 
-**```Array```** of file patterns to the files you want to search through for used classes (HTML, JS, PHP, ERB, Templates, anything that uses CSS selectors).
+**```Array```** of [glob](https://github.com/isaacs/node-glob) file patterns to the files to search through for used classes (HTML, JS, PHP, ERB, Templates, anything that uses CSS selectors).
 
-**```String```** of content you want us to look for used classes.
+**```String```** of content to look at for used classes.
 
 <br />
 
 ##### The ```css``` argument
 ##### Type: ```Array``` or ```String```
 
-**```Array```** of file patterns to the CSS files you want us to filter.
+**```Array```** of [glob](https://github.com/isaacs/node-glob) file patterns to the CSS files you want to filter.
 
-**```String```** of CSS you want us to filter.
+**```String```** of CSS to purify.
 
 <br />
 
@@ -194,7 +194,7 @@ purify(content, css, options, function(purifiedCSS){
 });
 ```
 
-##### Example of callback use without options
+##### Example of callback without options
 ``` javascript
 purify(content, css, function(purifiedCSS){
   console.log('callback without options and received', purifiedCSS);
