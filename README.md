@@ -236,7 +236,7 @@ purify(content, css, function(purifiedCSS){
   // Can detect various more ways, even if using a Javascript framework.
   // A React example.
   var classes = classNames({
-    button-active: this.state.buttonActive
+    'button-active': this.state.buttonActive
   });
   
   return (
