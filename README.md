@@ -1,6 +1,6 @@
+[![Join the chat at https://gitter.im/purifycss/purifycss](https://badges.gitter.im/purifycss/purifycss.svg)](https://gitter.im/purifycss/purifycss?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ### PurifyCSS
 
-[![Join the chat at https://gitter.im/purifycss/purifycss](https://badges.gitter.im/purifycss/purifycss.svg)](https://gitter.im/purifycss/purifycss?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Exposes a function that takes content (HTML/JS/etc) and CSS, and returns purified CSS.
 
 Purified CSS is made up of only the selectors you use. The goal is to reduce the size of CSS, similar to minify.
