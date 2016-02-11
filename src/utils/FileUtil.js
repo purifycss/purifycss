@@ -55,7 +55,7 @@ var FileUtil = {
     var options = {compress: isContent};
 
     if (Array.isArray(files)) {
-      var files = FileUtil.getFilesFromPatternArray(files);
+      files = FileUtil.getFilesFromPatternArray(files);
       return FileUtil.concatFiles(files, options);
     }
 
@@ -63,7 +63,7 @@ var FileUtil = {
     if (isContent) {
       return FileUtil.compressCode(files).toLowerCase();
     } else {
-      return files
+      return files;
     }
   }
 };
