@@ -63,7 +63,7 @@ var ExtractWordsUtil = {
       }
     }
 
-    words.push(word);
+    addWord(words, word);
     return words;
   }
 };
