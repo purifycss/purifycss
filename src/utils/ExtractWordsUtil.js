@@ -6,7 +6,11 @@ var addWord = function (words, word) {
 
 var ExtractWordsUtil = {
   getAllWordsInContent: function (content) {
-    var used = {};
+    var used = {
+      // Always include html and body.
+      html: true,
+      body: true
+    };
     var word = '';
 
     for (var i = 0; i < content.length; i++) {
