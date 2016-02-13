@@ -20,14 +20,14 @@ var FileUtil = {
       // If compression fails, assume it's not a JS file and return the full code.
     }
 
-    return code;
+    return code.toLowerCase();
   },
 
   concatFiles: function (files, options) {
     options = options || {};
 
     return files.reduce(function (total, file) {
-      var code = fs.readFileSync(file, 'utf8');
+      var code = fs.readFileSync(file, 'utf8').toLowerCase();
 
       if (options.compress) {
         code = FileUtil.compressCode(code);
@@ -61,9 +61,9 @@ var FileUtil = {
 
     // 'files' is already a source string.
     if (isContent) {
-      return FileUtil.compressCode(files).toLowerCase();
+      return FileUtil.compressCode(files);
     } else {
-      return files;
+      return files.toLowerCase();
     }
   }
 };
