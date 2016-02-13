@@ -27,7 +27,7 @@ var FileUtil = {
     options = options || {};
 
     return files.reduce(function (total, file) {
-      var code = fs.readFileSync(file, 'utf8').toLowerCase();
+      var code = fs.readFileSync(file, 'utf8');
 
       if (options.compress) {
         code = FileUtil.compressCode(code);
@@ -63,7 +63,7 @@ var FileUtil = {
     if (isContent) {
       return FileUtil.compressCode(files);
     } else {
-      return files.toLowerCase();
+      return files;
     }
   }
 };

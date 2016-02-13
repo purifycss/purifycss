@@ -257,7 +257,7 @@ describe('purify', function () {
     it('should only have .testFoo', function () {
       var css = this.css + read('camel_case/camel_case.css');
       var result = purify('testfoo', css);
-      console.log(result.length);
+
       expect(result.length < 400).to.equal(true);
       expect(result.indexOf('.testFoo') > -1).to.equal(true);
     });
