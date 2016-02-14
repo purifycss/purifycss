@@ -1,11 +1,68 @@
 [![Join the chat at https://gitter.im/purifycss/purifycss](https://badges.gitter.im/purifycss/purifycss.svg)](https://gitter.im/purifycss/purifycss?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ### PurifyCSS
 
-Exposes a function that takes content (HTML/JS/etc) and CSS, and returns purified CSS.
+A function that takes content (HTML/JS/PHP/etc) and CSS, and returns a file made up of only the selectors you use.
 
-Purified CSS is made up of only the selectors you use. The goal is to reduce the size of CSS, similar to minify.
+PurifyCSS does not modify the original CSS files. You can write to a new file, like minification.
 
 If your application is using a CSS framework, this is especially useful as many selectors are often unused.
+
+<br />
+***
+<br />
+### Potential reduction
+* [Bootstrap](https://github.com/twbs/bootstrap) file: ~140k
+* App using ~40% of selectors.
+* Minified: ~117k
+* Purified + Minified: **~35k**
+
+<br />
+***
+<br />
+
+### Used selector detection
+Statically analyzes your code to pick up which selectors are used. 
+
+But will it catch all of the cases?
+<br />
+<br />
+#### Start off simple.
+#### Detecting the use of: ```button-active```
+``` html
+  <!-- html -->
+  <!-- class directly on element -->
+  <div class="button-active">click</div>
+```
+
+``` javascript
+  // javascript
+  // Anytime your class name is together in your files, it will find it.
+  $(button).addClass('button-active');
+```
+
+<br />
+
+#### Now let's get crazy.
+#### Detecting the use of: ```button-active```
+``` javascript
+  // Can detect if class is split.
+  var half = 'button-';
+  $(button).addClass(half + 'active');
+
+  // Can detect if class is joined.
+  var dynamicClass = ['button', 'active'].join('-');
+  $(button).addClass(dynamicClass);
+  
+  // Can detect various more ways, including all Javascript frameworks.
+  // A React example.
+  var classes = classNames({
+    'button-active': this.state.buttonActive
+  });
+  
+  return (
+    <button className={classes}>Submit</button>;
+  );
+```
 
 <br />
 ***
@@ -20,15 +77,6 @@ npm install --save purify-css
 ```js
 var purify = require('purify-css');
 ```
-<br />
-***
-<br />
-### Potential reduction
-* [Bootstrap](https://github.com/twbs/bootstrap) file: ~140k
-* App using ~40% of selectors.
-* Minified: ~117k
-* Purified + Minified: **~35k**
-
 
 <br />
 ***
@@ -202,50 +250,6 @@ purify(content, css, function(purifiedCSS){
   console.log('callback without options and received', purifiedCSS);
 });
 ```
-
-<br />
-***
-<br />
-
-### Selector Detection in Content
-<br />
-
-##### Will be able to find ```button-active```
-``` html
-  <!-- html -->
-  <!-- class directly on element -->
-  <div class="button-active">click</div>
-```
-
-``` javascript
-  // javascript
-  // Anytime your class name is together in your files, it will find it.
-  $(button).addClass('button-active');
-```
-
-<br />
-
-##### Example finding dynamically created classes (```button-active```)
-``` javascript
-  // Can detect if class is split.
-  var half = 'button-';
-  $(button).addClass(half + 'active');
-
-  // Can detect if class is joined.
-  var dynamicClass = ['button', 'active'].join('-');
-  $(button).addClass(dynamicClass);
-  
-  // Can detect various more ways, even if using a Javascript framework.
-  // A React example.
-  var classes = classNames({
-    'button-active': this.state.buttonActive
-  });
-  
-  return (
-    <button className={classes}>Submit</button>;
-  );
-```
-
 
 <br />
 ***
