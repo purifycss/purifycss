@@ -26,7 +26,7 @@ Statically analyzes your code to pick up which selectors are used.
 But will it catch all of the cases?
 <br />
 <br />
-#### Start off simple.
+#### Let's start off simple.
 #### Detecting the use of: ```button-active```
 ``` html
   <!-- html -->
