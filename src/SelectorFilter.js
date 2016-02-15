@@ -29,13 +29,16 @@ SelectorFilter.prototype.initialize = function (CssSyntaxTree) {
 SelectorFilter.prototype.parseWhitelist = function (whitelist) {
   whitelist.forEach(function (whitelistSelector) {
     whitelistSelector = whitelistSelector.toLowerCase();
+
     if (isWildcardWhitelistSelector(whitelistSelector)) {
       // If '*button*' then push 'button' onto list.
       this.wildcardWhitelist.push(
         whitelistSelector.substr(1, whitelistSelector.length - 2)
       );
     } else {
-      this.contentWords[whitelistSelector] = true;
+      getAllWordsInSelector(whitelistSelector).forEach(function (word) {
+        this.contentWords[word] = true;
+      }.bind(this));
     }
   }.bind(this));
 };

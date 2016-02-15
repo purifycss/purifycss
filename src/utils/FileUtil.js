@@ -27,24 +27,35 @@ var FileUtil = {
     options = options || {};
 
     return files.reduce(function (total, file) {
-      var code = fs.readFileSync(file, 'utf8');
+      var code = '';
 
-      if (options.compress) {
-        code = FileUtil.compressCode(code);
+      try {
+        code = fs.readFileSync(file, 'utf8');
+        if (options.compress) {
+          code = FileUtil.compressCode(code);
+        }
+      } catch (e) {
+        console.warn('\nWARNING: Could not read ' + file + '.');
       }
 
       return total + code + ' ';
     }, '');
   },
 
-  getFilesFromPatternArray: function (patterns) {
+  getFilesFromPatternArray: function (fileArray) {
     var sourceFiles = {};
 
-    patterns.forEach(function (pattern) {
-      var files = glob.sync(pattern);
-      files.forEach(function (file) {
-        sourceFiles[file] = true;
-      });
+    fileArray.forEach(function (string) {
+      try {
+        // See if string is a filepath, not a file pattern.
+        fs.statSync(string);
+        sourceFiles[string] = true;
+      } catch (e) {
+        var files = glob.sync(string);
+        files.forEach(function (file) {
+          sourceFiles[file] = true;
+        });
+      }
     });
 
     return Object.keys(sourceFiles);
