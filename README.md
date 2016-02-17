@@ -217,6 +217,9 @@ purify(content, css, options, callback);
 
 * **```rejected:```** Logs the CSS rules that were removed if ```true```. Default: ```false```.
 
+* **```whitelist```** Array of selectors to always leave in. Ex. `['button-active', '*modal*']` this will leave any selector that includes `modal` in it and selectors that match `button-active`. (wrapping the string with *'s, leaves all selectors that include it)
+
+
 <br />
 
 ##### The (optional) ```callback``` argument
