@@ -68,12 +68,25 @@ But will it catch all of the cases?
 ***
 <br />
 
-### Install
+### Usage at Build Time
+
+[Grunt](https://github.com/purifycss/grunt-purify-css)
+
+[Gulp](https://github.com/purifycss/gulp-purifycss)
+
+[webpack](https://github.com/purifycss/purifycss-webpack-plugin)
+
+<br />
+***
+<br />
+### Standalone Usage
+
+#### Install
 ```bash
 npm install --save purify-css
 ```
 
-### Require
+#### Require
 ```js
 var purify = require('purify-css');
 ```
@@ -280,15 +293,3 @@ PurifyCSS has reduced the file size by ~35.2%
 ##################################
 ```
 The CLI currently does not support file patterns.
-
-<br />
-***
-<br />
-
-### Usage at Build Time
-
-[Grunt](https://github.com/purifycss/grunt-purify-css)
-
-[Gulp](https://github.com/purifycss/gulp-purifycss)
-
-[webpack](https://github.com/purifycss/purifycss-webpack-plugin)
