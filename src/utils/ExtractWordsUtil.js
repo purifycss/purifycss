@@ -14,7 +14,7 @@ var ExtractWordsUtil = {
     var word = '';
 
     for (var i = 0; i < content.length; i++) {
-      var chr = content[i].toLowerCase();
+      var chr = content[i];
 
       if (chr.match(/[a-z]+/)) {
         word += chr;
@@ -44,7 +44,7 @@ var ExtractWordsUtil = {
     var skipNextWord = false;
 
     for (var i = 0; i < selector.length; i++) {
-      var letter = selector[i].toLowerCase();
+      var letter = selector[i];
 
       if (skipNextWord && (letter !== '.' || letter !== '#' || letter !== ' ')) {
         continue;
