@@ -15,7 +15,7 @@ var FileUtil = {
       ast.figure_out_scope();
       ast.compute_char_frequency();
       ast.mangle_names({toplevel: true});
-      code = ast.print_to_string();
+      code = ast.print_to_string().toLowerCase();
     } catch (e) {
       // If compression fails, assume it's not a JS file and return the full code.
     }
