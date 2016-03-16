@@ -21,7 +21,7 @@ If your application is using a CSS framework, this is especially useful as many 
 <br />
 
 ### Used selector detection
-Statically analyzes your code to pick up which selectors are used. 
+Statically analyzes your code to pick up which selectors are used.
 
 But will it catch all of the cases?
 <br />
@@ -52,13 +52,13 @@ But will it catch all of the cases?
   // Can detect if class is joined.
   var dynamicClass = ['button', 'active'].join('-');
   $(button).addClass(dynamicClass);
-  
+
   // Can detect various more ways, including all Javascript frameworks.
   // A React example.
   var classes = classNames({
     'button-active': this.state.buttonActive
   });
-  
+
   return (
     <button className={classes}>Submit</button>;
   );
@@ -139,10 +139,10 @@ var css = '.button-active { color: green; } .unused-class { display: block; }';
 
 var options = {
   output: './dist/purified.css',
-  
+
   // Will minify CSS code in addition to purify.
   minify: true,
-  
+
   // Logs out removed selectors.
   rejected: true
 };
@@ -280,11 +280,11 @@ options:
 ##### Example CLI Usage
 
 ```
-$ purifycss src/js/main.js src/css/main.css src/css/bootstrap.css --min --info --out src/dist/index.css
+$ purifycss src/css/main.css src/css/bootstrap.css src/js/main.js --min --info --out src/dist/index.css
 ```
 This will concat both `main.css` and `bootstrap.css` and purify it by looking at what CSS selectors were used inside of `main.js`. It will then write the result to `dist/index.css`
 
-The `--min` flag minfies the result.
+The `--min` flag minifies the result.
 
 The `--info` flag will print this to stdout:
 ```
