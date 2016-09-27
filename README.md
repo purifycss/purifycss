@@ -144,7 +144,10 @@ var options = {
   minify: true,
 
   // Logs out removed selectors.
-  rejected: true
+  rejected: true,
+  
+  // Will return list of removed selectors instead of the purified CSS.
+  returnRejected: true
 };
 
 purify(content, css, options);
