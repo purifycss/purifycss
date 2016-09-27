@@ -144,7 +144,7 @@ var options = {
   minify: true,
 
   // Logs out removed selectors.
-  rejected: true,
+  rejected: true
 };
 
 purify(content, css, options);
