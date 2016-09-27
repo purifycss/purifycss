@@ -145,9 +145,6 @@ var options = {
 
   // Logs out removed selectors.
   rejected: true,
-  
-  // Will return list of removed selectors instead of the purified CSS.
-  returnRejected: true
 };
 
 purify(content, css, options);
@@ -156,6 +153,21 @@ logs out:
 
 ```
 .unused-class
+```
+
+<br />
+
+##### Example with returnRejected
+
+```js
+var content = '<button class="button-active"> Login </button>';
+var css = '.button-active { color: green; }   .unused-class { display: block; }';
+
+var rejected = purify(content, css, {
+  returnRejected: true
+});
+
+console.log(rejected)
 ```
 
 <br />
