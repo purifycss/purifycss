@@ -60,6 +60,10 @@ var purify = function (searchThrough, css, options, callback) {
   tree.beginReading();
   var source = tree.toString();
 
+  if (options.returnRejected) {
+    return selectorFilter.rejectedSelectors;
+  }
+
   if (options.minify) {
     source = minify(source);
   }
