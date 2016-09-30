@@ -26,6 +26,10 @@ describe('purify', function () {
     it('can find .triple-simple-class', function () {
       expect(this.result.indexOf('.triple-simple-class') > -1).to.equal(true);
     });
+
+    it('can find .Another-11_13', function(){
+     expect(this.result.indexOf('.Another-11_13') > -1).to.equal(true);
+    });
   });
 
   describe('callback', function () {
