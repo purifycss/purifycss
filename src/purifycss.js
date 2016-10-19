@@ -20,8 +20,7 @@ var SelectorFilter = require('./SelectorFilter');
 // callback = (optional) a function that the purified css will be passed into
 ////////////////////
 
-var getOptions = function (options) {
-  options = options || {};
+var getOptions = function (options = {}) {
   var defaultOptions = {
     output: false,
     minify: false,
