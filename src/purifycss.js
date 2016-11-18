@@ -74,7 +74,7 @@ var purify = function (searchThrough, css, options, callback) {
     PrintUtil.printInfo(minify(source).length);
   }
 
-  if (options.rejected) {
+  if (options.rejected && selectorFilter.rejectedSelectors.length) {
     PrintUtil.printRejected(selectorFilter.rejectedSelectors);
   }
 
