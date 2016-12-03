@@ -39,9 +39,9 @@ SelectorFilter.prototype.parseWhitelist = function (whitelist) {
     } else {
       getAllWordsInSelector(whitelistSelector, this.strict).forEach(function (word) {
         this.contentWords[word] = true;
-      }.bind(this));
+      }, this);
     }
-  }.bind(this));
+  }, this);
 };
 
 SelectorFilter.prototype.parseRule = function (selectors, rule) {
