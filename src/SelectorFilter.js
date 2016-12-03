@@ -14,10 +14,11 @@ function hasWhitelistMatch(selector, whitelist) {
   return false;
 }
 
-var SelectorFilter = function (contentWords, whitelist) {
+var SelectorFilter = function (contentWords, whitelist, strict) {
   this.contentWords = contentWords;
   this.rejectedSelectors = [];
   this.wildcardWhitelist = [];
+  this.strict = !!strict;
 
   this.parseWhitelist(whitelist);
 };
@@ -36,7 +37,7 @@ SelectorFilter.prototype.parseWhitelist = function (whitelist) {
         whitelistSelector.substr(1, whitelistSelector.length - 2)
       );
     } else {
-      getAllWordsInSelector(whitelistSelector).forEach(function (word) {
+      getAllWordsInSelector(whitelistSelector, this.strict).forEach(function (word) {
         this.contentWords[word] = true;
       }.bind(this));
     }
@@ -59,7 +60,7 @@ SelectorFilter.prototype.filterSelectors = function (selectors) {
       return;
     }
 
-    var words = getAllWordsInSelector(selector);
+    var words = getAllWordsInSelector(selector, this.strict);
     var usedWords = words.filter(function (word) {
       return contentWords[word];
     });
@@ -69,7 +70,7 @@ SelectorFilter.prototype.filterSelectors = function (selectors) {
     } else {
       rejectedSelectors.push(selector);
     }
-  });
+}, this);
 
   return usedSelectors;
 };

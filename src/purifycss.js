@@ -52,13 +52,12 @@ var purify = function (searchThrough, css, options, callback) {
 
   PrintUtil.startLog(minify(cssString).length);
 
-  var wordsInContent = getAllWordsInContent(content);
+  var wordsInContent = getAllWordsInContent(content, options.strict);
 
-  var selectorFilter = new SelectorFilter(wordsInContent, options.whitelist);
+  var selectorFilter = new SelectorFilter(wordsInContent, options.whitelist, options.strict);
 
   var tree = new CssTreeWalker(cssString, [selectorFilter]);
-  tree.beginReading();
-  var source = tree.toString();
+  var source = tree.beginReading().toString();
 
   if (options.minify) {
     source = minify(source);
@@ -70,7 +69,7 @@ var purify = function (searchThrough, css, options, callback) {
     PrintUtil.printInfo(minify(source).length);
   }
 
-  if (options.rejected && selectorFilter.rejectedSelectors.length) {
+  if (options.rejected) {
     PrintUtil.printRejected(selectorFilter.rejectedSelectors);
   }
 

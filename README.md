@@ -144,7 +144,12 @@ var options = {
   minify: true,
 
   // Logs out removed selectors.
-  rejected: true
+  rejected: true,
+
+  // Uses strict selector matching. Strict selector matching allows for
+  // more agressive removal of styles.
+  // will not match dynamic selectors i.e. ['button', 'active'].join('-')
+  strict: true,
 };
 
 purify(content, css, options);
