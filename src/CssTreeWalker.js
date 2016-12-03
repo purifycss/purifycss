@@ -20,6 +20,7 @@ CssTreeWalker.prototype.constructor = CssTreeWalker;
 CssTreeWalker.prototype.beginReading = function () {
   this.ast = rework(this.startingSource)
     .use(this.readPlugin.bind(this));
+  return this;
 };
 
 CssTreeWalker.prototype.readPlugin = function (tree) {
