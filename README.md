@@ -70,7 +70,7 @@ But will it catch all of the cases?
 
 ### Usage at Build Time
 
-[Grunt](https://github.com/purifycss/grunt-purify-css)
+[Grunt](https://github.com/purifycss/grunt-purifycss)
 
 [Gulp](https://github.com/purifycss/gulp-purifycss)
 
