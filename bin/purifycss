@@ -42,9 +42,10 @@ if (options.output) {
 
 function printUsage(errorOn) {
   if (errorOn === 'css') {
-    console.log('usage: purifycss \033[4;31m<css>\033[0m <content> [option ...]');
+    console.log('usage: purifycss \033[4;31m<css>\033[0m <content> [option ...]'); //eslint-disable-line no-octal-escape
   } else if (errorOn === 'content') {
-    console.log('usage: purifycss <css> \033[4;31m<content>\033[0m [option ...]');
+    console.log('usage: purifycss <css> \033[4;31m<content>\033[0m [option ...]'); //eslint-disable-line no-octal-escape
+
   } else {
     console.log('usage: purifycss <css> <content> [option ...]');
   }
