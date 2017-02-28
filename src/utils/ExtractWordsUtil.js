@@ -20,7 +20,7 @@ var ExtractWordsUtil = {
         word += chr;
       } else {
         if (word.length && word.match((/[a-z0-9]+/))) {
-            used[word] = true;
+          used[word] = true;
         }
         word = '';
       }

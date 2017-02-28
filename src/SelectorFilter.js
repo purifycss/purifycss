@@ -70,7 +70,7 @@ SelectorFilter.prototype.filterSelectors = function (selectors) {
     } else {
       rejectedSelectors.push(selector);
     }
-}, this);
+  }, this);
 
   return usedSelectors;
 };
