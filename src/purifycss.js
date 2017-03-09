@@ -26,7 +26,8 @@ var getOptions = function (options) {
     output: false,
     minify: false,
     info: false,
-    whitelist: []
+    whitelist: [],
+    timeSensitive: false
   };
 
   Object.keys(options).forEach(function (option) {
@@ -48,7 +49,7 @@ var purify = function (searchThrough, css, options, callback) {
   options = getOptions(options);
 
   var cssString = FileUtil.filesToSource(css, 'css');
-  var content = FileUtil.filesToSource(searchThrough, 'content');
+  var content = FileUtil.filesToSource(searchThrough, !options.timeSensitive && 'content');
 
   PrintUtil.startLog(minify(cssString).length);
 
