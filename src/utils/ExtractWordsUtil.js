@@ -57,7 +57,7 @@ var ExtractWordsUtil = {
         skipNextWord = true;
         continue;
       }
-    //Match any css selector
+    //Match any css selector 
       if (letter.match(/[\u002D0-9_A-Za-z]+/)) {
         word += letter;
       } else {
