@@ -7,25 +7,31 @@ PurifyCSS does not modify the original CSS files. You can write to a new file, l
 
 If your application is using a CSS framework, this is especially useful as many selectors are often unused.
 
-<br />
+
+
 ***
-<br />
+
+
 ### Potential reduction
 * [Bootstrap](https://github.com/twbs/bootstrap) file: ~140k
 * App using ~40% of selectors.
 * Minified: ~117k
 * Purified + Minified: **~35k**
 
-<br />
+
+
 ***
-<br />
+
+
 
 ### Used selector detection
 Statically analyzes your code to pick up which selectors are used.
 
 But will it catch all of the cases?
-<br />
-<br />
+
+
+
+
 #### Let's start off simple.
 #### Detecting the use of: ```button-active```
 ``` html
@@ -40,7 +46,8 @@ But will it catch all of the cases?
   $(button).addClass('button-active');
 ```
 
-<br />
+
+
 
 #### Now let's get crazy.
 #### Detecting the use of: ```button-active```
@@ -64,9 +71,11 @@ But will it catch all of the cases?
   );
 ```
 
-<br />
+
+
 ***
-<br />
+
+
 
 ### Usage at Build Time
 
@@ -76,9 +85,11 @@ But will it catch all of the cases?
 
 [webpack](https://github.com/purifycss/purifycss-webpack-plugin)
 
-<br />
+
+
 ***
-<br />
+
+
 ### Standalone Usage
 
 #### Install
@@ -91,13 +102,16 @@ npm install --save purify-css
 var purify = require('purify-css');
 ```
 
-<br />
+
+
 ***
-<br />
+
+
 
 ### Examples
 
-<br />
+
+
 
 ##### Example with source strings
 
@@ -113,7 +127,8 @@ logs out:
 .button-active { color: green; }
 ```
 
-<br />
+
+
 
 ##### Example with [glob](https://github.com/isaacs/node-glob) file patterns + writing to a file
 
@@ -129,7 +144,8 @@ var options = {
 purify(content, css, options);
 ```
 
-<br />
+
+
 
 ##### Example with both [glob](https://github.com/isaacs/node-glob) file patterns and source strings + minify + logging rejected selectors
 
@@ -155,7 +171,8 @@ logs out:
 .unused-class
 ```
 
-<br />
+
+
 
 ##### Example with callback
 
@@ -168,7 +185,8 @@ purify(content, css, function (purifiedResult) {
 });
 ```
 
-<br />
+
+
 
 ##### Example with callback + options
 
@@ -185,9 +203,11 @@ purify(content, css, options, function (purifiedAndMinifiedResult) {
 });
 ```
 
-<br />
+
+
 ***
-<br />
+
+
 
 ### API in depth
 
@@ -196,28 +216,31 @@ purify(content, css, options, function (purifiedAndMinifiedResult) {
 purify(content, css, options, callback);
 ```
 
-<br />
 
 
-#####  The ```content``` argument
+
+
+####  The ```content``` argument
 ##### Type: ```Array``` or ```String```
 
 **```Array```** of [glob](https://github.com/isaacs/node-glob) file patterns to the files to search through for used classes (HTML, JS, PHP, ERB, Templates, anything that uses CSS selectors).
 
 **```String```** of content to look at for used classes.
 
-<br />
 
-##### The ```css``` argument
+
+
+#### The ```css``` argument
 ##### Type: ```Array``` or ```String```
 
 **```Array```** of [glob](https://github.com/isaacs/node-glob) file patterns to the CSS files you want to filter.
 
 **```String```** of CSS to purify.
 
-<br />
 
-##### The (optional) ```options``` argument
+
+
+#### The (optional) ```options``` argument
 ##### Type: ```Object```
 
 ##### Properties of options object:
@@ -233,9 +256,9 @@ purify(content, css, options, callback);
 * **```whitelist```** Array of selectors to always leave in. Ex. `['button-active', '*modal*']` this will leave any selector that includes `modal` in it and selectors that match `button-active`. (wrapping the string with *'s, leaves all selectors that include it)
 
 
-<br />
 
-##### The (optional) ```callback``` argument
+
+#### The (optional) ```callback``` argument
 ##### Type: ```Function```
 
 A function that will receive the purified CSS as it's argument.
@@ -254,9 +277,11 @@ purify(content, css, function(purifiedCSS){
 });
 ```
 
-<br />
+
+
 ***
-<br />
+
+
 
 ### CLI Usage
 
@@ -276,7 +301,7 @@ options:
 
  -h, --help           Prints help (this message) and exits
 ```
-<br />
+
 ##### Example CLI Usage
 
 ```
