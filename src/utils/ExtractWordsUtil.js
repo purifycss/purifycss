@@ -1,75 +1,51 @@
-var addWord = function (words, word) {
-  if (word.length > 0) {
-    words.push(word);
-  }
-};
+const addWord = (words, word) => {
+    if (word) words.push(word)
+}
 
-var ExtractWordsUtil = {
-  getAllWordsInContent: function (content) {
-    var used = {
-      // Always include html and body.
-      html: true,
-      body: true
-    };
-    var word = '';
+class ExtractWordsUtil {
 
-    for (var i = 0; i < content.length; i++) {
-      var chr = content[i];
-
-      if (chr.match(/[a-z]+/)) {
-        word += chr;
-      } else {
-        used[word] = true;
-        word = '';
-      }
+    static getAllWordsInContent(content) {
+        let used = {
+            html: true,
+            body: true
+        }
+        const words = content.split(/[^a-z]/g)
+        for (let word of words) {
+            used[word] = true
+        }
     }
 
-    used[word] = true;
+    static getAllWordsInSelector(selector) {
+        selector = selector.replace(/\[(.+?)\]/g, "").toLowerCase()
+        if (!selector.includes("[") || !selector.includes("]")) {
+            return []
+        }
+        let skipNextWord = false,
+            word = "",
+            words = []
 
-    return used;
-  },
+        for (let letter of selector) {
+            if (skipNextWord && !(/[ #.]/).test(letter)) continue
+            // If pseudoclass or universal selector, skip the next word
+            if (/[:*]/.test(letter)) {
+                addWord(words, word)
+                word = ""
+                skipNextWord = true
+                continue
+            }
+            if (/[a-z]/.test(letter)) {
+                word += letter
+            } else {
+                addWord(words, word)
+                word = ""
+                skipNextWord = false
+            }
+        }
 
-  getAllWordsInSelector: function (selector) {
-    // Remove attr selectors. "a[href...]"" will become "a".
-    selector = selector.replace(/\[(.+?)\]/g, '').toLowerCase();
-
-    // If complex attr selector (has a bracket in it) just leave
-    // the selector in. ¯\_(ツ)_/¯
-    if (selector.indexOf('[') !== -1 || selector.indexOf(']') !== -1) {
-      return [];
+        addWord(words, word)
+        return words
     }
 
-    var words = [];
-    var word = '';
-    var skipNextWord = false;
+}
 
-    for (var i = 0; i < selector.length; i++) {
-      var letter = selector[i];
-
-      if (skipNextWord && (letter !== '.' || letter !== '#' || letter !== ' ')) {
-        continue;
-      }
-
-      // If pseudoclass or universal selector, skip the next word
-      if (letter === ':' || letter === '*') {
-        addWord(words, word);
-        word = '';
-        skipNextWord = true;
-        continue;
-      }
-
-      if (letter.match(/[a-z]+/)) {
-        word += letter;
-      } else {
-        addWord(words, word);
-        word = '';
-        skipNextWord = false;
-      }
-    }
-
-    addWord(words, word);
-    return words;
-  }
-};
-
-module.exports = ExtractWordsUtil;
+export default ExtractWordsUtil

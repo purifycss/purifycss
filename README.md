@@ -1,4 +1,5 @@
 [![Join the chat at https://gitter.im/purifycss/purifycss](https://badges.gitter.im/purifycss/purifycss.svg)](https://gitter.im/purifycss/purifycss?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ### PurifyCSS
 
 A function that takes content (HTML/JS/PHP/etc) and CSS, and returns only the **used CSS**.
@@ -7,27 +8,24 @@ PurifyCSS does not modify the original CSS files. You can write to a new file, l
 
 If your application is using a CSS framework, this is especially useful as many selectors are often unused.
 
-<br />
-***
-<br />
+
 ### Potential reduction
+
 * [Bootstrap](https://github.com/twbs/bootstrap) file: ~140k
 * App using ~40% of selectors.
 * Minified: ~117k
 * Purified + Minified: **~35k**
 
-<br />
-***
-<br />
 
 ### Used selector detection
+
 Statically analyzes your code to pick up which selectors are used.
 
-But will it catch all of the cases?
-<br />
-<br />
+But will it catch all of the cases?  
+
 #### Let's start off simple.
-#### Detecting the use of: ```button-active```
+#### Detecting the use of: `button-active`
+
 ``` html
   <!-- html -->
   <!-- class directly on element -->
@@ -40,10 +38,9 @@ But will it catch all of the cases?
   $(button).addClass('button-active');
 ```
 
-<br />
-
 #### Now let's get crazy.
-#### Detecting the use of: ```button-active```
+#### Detecting the use of: `button-active`
+
 ``` javascript
   // Can detect if class is split.
   var half = 'button-';
@@ -64,21 +61,15 @@ But will it catch all of the cases?
   );
 ```
 
-<br />
-***
-<br />
-
 ### Usage at Build Time
 
-[Grunt](https://github.com/purifycss/grunt-purifycss)
+- [Grunt](https://github.com/purifycss/grunt-purifycss)
 
-[Gulp](https://github.com/purifycss/gulp-purifycss)
+- [Gulp](https://github.com/purifycss/gulp-purifycss)
 
-[webpack](https://github.com/purifycss/purifycss-webpack-plugin)
+- [Webpack](https://github.com/purifycss/purifycss-webpack-plugin)
 
-<br />
-***
-<br />
+
 ### Standalone Usage
 
 #### Install
@@ -91,13 +82,8 @@ npm install --save purify-css
 var purify = require('purify-css');
 ```
 
-<br />
-***
-<br />
-
 ### Examples
 
-<br />
 
 ##### Example with source strings
 
@@ -107,13 +93,13 @@ var css = '.button-active { color: green; }   .unused-class { display: block; }'
 
 console.log(purify(content, css));
 ```
+
 logs out:
 
 ```
 .button-active { color: green; }
 ```
 
-<br />
 
 ##### Example with [glob](https://github.com/isaacs/node-glob) file patterns + writing to a file
 
@@ -129,7 +115,6 @@ var options = {
 purify(content, css, options);
 ```
 
-<br />
 
 ##### Example with both [glob](https://github.com/isaacs/node-glob) file patterns and source strings + minify + logging rejected selectors
 

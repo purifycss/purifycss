@@ -1,88 +1,68 @@
-var fs = require('fs');
+import fs from "fs"
+import CleanCss from "clean-css"
+import CssTreeWalker from "./CssTreeWalker"
+import FileUtil from "./utils/FileUtil"
+import PrintUtil from "./utils/PrintUtil"
+import SelectorFilter from "./SelectorFilter"
 
-var CleanCss = require('clean-css');
-var getAllWordsInContent = require('./utils/ExtractWordsUtil').getAllWordsInContent;
-var CssTreeWalker = require('./CssTreeWalker');
-var FileUtil = require('./utils/FileUtil');
-var PrintUtil = require('./utils/PrintUtil');
-var SelectorFilter = require('./SelectorFilter');
-
-////////////////////
-// ARGUMENTS
-// files    = an array of filepaths to html/js files OR a raw string of content to search through
-// css      = an array of filepaths to css files OR a raw string of css to filter
-// options  = (optional) {
-//   output  : string (filepath to write purified css to. if false, function returns raw string)
-//   minify  : boolean (if true, will minify the purified css)
-//   info    : boolean (if true, will log out stats of how much css was reduced)
-//   rejected: boolean (if true, will log out rejected css)
-// }
-// callback = (optional) a function that the purified css will be passed into
-////////////////////
-
-var getOptions = function (options) {
-  options = options || {};
-  var defaultOptions = {
+const OPTIONS = {
     output: false,
     minify: false,
     info: false,
-    whitelist: []
-  };
+    rejected: false,
+    whitelist: [],
+    cleanCssOptions: {}
+}
 
-  Object.keys(options).forEach(function (option) {
-    defaultOptions[option] = options[option];
-  });
+const getOptions = options => {
+    let opt = {}
+    for (option in OPTIONS) {
+        opt[option] = options[option] || OPTIONS[option]
+    }
+    return opt;
+}
 
-  return defaultOptions;
-};
+const minify = (cssSource, options) => new CleanCss(options).minify(cssSource).styles
 
-var minify = function (cssSource) {
-  return new CleanCss().minify(cssSource).styles;
-};
+const purify = (searchThrough, css, options, callback) => {
+    if (typeof options === "function") {
+        callback = options
+        options = {}
+    }
+    options = getOptions(options)
+    let cssString = FileUtil.filesToSource(css, "css"),
+        content = FileUtil.filesToSource(searchThrough, "content")
+    PrintUtil.startLog(minify(cssString).length)
+    let wordsInContent = getAllWordsInContent(content),
+        selectorFilter = new SelectorFilter(wordsInContent, options.whitelist),
+        tree = new CssTreeWalker(cssString, [selectorFilter])
+    tree.beginReading()
+    let source = tree.toString();
 
-var purify = function (searchThrough, css, options, callback) {
-  if (typeof options === 'function') {
-    callback = options;
-    options = {};
-  }
-  options = getOptions(options);
+    source = options.minify ? minify(source, options.cleanCssOptions) : source
 
-  var cssString = FileUtil.filesToSource(css, 'css');
-  var content = FileUtil.filesToSource(searchThrough, 'content');
+    // Option info = true
+    if (options.info) {
+        if (options.minify) {
+            PrintUtil.printInfo(source.length)
+        } else {
+            PrintUtil.printInfo(minify(source, options.cleanCssOptions).length)
+        }
+    }
 
-  PrintUtil.startLog(minify(cssString).length);
+    // Option rejected = true
+    if (options.rejected && selectorFilter.rejectedSelectors.length) {
+        PrintUtil.printRejected(selectorFilter.rejectedSelectors)
+    }
 
-  var wordsInContent = getAllWordsInContent(content);
+    if (options.output) {
+        fs.writeFile(options.output, source, err => {
+            if (err) return err
+        })
+    } else {
+        return callback ? callback(source) : source;
+    }
 
-  var selectorFilter = new SelectorFilter(wordsInContent, options.whitelist);
+}
 
-  var tree = new CssTreeWalker(cssString, [selectorFilter]);
-  tree.beginReading();
-  var source = tree.toString();
-
-  if (options.minify) {
-    source = minify(source);
-  }
-
-  if (options.info && options.minify) {
-    PrintUtil.printInfo(source.length);
-  } else if (options.info && !options.minify) {
-    PrintUtil.printInfo(minify(source).length);
-  }
-
-  if (options.rejected && selectorFilter.rejectedSelectors.length) {
-    PrintUtil.printRejected(selectorFilter.rejectedSelectors);
-  }
-
-  if (!options.output) {
-    return callback ? callback(source) : source;
-  } else {
-    fs.writeFile(options.output, source, function (err) {
-      if (err) {
-        return err;
-      }
-    });
-  }
-};
-
-module.exports = purify;
+export default purify
