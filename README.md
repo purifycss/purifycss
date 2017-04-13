@@ -1,12 +1,64 @@
-[![Join the chat at https://gitter.im/purifycss/purifycss](https://badges.gitter.im/purifycss/purifycss.svg)](https://gitter.im/purifycss/purifycss?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# PurifyCSS  
 
-### PurifyCSS
+[![Travis](https://img.shields.io/travis/purifycss/purifycss/master.svg)]()
+[![npm](https://img.shields.io/npm/dm/purify-css.svg)]()
+[![David](https://img.shields.io/david/purifycss/purifycss.svg)]()
+![Join the chat at https://gitter.im/purifycss/purifycss](https://badges.gitter.im/purifycss/purifycss.svg)
+
 
 A function that takes content (HTML/JS/PHP/etc) and CSS, and returns only the **used CSS**.
 
 PurifyCSS does not modify the original CSS files. You can write to a new file, like minification.
 
 If your application is using a CSS framework, this is especially useful as many selectors are often unused.
+
+
+## Usage
+
+### Standalone
+
+Installation  
+
+```bash
+npm install --save purify-css
+```
+
+```javascript
+import purifycss from "purify-css"
+const purifycss = require("purify-css")
+
+let content = ""
+let css = ""
+let options = {
+    output: "filepath/output.css"
+}
+purify(content, css, options)
+```
+
+### Build Time
+
+- [Grunt](https://github.com/purifycss/grunt-purifycss)
+- [Gulp](https://github.com/purifycss/gulp-purifycss)
+- [Webpack](https://github.com/purifycss/purifycss-webpack-plugin)
+
+### CLI Usage
+
+```
+$ npm install -g purify-css
+```
+
+```
+$ purifycss
+usage: purifycss <css> <content> [option ...]
+
+options:
+ --min                Minify CSS
+ --out [filepath]     Filepath to write purified CSS to
+ --info               Logs info on how much CSS was removed
+ --rejected           Logs the CSS rules that were removed
+
+ -h, --help           Prints help (this message) and exits
+```
 
 
 ### Potential reduction
@@ -61,26 +113,8 @@ But will it catch all of the cases?
   );
 ```
 
-### Usage at Build Time
-
-- [Grunt](https://github.com/purifycss/grunt-purifycss)
-
-- [Gulp](https://github.com/purifycss/gulp-purifycss)
-
-- [Webpack](https://github.com/purifycss/purifycss-webpack-plugin)
 
 
-### Standalone Usage
-
-#### Install
-```bash
-npm install --save purify-css
-```
-
-#### Require
-```js
-var purify = require('purify-css');
-```
 
 ### Examples
 
@@ -239,28 +273,7 @@ purify(content, css, function(purifiedCSS){
 });
 ```
 
-<br />
-***
-<br />
 
-### CLI Usage
-
-```
-$ npm install -g purify-css
-```
-
-```
-$ purifycss
-usage: purifycss <css> <content> [option ...]
-
-options:
- --min                Minify CSS
- --out [filepath]     Filepath to write purified CSS to
- --info               Logs info on how much CSS was removed
- --rejected           Logs the CSS rules that were removed
-
- -h, --help           Prints help (this message) and exits
-```
 <br />
 ##### Example CLI Usage
 
