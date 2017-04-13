@@ -4,11 +4,11 @@
   "description": "Removed unused css. Compatible with single-page apps.",
   "main": "./src/purifycss.js",
   "dependencies": {
-    "clean-css": "^3.2.10",
-    "glob": "^6.0.4",
+    "clean-css": "^4.0.12",
+    "glob": "^7.1.1",
     "rework": "^1.0.1",
     "uglifyjs": "^2.4.10",
-    "yargs": "^3.10.0"
+    "yargs": "^7.0.2"
   },
   "devDependencies": {
     "chai": "^3.0.0",
