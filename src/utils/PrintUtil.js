@@ -4,22 +4,22 @@ let beginningLength
 const printInfo = endingLength => {
     const sizeReduction = (((beginningLength - endingLength) / beginningLength) * 100).toFixed(1)
     console.log(`
-    ________________________________________________\n
-    |\n
-    |   PurifyCSS has reduced the file size by ~ ${sizeReduction}%  \n
-    |\n
-    ________________________________________________\n
+    ________________________________________________
+    |
+    |   PurifyCSS has reduced the file size by ~ ${sizeReduction}%  
+    |
+    ________________________________________________
     `)
 }
 
 const printRejected = rejectedTwigs => {
     console.log(`
-    ________________________________________________\n
-    |\n
-    |   PurifyCSS - Rejected selectors:  \n
-    |   ${rejectedTwigs.join("\n|\t")}
-    |\n
-    ________________________________________________\n
+    ________________________________________________
+    |
+    |   PurifyCSS - Rejected selectors:  
+    |   ${rejectedTwigs.join("\n    |\t")}
+    |
+    ________________________________________________
     `)
 }
 
