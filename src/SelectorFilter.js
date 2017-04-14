@@ -45,20 +45,18 @@ class SelectorFilter {
     }
 
     filterSelectors(selectors) {
-        var contentWords = this.contentWords
-        var rejectedSelectors = this.rejectedSelectors
-        var wildcardWhitelist = this.wildcardWhitelist
-        var usedSelectors = []
+        let contentWords = this.contentWords,
+            rejectedSelectors = this.rejectedSelectors,
+            wildcardWhitelist = this.wildcardWhitelist,
+            usedSelectors = []
 
         selectors.forEach(selector => {
             if (hasWhitelistMatch(selector, wildcardWhitelist)) {
                 usedSelectors.push(selector)
                 return
             }
-            // console.log(selector)
-            var words = getAllWordsInSelector(selector)
-            // console.log(words)
-            var usedWords = words.filter(word => contentWords[word])
+            let words = getAllWordsInSelector(selector),
+                usedWords = words.filter(word => contentWords[word])
 
             if (usedWords.length === words.length) {
                 usedSelectors.push(selector)

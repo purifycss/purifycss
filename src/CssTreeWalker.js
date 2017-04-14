@@ -38,12 +38,11 @@ class CssTreeWalker extends EventEmitter {
         let emptyRules = []
 
         for (let rule of rules) {
-            var ruleType = rule.type
+            const ruleType = rule.type
 
             if (ruleType === RULE_TYPE && rule.selectors.length === 0) {
                 emptyRules.push(rule)
             }
-
             if (ruleType === MEDIA_TYPE) {
                 this.removeEmptyRules(rule.rules)
                 if (rule.rules.length === 0) {
@@ -53,7 +52,7 @@ class CssTreeWalker extends EventEmitter {
         }
 
         emptyRules.forEach(emptyRule => {
-            var index = rules.indexOf(emptyRule)
+            const index = rules.indexOf(emptyRule)
             rules.splice(index, 1)
         })
     }
@@ -62,7 +61,6 @@ class CssTreeWalker extends EventEmitter {
         if (this.ast) {
             return this.ast.toString().replace(/,\n/g, ",")
         }
-
         return ""
     }
 }

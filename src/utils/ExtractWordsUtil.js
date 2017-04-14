@@ -4,6 +4,7 @@ const addWord = (words, word) => {
 
 export const getAllWordsInContent = content => {
     let used = {
+        // Always include html and body.
         html: true,
         body: true
     }
@@ -15,7 +16,10 @@ export const getAllWordsInContent = content => {
 }
 
 export const getAllWordsInSelector = selector => {
+    // Remove attr selectors. "a[href...]"" will become "a".
     selector = selector.replace(/\[(.+?)\]/g, "").toLowerCase()
+    // If complex attr selector (has a bracket in it) just leave
+    // the selector in. ¯\_(ツ)_/¯
     if (selector.includes("[") || selector.includes("]")) {
         return []
     }
