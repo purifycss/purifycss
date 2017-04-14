@@ -1,11 +1,9 @@
-// import fs from "fs"
-const fs = require("fs")
 import CleanCss from "clean-css"
 import CssTreeWalker from "./CssTreeWalker"
 import FileUtil from "./utils/FileUtil"
 import PrintUtil from "./utils/PrintUtil"
 import SelectorFilter from "./SelectorFilter"
-// const SelectorFilter = require("./../src-old/SelectorFilter")
+import fs from "fs"
 import { getAllWordsInContent } from "./utils/ExtractWordsUtil"
 
 const OPTIONS = {

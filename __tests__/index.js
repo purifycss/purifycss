@@ -1,5 +1,5 @@
 const fs = require("fs")
-const purify = require("../src-old/purifycss.js")
+const purify = require("../lib/purifycss.js")
 const absPath = `${__dirname}/test_examples/`
 const read = path => fs.readFileSync(absPath + path, "utf8")
 
