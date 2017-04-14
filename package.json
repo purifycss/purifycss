@@ -2,7 +2,9 @@
   "name": "purify-css",
   "version": "1.1.9",
   "description": "Removed unused css. Compatible with single-page apps.",
-  "main": "./src/purifycss.js",
+  "main": "./lib/purifycss.js",
+  "module": "./lib/purifycss.es.js",
+  "jsnext:main": "./lib/purifycss.es.js",
   "dependencies": {
     "clean-css": "^4.0.12",
     "glob": "^7.1.1",
@@ -13,11 +15,17 @@
   "devDependencies": {
     "chai": "^3.0.0",
     "eslint": "^0.24.1",
-    "mocha": "^2.2.5"
+    "mocha": "^2.2.5",
+    "rollup": "^0.41.6",
+    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-commonjs": "^8.0.2",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-watch": "^3.2.2"
   },
   "scripts": {
-    "pretest": "eslint src && eslint bin/purifycss",
-    "test": "node ./node_modules/mocha/bin/mocha"
+    "test": "node ./node_modules/mocha/bin/mocha",
+    "dev": "rollup -c config/rollup.config.js -w",
+    "build": "rollup -c config/rollup.config.js"
   },
   "repository": {
     "type": "git",
