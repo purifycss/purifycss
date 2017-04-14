@@ -1,54 +1,55 @@
 {
-  "name": "purify-css",
-  "version": "1.1.9",
-  "description": "Removed unused css. Compatible with single-page apps.",
-  "main": "./lib/purifycss.js",
-  "module": "./lib/purifycss.es.js",
-  "jsnext:main": "./lib/purifycss.es.js",
-  "dependencies": {
-    "clean-css": "^4.0.12",
-    "glob": "^7.1.1",
-    "rework": "^1.0.1",
-    "uglifyjs": "^2.4.10",
-    "yargs": "^7.0.2"
-  },
-  "devDependencies": {
-    "jest": "^19.0.2",
-    "rollup": "^0.41.6",
-    "rollup-plugin-babel": "^2.7.1",
-    "rollup-plugin-commonjs": "^8.0.2",
-    "rollup-plugin-node-resolve": "^3.0.0",
-    "rollup-watch": "^3.2.2"
-  },
-  "scripts": {
-    "test": "jest index.js",
-    "dev": "rollup -c config/rollup.config.js -w",
-    "build": "rollup -c config/rollup.config.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/purifycss/purifycss.git"
-  },
-  "keywords": [
-    "optimize",
-    "css",
-    "remove",
-    "unused"
-  ],
-  "files": [
-    "bin",
-    "src",
-    "LICENSE",
-    "package.json",
-    "README.md"
-  ],
-  "author": "Kenny Tran, Matthew Rourke, Phoebe Li",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/purifycss/purifycss/issues"
-  },
-  "bin": {
-    "purifycss": "./bin/purifycss"
-  },
-  "homepage": "https://github.com/purifycss/purifycss"
+    "name": "purify-css",
+    "version": "1.2.0",
+    "description": "Removed unused css. Compatible with single-page apps.",
+    "main": "./lib/purifycss.js",
+    "module": "./lib/purifycss.es.js",
+    "jsnext:main": "./lib/purifycss.es.js",
+    "dependencies": {
+        "clean-css": "^4.0.12",
+        "glob": "^7.1.1",
+        "rework": "^1.0.1",
+        "uglifyjs": "^2.4.10",
+        "yargs": "^7.0.2"
+    },
+    "devDependencies": {
+        "jest": "^19.0.2",
+        "rollup": "^0.41.6",
+        "rollup-plugin-babel": "^2.7.1",
+        "rollup-plugin-commonjs": "^8.0.2",
+        "rollup-plugin-node-builtins": "^2.1.0",
+        "rollup-plugin-node-resolve": "^3.0.0",
+        "rollup-watch": "^3.2.2"
+    },
+    "scripts": {
+        "test": "jest index.js",
+        "dev": "rollup -c config/rollup.config.js -w",
+        "build": "rollup -c config/rollup.config.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/purifycss/purifycss.git"
+    },
+    "keywords": [
+        "optimize",
+        "css",
+        "remove",
+        "unused"
+    ],
+    "files": [
+        "bin",
+        "src",
+        "LICENSE",
+        "package.json",
+        "README.md"
+    ],
+    "author": "Kenny Tran, Matthew Rourke, Phoebe Li",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/purifycss/purifycss/issues"
+    },
+    "bin": {
+        "purifycss": "./bin/purifycss"
+    },
+    "homepage": "https://github.com/purifycss/purifycss"
 }
