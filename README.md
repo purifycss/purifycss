@@ -6,11 +6,16 @@
 ![Join the chat at https://gitter.im/purifycss/purifycss](https://badges.gitter.im/purifycss/purifycss.svg)
 
 
-A function that takes content (HTML/JS/PHP/etc) and CSS, and returns only the **used CSS**.
-
-PurifyCSS does not modify the original CSS files. You can write to a new file, like minification.
-
+A function that takes content (HTML/JS/PHP/etc) and CSS, and returns only the **used CSS**.  
+PurifyCSS does not modify the original CSS files. You can write to a new file, like minification.  
 If your application is using a CSS framework, this is especially useful as many selectors are often unused.
+
+### Potential reduction
+
+* [Bootstrap](https://github.com/twbs/bootstrap) file: ~140k
+* App using ~40% of selectors.
+* Minified: ~117k
+* Purified + Minified: **~35k**
 
 
 ## Usage
@@ -20,7 +25,7 @@ If your application is using a CSS framework, this is especially useful as many 
 Installation  
 
 ```bash
-npm install --save purify-css
+npm i -D purify-css
 ```
 
 ```javascript
@@ -48,31 +53,26 @@ $ npm install -g purify-css
 ```
 
 ```
-$ purifycss
-usage: purifycss <css> <content> [option ...]
+$ purifycss -h
 
-options:
- --min                Minify CSS
- --out [filepath]     Filepath to write purified CSS to
- --info               Logs info on how much CSS was removed
- --rejected           Logs the CSS rules that were removed
+purifycss <css> <content> [option]
 
- -h, --help           Prints help (this message) and exits
+Options:
+  -m, --min       Minify CSS                          [boolean] [default: false]
+  -o, --out       Filepath to write purified css to                     [string]
+  -i, --info      Logs info on how much css was removed
+                                                      [boolean] [default: false]
+  -r, --rejected  Logs the CSS rules that were removed[boolean] [default: false]
+  -h, --help      Show help                                            [boolean]
+  -v, --version   Show version number                                  [boolean]
 ```
 
 
-### Potential reduction
-
-* [Bootstrap](https://github.com/twbs/bootstrap) file: ~140k
-* App using ~40% of selectors.
-* Minified: ~117k
-* Purified + Minified: **~35k**
-
+## How it works
 
 ### Used selector detection
 
-Statically analyzes your code to pick up which selectors are used.
-
+Statically analyzes your code to pick up which selectors are used.  
 But will it catch all of the cases?  
 
 #### Let's start off simple.
@@ -112,9 +112,6 @@ But will it catch all of the cases?
     <button className={classes}>Submit</button>;
   );
 ```
-
-
-
 
 ### Examples
 
@@ -174,7 +171,6 @@ logs out:
 .unused-class
 ```
 
-<br />
 
 ##### Example with callback
 
@@ -187,7 +183,6 @@ purify(content, css, function (purifiedResult) {
 });
 ```
 
-<br />
 
 ##### Example with callback + options
 
@@ -204,10 +199,6 @@ purify(content, css, options, function (purifiedAndMinifiedResult) {
 });
 ```
 
-<br />
-***
-<br />
-
 ### API in depth
 
 ```javascript
@@ -215,47 +206,43 @@ purify(content, css, options, function (purifiedAndMinifiedResult) {
 purify(content, css, options, callback);
 ```
 
-<br />
+#####  The `content` argument
+##### Type: `Array` or `String`
 
+**`Array`** of [glob](https://github.com/isaacs/node-glob) file patterns to the files to search through for used classes (HTML, JS, PHP, ERB, Templates, anything that uses CSS selectors).
 
-#####  The ```content``` argument
-##### Type: ```Array``` or ```String```
-
-**```Array```** of [glob](https://github.com/isaacs/node-glob) file patterns to the files to search through for used classes (HTML, JS, PHP, ERB, Templates, anything that uses CSS selectors).
-
-**```String```** of content to look at for used classes.
+**`String`** of content to look at for used classes.
 
 <br />
 
-##### The ```css``` argument
-##### Type: ```Array``` or ```String```
+##### The `css` argument
+##### Type: `Array` or `String`
 
-**```Array```** of [glob](https://github.com/isaacs/node-glob) file patterns to the CSS files you want to filter.
+**`Array`** of [glob](https://github.com/isaacs/node-glob) file patterns to the CSS files you want to filter.
 
-**```String```** of CSS to purify.
+**`String`** of CSS to purify.
 
 <br />
 
-##### The (optional) ```options``` argument
-##### Type: ```Object```
+##### The (optional) `options` argument
+##### Type: `Object`
 
 ##### Properties of options object:
 
-* **```minify:```** Set to ```true``` to minify. Default: ```false```.
+* **`minify:`** Set to `true` to minify. Default: `false`.
 
-* **```output:```** Filepath to write purified CSS to. Returns raw string if ```false```. Default: ```false```.
+* **`output:`** Filepath to write purified CSS to. Returns raw string if `false`. Default: `false`.
 
-* **```info:```** Logs info on how much CSS was removed if ```true```. Default: ```false```.
+* **`info:`** Logs info on how much CSS was removed if `true`. Default: `false`.
 
-* **```rejected:```** Logs the CSS rules that were removed if ```true```. Default: ```false```.
+* **`rejected:`** Logs the CSS rules that were removed if `true`. Default: `false`.
 
-* **```whitelist```** Array of selectors to always leave in. Ex. `['button-active', '*modal*']` this will leave any selector that includes `modal` in it and selectors that match `button-active`. (wrapping the string with *'s, leaves all selectors that include it)
+* **`whitelist`** Array of selectors to always leave in. Ex. `['button-active', '*modal*']` this will leave any selector that includes `modal` in it and selectors that match `button-active`. (wrapping the string with *'s, leaves all selectors that include it)
 
 
-<br />
 
 ##### The (optional) ```callback``` argument
-##### Type: ```Function```
+##### Type: `Function`
 
 A function that will receive the purified CSS as it's argument.
 
@@ -273,8 +260,6 @@ purify(content, css, function(purifiedCSS){
 });
 ```
 
-
-<br />
 ##### Example CLI Usage
 
 ```
@@ -286,8 +271,11 @@ The `--min` flag minifies the result.
 
 The `--info` flag will print this to stdout:
 ```
-##################################
-PurifyCSS has reduced the file size by ~35.2%
-##################################
+    ________________________________________________
+    |
+    |   PurifyCSS has reduced the file size by ~ 33.8%
+    |
+    ________________________________________________
+
 ```
 The CLI currently does not support file patterns.
