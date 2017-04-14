@@ -1,16 +1,17 @@
 import UglifyJS from "uglifyjs"
-import fs from "fs"
+const fs = require("fs") // import fs from "fs"
 import glob from "glob"
 
 const compressCode = code => {
     try {
         let ast = UglifyJS.parse(code)
         ast.figure_out_scope()
-        const compressor = UglifyJS.Compressor({ warnings: false })
+        let compressor = UglifyJS.Compressor({ warnings: false })
         ast = ast.transform(compressor)
         ast.figure_out_scope()
         ast.compute_char_frequency()
         ast.mangle_names({ toplevel: true })
+        code = ast.print_to_string().toLowerCase()
     } catch (e) {
         console.error(e.message)
     }
@@ -22,7 +23,7 @@ export const concatFiles = (files, options) =>
         let code = ""
         try {
             code = fs.readFileSync(file, "utf8")
-            code = options.compress ? FileUtil.compressCode(code) : code
+            code = options.compress ? compressCode(code) : code
         } catch (e) {
             console.warn(e.message)
         }
@@ -56,3 +57,8 @@ export const filesToSource = (files, type) => {
     return isContent ? compressCode(files) : files
 }
 
+export default {
+    concatFiles,
+    filesToSource,
+    getFilesFromPatternArray
+}

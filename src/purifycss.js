@@ -1,9 +1,12 @@
-import fs from "fs"
+// import fs from "fs"
+const fs = require("fs")
 import CleanCss from "clean-css"
 import CssTreeWalker from "./CssTreeWalker"
 import FileUtil from "./utils/FileUtil"
 import PrintUtil from "./utils/PrintUtil"
 import SelectorFilter from "./SelectorFilter"
+// const SelectorFilter = require("./../src-old/SelectorFilter")
+import { getAllWordsInContent } from "./utils/ExtractWordsUtil"
 
 const OPTIONS = {
     output: false,
@@ -14,15 +17,17 @@ const OPTIONS = {
     cleanCssOptions: {}
 }
 
-const getOptions = options => {
+const getOptions = (options = {}) => {
     let opt = {}
-    for (option in OPTIONS) {
+    for (let option in OPTIONS) {
         opt[option] = options[option] || OPTIONS[option]
     }
-    return opt;
+    return opt
 }
 
-const minify = (cssSource, options) => new CleanCss(options).minify(cssSource).styles
+
+const minify = (cssSource, options) =>
+    new CleanCss(options).minify(cssSource).styles
 
 const purify = (searchThrough, css, options, callback) => {
     if (typeof options === "function") {
@@ -37,7 +42,7 @@ const purify = (searchThrough, css, options, callback) => {
         selectorFilter = new SelectorFilter(wordsInContent, options.whitelist),
         tree = new CssTreeWalker(cssString, [selectorFilter])
     tree.beginReading()
-    let source = tree.toString();
+    let source = tree.toString()
 
     source = options.minify ? minify(source, options.cleanCssOptions) : source
 
@@ -60,9 +65,8 @@ const purify = (searchThrough, css, options, callback) => {
             if (err) return err
         })
     } else {
-        return callback ? callback(source) : source;
+        return callback ? callback(source) : source
     }
-
 }
 
 export default purify
