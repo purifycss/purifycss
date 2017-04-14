@@ -13,9 +13,7 @@
     "yargs": "^7.0.2"
   },
   "devDependencies": {
-    "chai": "^3.0.0",
-    "eslint": "^0.24.1",
-    "mocha": "^2.2.5",
+    "jest": "^19.0.2",
     "rollup": "^0.41.6",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-commonjs": "^8.0.2",
@@ -23,7 +21,7 @@
     "rollup-watch": "^3.2.2"
   },
   "scripts": {
-    "test": "node ./node_modules/mocha/bin/mocha",
+    "test": "jest index.js",
     "dev": "rollup -c config/rollup.config.js -w",
     "build": "rollup -c config/rollup.config.js"
   },
