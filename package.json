@@ -10,7 +10,7 @@
         "glob": "^7.1.1",
         "rework": "^1.0.1",
         "uglifyjs": "^2.4.10",
-        "yargs": "^7.0.2"
+        "yargs": "^8.0.1"
     },
     "devDependencies": {
         "jest": "^19.0.2",
@@ -35,13 +35,6 @@
         "css",
         "remove",
         "unused"
-    ],
-    "files": [
-        "bin",
-        "src",
-        "LICENSE",
-        "package.json",
-        "README.md"
     ],
     "author": "Kenny Tran, Matthew Rourke, Phoebe Li",
     "license": "MIT",
