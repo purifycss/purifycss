@@ -1,61 +1,57 @@
 #!/usr/bin/env node
+var yargs = require("yargs")
+var path = require("path")
+var purify = require("../lib/purifycss.js")
 
-var argv = require('yargs').argv;
-var path = require('path');
-var purify = require('../src/purifycss.js');
+var argv = yargs
+    .usage("$0 <css> <content> [option]")
+    .option("m", {
+        alias: "min",
+        description: "Minify CSS",
+        type: "boolean",
+        default: false
+    })
+    .option("o", {
+        alias: "out",
+        description: "Filepath to write purified css to",
+        type: "string"
+    })
+    .option("i", {
+        alias: "info",
+        description: "Logs info on how much css was removed",
+        type: "boolean",
+        default: false
+    })
+    .option("r", {
+        alias: "rejected",
+        description: "Logs the CSS rules that were removed",
+        type: "boolean",
+        default: false
+    })
+    .demandCommand(2)
+    .help()
+    .alias("h", "help")
+    .version()
+    .alias("v", "version")
+    .argv
 
-if (argv.help || argv.h) {
-  return printUsage();
-}
-
-var files = argv._;
-if (files.length === 0) {
-  return printUsage();
-}
-
+var files = argv._
 var css = files.filter(function (file) {
-  return path.extname(file) === '.css';
-});
-if (css.length === 0) {
-  return printUsage('css');
-}
-
+    return path.extname(file) === ".css"
+})
 var content = files.filter(function (file) {
-  return path.extname(file) !== '.css';
-});
-if (content.length === 0) {
-  return printUsage('content');
-}
+    return path.extname(file) !== ".css"
+})
 
 var options = {
-  minify: !!argv.min,
-  info: !!argv.info,
-  rejected: !!argv.rejected,
-  output: argv.out
-};
-
-if (options.output) {
-  purify(content, css, options);
-} else {
-  console.log(purify(content, css, options));
+    minify: argv.min,
+    info: argv.info,
+    rejected: argv.rejected,
+    output: argv.out
 }
 
-function printUsage(errorOn) {
-  if (errorOn === 'css') {
-    console.log('Missing: <css>');
-  } else if (errorOn === 'content') {
-    console.log('Missing: <content>');
-  }
-
-  console.log('usage: purifycss <css> <content> [option ...]');
-  console.log();
-  console.log('options:');
-  console.log(' --min                Minify CSS');
-  console.log(' --out [filepath]     Filepath to write purified css to');
-  console.log(' --info               Logs info on how much css was removed');
-  console.log(' --rejected           Logs the CSS rules that were removed');
-  console.log();
-  console.log(' -h, --help           Prints help (this message) and exits');
-  console.log();
-  console.log('Report bugs to: https://github.com/purifycss/purifycss/issues');
+if (options.output) {
+    purify(content, css, options)
+} else {
+    console.log(purify(content, css, options));
 }

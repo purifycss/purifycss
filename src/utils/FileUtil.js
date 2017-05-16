@@ -1,82 +1,67 @@
-var fs = require('fs');
-var glob = require('glob');
-var UglifyJS = require('uglify-js');
+import UglifyJS from "uglify-js"
+const fs = require("fs")
+import glob from "glob"
 
-var FileUtil = {
-  compressCode: function (code) {
+const compressCode = code => {
     try {
-      // Try to minimize the code as much as possible, removing noise.
-      var ast = UglifyJS.parse(code);
-      ast.figure_out_scope();
-      /* eslint-disable new-cap */
-      var compressor = UglifyJS.Compressor({warnings: false});
-      /* eslint-enable new-cap */
-      ast = ast.transform(compressor);
-      ast.figure_out_scope();
-      ast.compute_char_frequency();
-      ast.mangle_names({toplevel: true});
-      code = ast.print_to_string().toLowerCase();
+        // Try to minimize the code as much as possible, removing noise.
+        let ast = UglifyJS.parse(code)
+        ast.figure_out_scope()
+        let compressor = UglifyJS.Compressor({ warnings: false })
+        ast = ast.transform(compressor)
+        ast.figure_out_scope()
+        ast.compute_char_frequency()
+        ast.mangle_names({ toplevel: true })
+        code = ast.print_to_string().toLowerCase()
     } catch (e) {
-      // If compression fails, assume it's not a JS file and return the full code.
+        // If compression fails, assume it's not a JS file and return the full code.
     }
+    return code.toLowerCase()
+}
 
-    return code.toLowerCase();
-  },
-
-  concatFiles: function (files, options) {
-    options = options || {};
-
-    return files.reduce(function (total, file) {
-      var code = '';
-
-      try {
-        code = fs.readFileSync(file, 'utf8');
-        if (options.compress) {
-          code = FileUtil.compressCode(code);
+export const concatFiles = (files, options) =>
+    files.reduce((total, file) => {
+        let code = ""
+        try {
+            code = fs.readFileSync(file, "utf8")
+            code = options.compress ? compressCode(code) : code
+        } catch (e) {
+            console.warn(e.message)
         }
-      } catch (e) {
-        console.warn('\nWARNING: Could not read ' + file + '.');
-      }
+        return `${total}${code} `
+    }, "")
 
-      return total + code + ' ';
-    }, '');
-  },
 
-  getFilesFromPatternArray: function (fileArray) {
-    var sourceFiles = {};
+export const getFilesFromPatternArray = fileArray => {
+    let sourceFiles = {}
+    for (let string of fileArray) {
+        try {
+            // See if string is a filepath, not a file pattern.
+            fs.statSync(string)
+            sourceFiles[string] = true
+        } catch (e) {
+            const files = glob.sync(string)
+            files.forEach(file => {
+                sourceFiles[file] = true
+            })
+        }
+    }
+    return Object.keys(sourceFiles)
+}
 
-    fileArray.forEach(function (string) {
-      try {
-        // See if string is a filepath, not a file pattern.
-        fs.statSync(string);
-        sourceFiles[string] = true;
-      } catch (e) {
-        var files = glob.sync(string);
-        files.forEach(function (file) {
-          sourceFiles[file] = true;
-        });
-      }
-    });
-
-    return Object.keys(sourceFiles);
-  },
-
-  filesToSource: function (files, type) {
-    var isContent = type === 'content';
-    var options = {compress: isContent};
-
+export const filesToSource = (files, type) => {
+    const isContent = type === "content"
+    const options = { compress: isContent }
     if (Array.isArray(files)) {
-      files = FileUtil.getFilesFromPatternArray(files);
-      return FileUtil.concatFiles(files, options);
+        files = getFilesFromPatternArray(files)
+        return concatFiles(files, options)
     }
-
     // 'files' is already a source string.
-    if (isContent) {
-      return FileUtil.compressCode(files);
-    } else {
-      return files;
-    }
-  }
-};
+    return isContent ? compressCode(files) : files
+}
 
-module.exports = FileUtil;
+export default {
+    concatFiles,
+    filesToSource,
+    getFilesFromPatternArray
+}

@@ -1,23 +1,30 @@
 {
   "name": "purify-css",
-  "version": "1.1.9",
+  "version": "1.2.0",
   "description": "Removed unused css. Compatible with single-page apps.",
-  "main": "./src/purifycss.js",
+  "main": "./lib/purifycss.js",
+  "module": "./lib/purifycss.es.js",
+  "jsnext:main": "./lib/purifycss.es.js",
   "dependencies": {
-    "clean-css": "^3.2.10",
-    "glob": "^6.0.4",
+    "clean-css": "^4.0.12",
+    "glob": "^7.1.1",
     "rework": "^1.0.1",
-    "uglify-js": "^2.8.22",
-    "yargs": "^3.10.0"
+    "uglify-js": "^3.0.6",
+    "yargs": "^8.0.1"
   },
   "devDependencies": {
-    "chai": "^3.0.0",
-    "eslint": "^0.24.1",
-    "mocha": "^2.2.5"
+    "jest": "^19.0.2",
+    "rollup": "^0.41.6",
+    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-commonjs": "^8.0.2",
+    "rollup-plugin-node-builtins": "^2.1.0",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-watch": "^3.2.2"
   },
   "scripts": {
-    "pretest": "eslint src && eslint bin/purifycss",
-    "test": "node ./node_modules/mocha/bin/mocha"
+    "test": "jest index.js",
+    "dev": "rollup -c config/rollup.config.js -w",
+    "build": "rollup -c config/rollup.config.js"
   },
   "repository": {
     "type": "git",
@@ -28,13 +35,6 @@
     "css",
     "remove",
     "unused"
-  ],
-  "files": [
-    "bin",
-    "src",
-    "LICENSE",
-    "package.json",
-    "README.md"
   ],
   "author": "Kenny Tran, Matthew Rourke, Phoebe Li",
   "license": "MIT",

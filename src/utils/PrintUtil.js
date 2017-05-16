@@ -1,30 +1,35 @@
-var startTime;
-var beginningLength;
+let startTime
+let beginningLength
 
-var PrintUtil = {
+const printInfo = endingLength => {
+    const sizeReduction = (((beginningLength - endingLength) / beginningLength) * 100).toFixed(1)
+    console.log(`
+    ________________________________________________
+    |
+    |   PurifyCSS has reduced the file size by ~ ${sizeReduction}%  
+    |
+    ________________________________________________
+    `)
+}
 
-  printInfo: function (endingLength) {
-    var logFn = console.error;
-    logFn.call(null, '##################################');
-    logFn.call(null, 'PurifyCSS has reduced the file size by ~' +
-      (((beginningLength - endingLength) / beginningLength) * 100).toFixed(1) + '%');
-    logFn.call(null, '##################################');
-    logFn.call(null, 'This function took: ', new Date() - startTime, 'ms');
-  },
+const printRejected = rejectedTwigs => {
+    console.log(`
+    ________________________________________________
+    |
+    |   PurifyCSS - Rejected selectors:  
+    |   ${rejectedTwigs.join("\n    |\t")}
+    |
+    ________________________________________________
+    `)
+}
 
-  printRejected: function (rejectedTwigs) {
-    var logFn = console.error;
-    logFn.call(null, '##################################');
-    logFn.call(null, 'Rejected selectors:');
-    logFn.call(null, rejectedTwigs.join('\n'));
-    logFn.call(null, '##################################');
-  },
+const startLog = cssLength => {
+    startTime = new Date()
+    beginningLength = cssLength
+}
 
-  startLog: function (cssLength) {
-    startTime = new Date();
-    beginningLength = cssLength;
-  }
-
-};
-
-module.exports = PrintUtil;
+export default {
+    printInfo,
+    printRejected,
+    startLog
+}
