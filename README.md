@@ -157,6 +157,21 @@ logs out:
 
 <br />
 
+##### Example with returnRejected
+
+```js
+var content = '<button class="button-active"> Login </button>';
+var css = '.button-active { color: green; }   .unused-class { display: block; }';
+
+var rejected = purify(content, css, {
+  returnRejected: true
+});
+
+console.log(rejected)
+```
+
+<br />
+
 ##### Example with callback
 
 ```js
