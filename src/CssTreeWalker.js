@@ -11,7 +11,7 @@ var CssTreeWalker = function (code, plugins) {
 
   plugins.forEach(function (plugin) {
     plugin.initialize(this);
-  }.bind(this));
+  }, this);
 };
 
 CssTreeWalker.prototype = Object.create(EventEmitter.prototype);
@@ -20,6 +20,7 @@ CssTreeWalker.prototype.constructor = CssTreeWalker;
 CssTreeWalker.prototype.beginReading = function () {
   this.ast = rework(this.startingSource)
     .use(this.readPlugin.bind(this));
+  return this;
 };
 
 CssTreeWalker.prototype.readPlugin = function (tree) {
@@ -38,7 +39,7 @@ CssTreeWalker.prototype.readRules = function (rules) {
     if (ruleType === MEDIA_TYPE) {
       this.readRules(rule.rules);
     }
-  }.bind(this));
+  }, this);
 };
 
 CssTreeWalker.prototype.toString = function () {
@@ -65,7 +66,7 @@ CssTreeWalker.prototype.removeEmptyRules = function (rules) {
         emptyRules.push(rule);
       }
     }
-  }.bind(this));
+  }, this);
 
   emptyRules.forEach(function (emptyRule) {
     var index = rules.indexOf(emptyRule);

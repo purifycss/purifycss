@@ -5,7 +5,7 @@ var addWord = function (words, word) {
 };
 
 var ExtractWordsUtil = {
-  getAllWordsInContent: function (content) {
+  getAllWordsInContent: function (content, strict) {
     var used = {
       // Always include html and body.
       html: true,
@@ -16,10 +16,12 @@ var ExtractWordsUtil = {
     for (var i = 0; i < content.length; i++) {
       var chr = content[i];
 
-      if (chr.match(/[a-z]+/)) {
+      if (chr.match(/[a-z]+/) || (strict && (chr.match(/[0-9\_]+/) || (word.length && chr === '-')))) {
         word += chr;
       } else {
-        used[word] = true;
+        if (word.length && word.match((/[a-z0-9]+/))) {
+          used[word] = true;
+        }
         word = '';
       }
     }
@@ -29,7 +31,7 @@ var ExtractWordsUtil = {
     return used;
   },
 
-  getAllWordsInSelector: function (selector) {
+  getAllWordsInSelector: function (selector, strict) {
     // Remove attr selectors. "a[href...]"" will become "a".
     selector = selector.replace(/\[(.+?)\]/g, '').toLowerCase();
 
@@ -44,22 +46,22 @@ var ExtractWordsUtil = {
     var skipNextWord = false;
 
     for (var i = 0; i < selector.length; i++) {
-      var letter = selector[i];
+      var chr = selector[i];
 
-      if (skipNextWord && (letter !== '.' || letter !== '#' || letter !== ' ')) {
+      if (skipNextWord && (chr !== '.' || chr !== '#' || chr !== ' ')) {
         continue;
       }
 
       // If pseudoclass or universal selector, skip the next word
-      if (letter === ':' || letter === '*') {
+      if (chr === ':' || chr === '*') {
         addWord(words, word);
         word = '';
         skipNextWord = true;
         continue;
       }
 
-      if (letter.match(/[a-z]+/)) {
-        word += letter;
+      if (chr.match(/[a-z]+/) || (strict && (chr.match(/[0-9\_]+/) || (word.length && chr === '-')))) {
+        word += chr;
       } else {
         addWord(words, word);
         word = '';
