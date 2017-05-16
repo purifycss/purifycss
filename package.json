@@ -7,7 +7,7 @@
     "clean-css": "^3.2.10",
     "glob": "^6.0.4",
     "rework": "^1.0.1",
-    "uglifyjs": "^2.4.10",
+    "uglify-js": "^2.8.22",
     "yargs": "^3.10.0"
   },
   "devDependencies": {

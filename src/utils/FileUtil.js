@@ -1,6 +1,6 @@
 var fs = require('fs');
 var glob = require('glob');
-var UglifyJS = require('uglifyjs');
+var UglifyJS = require('uglify-js');
 
 var FileUtil = {
   compressCode: function (code) {
