@@ -53,5 +53,5 @@ var options = {
 if (options.output) {
     purify(content, css, options)
 } else {
-    console.log(purify(content, css, options))
+    console.log(purify(content, css, options));
 }

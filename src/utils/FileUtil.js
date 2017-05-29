@@ -1,4 +1,4 @@
-import UglifyJS from "uglifyjs"
+const UglifyJS = require("uglify-js")
 const fs = require("fs")
 import glob from "glob"
 
