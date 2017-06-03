@@ -58,13 +58,16 @@ $ purifycss -h
 purifycss <css> <content> [option]
 
 Options:
-  -m, --min       Minify CSS                          [boolean] [default: false]
-  -o, --out       Filepath to write purified css to                     [string]
-  -i, --info      Logs info on how much css was removed
+  -m, --min        Minify CSS                         [boolean] [default: false]
+  -o, --out        Filepath to write purified css to                    [string]
+  -i, --info       Logs info on how much css was removed
                                                       [boolean] [default: false]
-  -r, --rejected  Logs the CSS rules that were removed[boolean] [default: false]
-  -h, --help      Show help                                            [boolean]
-  -v, --version   Show version number                                  [boolean]
+  -r, --rejected   Logs the CSS rules that were removed
+                                                      [boolean] [default: false]
+  -w, --whitelist  List of classes that should not be removed
+                                                           [array] [default: []]
+  -h, --help       Show help                                           [boolean]
+  -v, --version    Show version number                                 [boolean]
 ```
 
 
