@@ -28,6 +28,12 @@ var argv = yargs
         type: "boolean",
         default: false
     })
+    .option("w", {
+        alias: "whitelist",
+        description: "List of classes that should not be removed",
+        type: "array",
+        default: []
+    })
     .demandCommand(2)
     .help()
     .alias("h", "help")
@@ -47,11 +53,12 @@ var options = {
     minify: argv.min,
     info: argv.info,
     rejected: argv.rejected,
-    output: argv.out
+    output: argv.out,
+    whitelist: argv.whitelist
 }
 
 if (options.output) {
     purify(content, css, options)
 } else {
-    console.log(purify(content, css, options));
+    console.log(purify(content, css, options))
 }
