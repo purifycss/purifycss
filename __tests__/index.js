@@ -251,14 +251,14 @@ describe("pseudo classes", () => {
 })
 
 describe("classes with hyphens", () => {
-    const content = read("class_hyphen/index.css"),
+    const content = read("class_hyphen/index.html"),
         css = read("class_hyphen/index.css"),
         result = purify(content, css)
 
     it("removes unused class", () => {
-        expect(result.includes(".carousel-control") === false).toBe(true)
+        expect(result.includes(".carousel ") === false).toBe(true)
     })
     it("keeps used class", () => {
-        expect(result.includes(".carousel ") === true).toBe(true)
+        expect(result.includes(".carousel-control") === true).toBe(true)
     })
 })
