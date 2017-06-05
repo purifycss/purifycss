@@ -8,6 +8,7 @@
   "dependencies": {
     "clean-css": "^4.0.12",
     "glob": "^7.1.1",
+    "prepack": "0.2.0",
     "rework": "^1.0.1",
     "uglify-js": "^3.0.6",
     "yargs": "^8.0.1"
