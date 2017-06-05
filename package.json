@@ -1,6 +1,6 @@
 {
   "name": "purify-css",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Removed unused css. Compatible with single-page apps.",
   "main": "./lib/purifycss.js",
   "module": "./lib/purifycss.es.js",
