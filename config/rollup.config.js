@@ -20,11 +20,17 @@ export default {
         resolve(),
         commonjs(),
         babel({
-            exclude: "node_modules/**",
-            presets: [["es2015", { modules: false }]],
-            plugins: ["external-helpers"]
+          exclude: "node_modules/**",
+          presets: [
+            [
+              "es2015", {
+                "modules": false
+              }
+            ]
+          ],
+          "plugins": [ "external-helpers" ]
         })
     ],
-    external: ["clean-css", "glob", "rework", "uglify-js", "prepack"],
+    external: ["clean-css", "glob", "rework", "uglifyjs"],
     sourceMap: false
 }

@@ -1,17 +1,22 @@
 const UglifyJS = require("uglify-js")
 const fs = require("fs")
 import glob from "glob"
-import { prepack } from "prepack"
 
 const compressCode = code => {
-    let compressedCode = code
     try {
-        const prepackedCode = prepack(code).code
-        compressedCode = UglifyJS.minify(prepackedCode).code
+        // Try to minimize the code as much as possible, removing noise.
+        let ast = UglifyJS.parse(code)
+        ast.figure_out_scope()
+        let compressor = UglifyJS.Compressor({ warnings: false })
+        ast = ast.transform(compressor)
+        ast.figure_out_scope()
+        ast.compute_char_frequency()
+        ast.mangle_names({ toplevel: true })
+        code = ast.print_to_string().toLowerCase()
     } catch (e) {
         // If compression fails, assume it's not a JS file and return the full code.
     }
-    return compressedCode.toLowerCase()
+    return code.toLowerCase()
 }
 
 export const concatFiles = (files, options) =>
@@ -25,6 +30,7 @@ export const concatFiles = (files, options) =>
         }
         return `${total}${code} `
     }, "")
+
 
 export const getFilesFromPatternArray = fileArray => {
     let sourceFiles = {}
