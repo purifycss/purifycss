@@ -1,1 +1,1 @@
-'div'
+var class1 = "div"

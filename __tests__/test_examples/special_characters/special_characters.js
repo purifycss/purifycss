@@ -1,5 +1,5 @@
-'@home'
+var class1 = "@home"
 
-'+rounded'
+var class2 = "+rounded"
 
-'button'
+var class3 = "button"

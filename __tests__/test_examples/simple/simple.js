@@ -1,5 +1,5 @@
-'single'
+var class1 = "single"
 
-'double-class'
+var class2 = "double-class"
 
-'triple-simple-class'
+var class3 = "triple-simple-class"

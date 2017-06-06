@@ -1,6 +1,6 @@
 {
   "name": "purify-css",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Removed unused css. Compatible with single-page apps.",
   "main": "./lib/purifycss.js",
   "module": "./lib/purifycss.es.js",
@@ -8,6 +8,7 @@
   "dependencies": {
     "clean-css": "^4.0.12",
     "glob": "^7.1.1",
+    "prepack": "0.2.0",
     "rework": "^1.0.1",
     "uglify-js": "^3.0.6",
     "yargs": "^8.0.1"

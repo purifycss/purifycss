@@ -1,1 +1,1 @@
-'blank-space'
+var class1 = "blank-space"
