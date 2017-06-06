@@ -1,5 +1,5 @@
-var class1 = "single"
+'single'
 
-var class2 = "double-class"
+'double-class'
 
-var class3 = "triple-simple-class"
+'triple-simple-class'

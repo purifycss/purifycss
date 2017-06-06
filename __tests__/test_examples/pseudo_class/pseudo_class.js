@@ -1,1 +1,1 @@
-var class1 = "div"
+'div'

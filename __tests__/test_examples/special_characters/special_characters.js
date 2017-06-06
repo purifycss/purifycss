@@ -1,5 +1,5 @@
-var class1 = "@home"
+'@home'
 
-var class2 = "+rounded"
+'+rounded'
 
-var class3 = "button"
+'button'

@@ -1,1 +1,1 @@
-var class1 = ".used-class"
+'.used-class'

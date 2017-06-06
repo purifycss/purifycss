@@ -1,1 +1,1 @@
-var class1 = "blank-space"
+'blank-space'
