@@ -198,13 +198,16 @@ describe("delimited", () => {
         result = purify(content, css)
 
     it("removes the extra comma", () => {
-        var commaCount = result.split("").reduce((total, chr) => {
-            if (chr === ",") {
-                return total + 1
-            }
+        var commaCount = result.split("").reduce(
+            (total, chr) => {
+                if (chr === ",") {
+                    return total + 1
+                }
 
-            return total
-        }, 0)
+                return total
+            },
+            0
+        )
 
         expect(commaCount).toBe(1)
     })
@@ -247,18 +250,5 @@ describe("pseudo classes", () => {
 
     it("removes row:after", () => {
         expect(result.includes("row:after") === true).toBe(false)
-    })
-})
-
-describe("classes with hyphens", () => {
-    const content = read("class_hyphen/index.html"),
-        css = read("class_hyphen/index.css"),
-        result = purify(content, css)
-
-    it("removes unused class", () => {
-        expect(result.includes(".carousel ") === false).toBe(true)
-    })
-    it("keeps used class", () => {
-        expect(result.includes(".carousel-control") === true).toBe(true)
     })
 })
