@@ -12,7 +12,8 @@ const OPTIONS = {
     info: false,
     rejected: false,
     whitelist: [],
-    cleanCssOptions: {}
+    cleanCssOptions: {},
+    regex: '[a-z]'
 }
 
 const getOptions = (options = {}) => {
