@@ -242,6 +242,7 @@ purify(content, css, options, callback);
 
 * **`whitelist`** Array of selectors to always leave in. Ex. `['button-active', '*modal*']` this will leave any selector that includes `modal` in it and selectors that match `button-active`. (wrapping the string with *'s, leaves all selectors that include it)
 
+* **`regex:`** Add custom regex to fit your custom purifying. Ex. `a-z_-`. Default: `a-z`.
 
 
 ##### The (optional) ```callback``` argument
