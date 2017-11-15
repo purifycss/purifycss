@@ -13,7 +13,7 @@ const OPTIONS = {
     rejected: false,
     whitelist: [],
     cleanCssOptions: {},
-    regex: '[a-z]'
+    regex: 'a-z'
 }
 
 const getOptions = (options = {}) => {
@@ -37,8 +37,8 @@ const purify = (searchThrough, css, options, callback) => {
     let cssString = FileUtil.filesToSource(css, "css"),
         content = FileUtil.filesToSource(searchThrough, "content")
     PrintUtil.startLog(minify(cssString).length)
-    let wordsInContent = getAllWordsInContent(content),
-        selectorFilter = new SelectorFilter(wordsInContent, options.whitelist),
+    let wordsInContent = getAllWordsInContent(content, options),
+        selectorFilter = new SelectorFilter(wordsInContent, options),
         tree = new CssTreeWalker(cssString, [selectorFilter])
     tree.beginReading()
     let source = tree.toString()

@@ -2,13 +2,13 @@ const addWord = (words, word) => {
     if (word) words.push(word)
 }
 
-export const getAllWordsInContent = content => {
+export const getAllWordsInContent = (content, options) => {
     let used = {
         // Always include html and body.
         html: true,
         body: true
     }
-    const options = getOptions();
+
 	const regex = new RegExp("[^" + options.regex + "]",'g');
 	const words = content.split(regex);
 
@@ -18,7 +18,7 @@ export const getAllWordsInContent = content => {
     return used
 }
 
-export const getAllWordsInSelector = selector => {
+export const getAllWordsInSelector = (selector, options) => {
     // Remove attr selectors. "a[href...]"" will become "a".
     selector = selector.replace(/\[(.+?)\]/g, "").toLowerCase()
     // If complex attr selector (has a bracket in it) just leave
@@ -30,7 +30,6 @@ export const getAllWordsInSelector = selector => {
         word = "",
         words = []
 
-	const options = getOptions();
 	const regex = new RegExp("[" + options.regex + "]");
 
     for (let letter of selector) {
