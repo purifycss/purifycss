@@ -1,0 +1,76 @@
+<div class="col-md-12 col-12 a_ico">
+  <div id='upcoming_ico' class="white-desk ico-card  pinned_ad">
+    <i class="fa fa-rocket" aria-hidden="true" title="Advertising"></i>
+    <div class="ico-list-item">
+      <div class="ico-icon">
+        <a id='ccc' href="/detail/{{project.id}}" rel="bookmark" [attr.data-id]="project.id">
+          <div class="pre-icon" *ngIf="project.is_pre_sale">PRE SALE</div>
+          <img width="150" height="150" src="//icodrops.com/wp-content/plugins/a3-lazy-load/assets/images/lazy_placeholder.gif" class="lazy-hidden attachment-thumbnail size-thumbnail wp-post-image"
+            alt="Experty" [attr.data-src]="project.image_url" data-lazy-type="image"
+          />
+        </a>
+      </div>
+
+      <div class="ico-main-info">
+        <h3>
+          <a href="/detail/{{project.id}}" rel="bookmark">{{project.name}}</a>
+          <i class="fa fa-rocket" aria-hidden="true" title="Advertising"></i>
+        </h3>
+        <span class="ico-category-name">{{project.category_name}}</span>
+
+        <div class="goal-in-card">
+          GOAL: {{project.goal}}
+        </div>
+        <div class="categ_desc_short">{{project.short_des}}</div>
+      </div>
+    </div>
+    <div class="interest">
+      <span class="spspan">{{project.interest}}</span>
+    </div>
+    <div class="categ_type">{{project.category_type}}</div>
+
+    <div id='categ_desctop'>
+      {{project.goal}}
+    </div>
+
+    <div class="date">
+      {{project.start_date}}
+    </div>
+    <div class='meta_icon'>
+      <div class="categ_one"
+        [class.yes]="project.tags.category_one_status == 'Yes'" 
+        [class.no]="project.tags.category_one_status == 'No'"
+        [class.tooltip]="project.tags.category_one_show_tooltip"
+        [attr.rel]="project.tags.category_one_tooltip" 
+        [attr.title]="project.tags.category_one_tooltip"></div><div 
+        
+        id='linkwhitelist' class='categ_three' 
+        [class.yes]="project.tags.category_three_status == 'Yes'" 
+        [class.no]="project.tags.category_three_status == 'No'"
+        [class.tooltip]="project.tags.category_three_show_tooltip"
+        [attr.rel]='project.tags.category_three_tooltip' 
+        [attr.title]='project.tags.category_three_tooltip'></div><div 
+        
+        class="categ_two" 
+        [class.yes]="project.tags.category_two_status == 'Yes'" 
+        [class.no]="project.tags.category_two_status == 'No'"
+        [class.tooltip]="project.tags.category_two_show_tooltip"
+        [attr.rel]="project.tags.category_two_tooltip" 
+        [attr.title]="project.tags.category_two_tooltip"></div><div 
+        
+        class="categ_four" 
+        [class.yes]="project.tags.category_four_status == 'Yes'" 
+        [class.no]="project.tags.category_four_status == 'No'"
+        [class.tooltip]="project.tags.category_four_show_tooltip"
+        [attr.rel]="project.tags.category_four_tooltip" 
+        [attr.title]="project.tags.category_four_tooltip"></div><div 
+        
+        class="categ_five" 
+        [class.yes]="project.tags.category_five_status == 'Yes'" 
+        [class.no]="project.tags.category_five_status == 'No'"
+        [class.tooltip]="project.tags.category_five_show_tooltip"
+        [attr.rel]="project.tags.category_five_tooltip" 
+        [attr.title]="project.tags.category_five_tooltip"></div>
+    </div>
+  </div>
+</div>
