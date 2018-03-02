@@ -35,7 +35,9 @@ const purify = (searchThrough, css, options, callback) => {
     options = getOptions(options)
     let cssString = FileUtil.filesToSource(css, "css"),
         content = FileUtil.filesToSource(searchThrough, "content")
-    PrintUtil.startLog(minify(cssString).length)
+    if (options.info) {
+        PrintUtil.startLog(minify(cssString).length)
+    }
     let wordsInContent = getAllWordsInContent(content),
         selectorFilter = new SelectorFilter(wordsInContent, options.whitelist),
         tree = new CssTreeWalker(cssString, [selectorFilter])
