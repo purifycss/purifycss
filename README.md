@@ -29,8 +29,8 @@ npm i -D purify-css
 ```
 
 ```javascript
-import purifycss from "purify-css"
-const purifycss = require("purify-css")
+import purify from "purify-css"
+const purify = require("purify-css")
 
 let content = ""
 let css = ""
