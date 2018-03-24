@@ -12,18 +12,20 @@ const hasWhitelistMatch = (selector, whitelist) => {
 }
 
 class SelectorFilter {
-    constructor(contentWords, whitelist) {
+    constructor(contentWords, options) {
         this.contentWords = contentWords
+	    this.options = options
         this.rejectedSelectors = []
         this.wildcardWhitelist = []
-        this.parseWhitelist(whitelist)
+        this.parseWhitelist()
     }
 
     initialize(CssSyntaxTree) {
         CssSyntaxTree.on("readRule", this.parseRule.bind(this))
     }
 
-    parseWhitelist(whitelist) {
+    parseWhitelist() {
+    	const whitelist = this.options.whitelist;
         whitelist.forEach(whitelistSelector => {
             whitelistSelector = whitelistSelector.toLowerCase()
 
@@ -33,7 +35,7 @@ class SelectorFilter {
                     whitelistSelector.substr(1, whitelistSelector.length - 2)
                 )
             } else {
-                getAllWordsInSelector(whitelistSelector).forEach(word => {
+                getAllWordsInSelector(whitelistSelector, this.options).forEach(word => {
                     this.contentWords[word] = true
                 })
             }
@@ -55,7 +57,7 @@ class SelectorFilter {
                 usedSelectors.push(selector)
                 return
             }
-            let words = getAllWordsInSelector(selector),
+            let words = getAllWordsInSelector(selector, this.options),
                 usedWords = words.filter(word => contentWords[word])
 
             if (usedWords.length === words.length) {
