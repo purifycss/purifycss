@@ -252,3 +252,51 @@ describe("pseudo classes", () => {
         expect(result.includes("row:after") === true).toBe(false)
     })
 })
+
+describe("whitelist", () => {
+    const content = read("whitelist/whitelist.html"),
+        css = read("whitelist/whitelist.css"),
+        options = {whitelist: ["/ell?(-\\d)?$/i", "*dl*", "al"]}
+        result = purify(content, css, options)
+
+    it("finds el", () => {
+        expect(result.includes(".el {") === true).toBe(true)
+    })
+
+    it("does not find el-a", () => {
+        expect(result.includes(".el-a {") === true).toBe(false)
+    })
+
+    it("finds el-1", () => {
+        expect(result.includes(".el-1 {") === true).toBe(true)
+    })
+    
+    it("finds el-2", () => {
+        expect(result.includes(".el-2 {") === true).toBe(true)
+    })
+
+    it("does not find el-3", () => {
+        expect(result.includes(".el-3.test {") === true).toBe(false)
+    })
+
+    it("finds eL-4", () => {
+        expect(result.includes(".eL-4 {") === true).toBe(true)
+    })
+
+    it("finds ell-5", () => {
+        expect(result.includes(".ell-5 {") === true).toBe(true)
+    })
+
+    it("finds test.dl", () => {
+        expect(result.includes(".test.dl {") === true).toBe(true)
+    })
+
+    it("finds dl.test", () => {
+        expect(result.includes(".dl.test {") === true).toBe(true)
+    })
+
+    it("finds al", () => {
+        expect(result.includes(".al {") === true).toBe(true)
+    })
+
+})
