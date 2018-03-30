@@ -25,8 +25,6 @@ class SelectorFilter {
 
     parseWhitelist(whitelist) {
         whitelist.forEach(whitelistSelector => {
-            whitelistSelector = whitelistSelector.toLowerCase()
-
             if (isWildcardWhitelistSelector(whitelistSelector)) {
                 // If '*button*' then push 'button' onto list.
                 this.wildcardWhitelist.push(
