@@ -3,3 +3,5 @@ node_js:
   - "6"
 notifications:
   email: false
+before_install: npm install -g npm@latest
+install: npm ci
