@@ -5,3 +5,7 @@ div:before {
 .row:after {
   color: black;
 }
+
+div:not(.foo) {
+  color: black;
+}

@@ -251,4 +251,8 @@ describe("pseudo classes", () => {
     it("removes row:after", () => {
         expect(result.includes("row:after") === true).toBe(false)
     })
+
+    it("finds div:not(.foo)", () => {
+        expect(result.includes(":not(.foo)") === true).toBe(true)
+    })
 })
