@@ -10,18 +10,18 @@
     "glob": "^7.1.1",
     "rework": "^1.0.1",
     "uglify-js": "^3.0.6",
-    "yargs": "^8.0.1"
+    "yargs": "^12.0.2"
   },
   "devDependencies": {
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-es2015": "^6.24.1",
-    "jest": "^19.0.2",
-    "rollup": "^0.41.6",
-    "rollup-plugin-babel": "^2.7.1",
-    "rollup-plugin-commonjs": "^8.0.2",
+    "jest": "^23.6.0",
+    "rollup": "^0.65.2",
+    "rollup-plugin-babel": "^4.0.3",
+    "rollup-plugin-commonjs": "^9.1.6",
     "rollup-plugin-node-builtins": "^2.1.0",
     "rollup-plugin-node-resolve": "^3.0.0",
-    "rollup-watch": "^3.2.2"
+    "rollup-watch": "^4.3.1"
   },
   "scripts": {
     "test": "jest index.js",
