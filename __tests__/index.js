@@ -252,3 +252,15 @@ describe("pseudo classes", () => {
         expect(result.includes("row:after") === true).toBe(false)
     })
 })
+
+describe("whitelist", () => {
+    const css = read("whitelist/whitelist.css"),
+        result = purify("", css, {whitelist: ["*.testWhitelist*"]})
+
+    it("keeps whitelisted selector", () => {
+        expect(result.includes(".testWhitelist") === true).toBe(true)
+    })
+    it("removes rejected selector", () => {
+        expect(result.includes("#rejected") === true).toBe(false)
+    })
+})

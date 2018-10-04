@@ -6,7 +6,7 @@ const isWildcardWhitelistSelector = selector => {
 
 const hasWhitelistMatch = (selector, whitelist) => {
     for (let el of whitelist) {
-        if (selector.includes(el)) return true
+        if (selector.toLowerCase().includes(el)) return true
     }
     return false
 }
