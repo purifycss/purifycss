@@ -1,12 +1,12 @@
 import { getAllWordsInSelector } from "./utils/ExtractWordsUtil"
 
 const isWildcardWhitelistSelector = selector => {
-    return selector[0] === "*" && selector[selector.length - 1] === "*"
+    return selector.indexOf('*') >= 0 ? selector : false
 }
 
 const hasWhitelistMatch = (selector, whitelist) => {
     for (let el of whitelist) {
-        if (selector.includes(el)) return true
+        if ((new RegExp('^' + el.replace(/\*/g, '\\S*').replace(/\./g, '\\.') + '$', 'm')).test(selector.replace(/^\s|\s$/g, ''))) return true
     }
     return false
 }
@@ -27,11 +27,10 @@ class SelectorFilter {
         whitelist.forEach(whitelistSelector => {
             whitelistSelector = whitelistSelector.toLowerCase()
 
-            if (isWildcardWhitelistSelector(whitelistSelector)) {
-                // If '*button*' then push 'button' onto list.
-                this.wildcardWhitelist.push(
-                    whitelistSelector.substr(1, whitelistSelector.length - 2)
-                )
+            let wildCard = isWildcardWhitelistSelector(whitelistSelector);
+            if (wildCard) {
+                // If '*button' or 'button*' then push the wildcard onto list.
+                this.wildcardWhitelist.push(wildCard)
             } else {
                 getAllWordsInSelector(whitelistSelector).forEach(word => {
                     this.contentWords[word] = true
