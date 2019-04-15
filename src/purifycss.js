@@ -12,7 +12,8 @@ const OPTIONS = {
     info: false,
     rejected: false,
     whitelist: [],
-    cleanCssOptions: {}
+    cleanCssOptions: {},
+    indent: '  '
 }
 
 const getOptions = (options = {}) => {
@@ -40,7 +41,7 @@ const purify = (searchThrough, css, options, callback) => {
         selectorFilter = new SelectorFilter(wordsInContent, options.whitelist),
         tree = new CssTreeWalker(cssString, [selectorFilter])
     tree.beginReading()
-    let source = tree.toString()
+    let source = tree.toString(options.indent)
 
     source = options.minify ? minify(source, options.cleanCssOptions) : source
 

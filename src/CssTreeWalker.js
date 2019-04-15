@@ -57,9 +57,9 @@ class CssTreeWalker extends EventEmitter {
         })
     }
 
-    toString() {
+    toString(indent) {
         if (this.ast) {
-            return this.ast.toString().replace(/,\n/g, ",")
+            return this.ast.toString({indent: indent}).replace(/,\n/g, ",")
         }
         return ""
     }
